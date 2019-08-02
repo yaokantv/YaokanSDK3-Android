@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">YaokanSDK3</string>
+    <string name="first_match">一级匹配</string>
+    <string name="second_match">二级匹配</string>
+    <string name="rc_list">遥控器列表</string>
+    <string name="rc_detail">遥控器详情</string>
+    <string name="rc_brand">遥控器品牌</string>
+    <string name="tv_provider">电视运营商</string>
+    <string name="t_smart_config">配置入网</string>
+</resources>

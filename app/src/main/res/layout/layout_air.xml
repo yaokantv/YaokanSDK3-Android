@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_air"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/tips"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+    <TextView
+        android:id="@+id/tv_temp"
+        style="@style/tv"
+        android:textSize="35sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_mode"
+            style="@style/tv" />
+
+        <TextView
+            android:id="@+id/tv_speed"
+            style="@style/tv" />
+
+        <TextView
+            android:id="@+id/tv_ver"
+            style="@style/tv" />
+
+        <TextView
+            android:id="@+id/tv_hor"
+            style="@style/tv" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_mode"
+            style="@style/btn"
+            android:text="模式" />
+
+        <Button
+            android:id="@+id/btn_speed"
+            style="@style/btn"
+            android:text="风速" />
+
+        <Button
+            android:id="@+id/btn_ver"
+            style="@style/btn"
+            android:text="上下扫风" />
+
+        <Button
+            android:id="@+id/btn_hor"
+            style="@style/btn"
+            android:text="左右扫风" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_on"
+            style="@style/btn"
+            android:text="电源开" />
+
+        <Button
+            android:id="@+id/btn_sub"
+            style="@style/btn"
+            android:text="溫度-" />
+
+        <Button
+            android:id="@+id/btn_add"
+            style="@style/btn"
+            android:text="溫度+" />
+
+        <Button
+            android:id="@+id/btn_off"
+            style="@style/btn"
+            android:text="电源关" />
+    </LinearLayout>
+</LinearLayout>
