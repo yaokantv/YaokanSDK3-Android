@@ -105,7 +105,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Yaokan.instance().sendCmd(App.curDid, rc.getRid(), rc.getRcCmd().get(position).getValue(), rc.getBe_rc_type(),rc.getStudyId());
+                Yaokan.instance().sendCmd(App.curDid, rc.getRid(), rc.getRcCmd().get(position).getValue(), rc.getBe_rc_type(), rc.getStudyId());
             }
         });
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -380,6 +380,9 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
                         countDownTime.cancel();
                     }
                 }
+                break;
+            case SendCodeResponse:
+                log(ykMessage.toString());
                 break;
         }
     }

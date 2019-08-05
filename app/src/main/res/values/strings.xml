@@ -7,4 +7,5 @@
     <string name="rc_brand">遥控器品牌</string>
     <string name="tv_provider">电视运营商</string>
     <string name="t_smart_config">配置入网</string>
+    <string name="t_init">初始化</string>
 </resources>

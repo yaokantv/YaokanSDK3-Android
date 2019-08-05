@@ -19,12 +19,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <activity android:name=".InitActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".MatchActivity"
-            android:label="一级匹配"></activity>
+            android:label="一级匹配" />
         <activity
             android:name=".SecondMatchActivity"
-            android:label="二级匹配"></activity>
+            android:label="二级匹配" />
         <activity
             android:name=".RcListActivity"
             android:label="遥控器列表" />
@@ -41,11 +48,8 @@
             android:name=".SmartConfigActivity"
             android:label="配置入网" />
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
+
 </manifest>
