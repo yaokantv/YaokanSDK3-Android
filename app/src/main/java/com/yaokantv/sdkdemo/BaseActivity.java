@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 public class BaseActivity extends AppCompatActivity {
     ProgressDialog dialog;
+    ProgressDialog progressDialog;
     static final String TAG = "YaokanSDK";
     protected String[] rcItem = {"删除"};
     protected String[] rcListItem = {"查询小苹果内的遥控器"};
@@ -27,12 +28,13 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         activity = this;
         dialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(this);
         AppManager.getAppManager().addActivity(activity);
 
     }
 
-    void log(String s){
-        Log.e(TAG,s);
+    void log(String s) {
+        Log.e(TAG + activity.getClass().getName(), s);
     }
 
     void initToolbar(int id) {
@@ -137,12 +139,69 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    protected void showForceDlg(final String s) {
+        if (dialog != null && !dialog.isShowing()) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dialog.setMessage(s);
+                    dialog.setCancelable(false);
+                    dialog.show();
+                }
+            });
+        }
+    }
+
+    protected void showProDlg(final String s, final int p) {
+        if (progressDialog != null) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog.setCancelable(false);
+                    progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                    progressDialog.setMax(100);
+                    progressDialog.setProgress(p);
+                    progressDialog.setMessage(s);
+                    if (!progressDialog.isShowing()) {
+                        progressDialog.show();
+                    }
+                }
+            });
+        }
+    }
+
+    protected void dismissPro() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog.dismiss();
+                }
+            });
+        }
+    }
+
     protected void showDlg(final String s) {
         if (dialog != null && !dialog.isShowing()) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     dialog.setMessage(s);
+                    dialog.setCancelable(true);
+                    dialog.show();
+                }
+            });
+        }
+    }
+
+    protected void showDlg(final String s, final DialogInterface.OnCancelListener listener) {
+        if (dialog != null && !dialog.isShowing()) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dialog.setMessage(s);
+                    dialog.setOnCancelListener(listener);
+                    dialog.setCancelable(true);
                     dialog.show();
                 }
             });

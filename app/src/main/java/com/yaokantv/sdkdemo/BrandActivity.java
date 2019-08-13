@@ -1,9 +1,11 @@
 package com.yaokantv.sdkdemo;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,8 +16,10 @@ import com.yaokantv.yaokansdk.callback.YaokanSDKListener;
 import com.yaokantv.yaokansdk.manager.Yaokan;
 import com.yaokantv.yaokansdk.model.Brand;
 import com.yaokantv.yaokansdk.model.BrandResult;
+import com.yaokantv.yaokansdk.model.CheckVersionResult;
 import com.yaokantv.yaokansdk.model.DeviceType;
 import com.yaokantv.yaokansdk.model.DeviceTypeResult;
+import com.yaokantv.yaokansdk.model.ProgressResult;
 import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
 import com.yaokantv.yaokansdk.utils.DlgUtils;
@@ -39,7 +43,9 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
         setContentView(R.layout.activity_d);
         initView();
         Yaokan.instance().addSdkListener(this);
-        initToolbar(R.string.rc_brand);
+        initToolbar(App.curMac);
+        //检测更新
+        Yaokan.instance().checkDeviceVersion(App.curMac, App.curDid);
     }
 
     @Override
@@ -110,6 +116,8 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                     App.curBid = currBrand.getBid();
                     if (App.curTid == 7) {
                         startActivity(new Intent(this, SecondMatchActivity.class));
+                    } else if (App.curTid >= 21 && App.curTid <= 24) {
+                        startActivity(new Intent(this, RfMatchActivity.class));
                     } else {
                         startActivity(new Intent(this, MatchActivity.class));
                     }
@@ -141,49 +149,98 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
     final int HAND_BRANDS_SUC = 1;
 
     @Override
-    public void onReceiveMsg(MsgType msgType, final YkMessage ykMessage) {
-        dismiss();
-        switch (msgType) {
-            case Types:
-                if (ykMessage != null && ykMessage.getCode() == 0) {
-                    DeviceTypeResult typeResult = (DeviceTypeResult) ykMessage.getData();
-                    if (typeResult != null) {
-                        mTypeResult = typeResult;
-                        mHandler.sendEmptyMessage(HAND_TYPES_SUC);
-                    }
-                } else if (ykMessage != null) {
-                    Log.e(TAG, ykMessage.toString());
+    public void onReceiveMsg(final MsgType msgType, final YkMessage ykMessage) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dismiss();
+                switch (msgType) {
+                    case Types:
+                        if (ykMessage != null && ykMessage.getCode() == 0) {
+                            DeviceTypeResult typeResult = (DeviceTypeResult) ykMessage.getData();
+                            if (typeResult != null) {
+                                mTypeResult = typeResult;
+                                mHandler.sendEmptyMessage(HAND_TYPES_SUC);
+                            }
+                        } else if (ykMessage != null) {
+                            Log.e(TAG, ykMessage.toString());
+                        }
+                        break;
+                    case Brands:
+                        if (ykMessage != null && ykMessage.getCode() == 0) {
+                            BrandResult brandResult = (BrandResult) ykMessage.getData();
+                            if (brandResult != null) {
+                                mBrandResult = brandResult;
+                                mHandler.sendEmptyMessage(HAND_BRANDS_SUC);
+                            }
+                        } else if (ykMessage != null) {
+                            Log.e(TAG, ykMessage.toString());
+                        }
+                        break;
+                    case DeviceInfo:
+                    case otaVersion:
+                        if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof CheckVersionResult) {
+                            CheckVersionResult result = (CheckVersionResult) ykMessage.getData();
+                            if (!TextUtils.isEmpty(result.getOtaversion()) && !TextUtils.isEmpty(result.getVersion())) {
+                                if (!result.getOtaversion().equals(result.getVersion())) {
+                                    DlgUtils.createDefDlg(activity, "版本更新", "硬件检测到新版本，是否更新？" + "\n当前版本：" + result.getVersion()
+                                            + "\n最新版本：" + result.getOtaversion(), new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                            Yaokan.instance().updateDevice(App.curMac, App.curDid);
+                                        }
+                                    }, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                        break;
+                    case UpdateStart:
+                        if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof ProgressResult) {
+                            if (App.curMac.equals(((ProgressResult) ykMessage.getData()).getMac())) {
+                                showProDlg("硬件升级中...", 0);
+                            }
+                        }
+                        break;
+                    case UpdateProgress:
+                        if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof ProgressResult) {
+                            if (App.curMac.equals(((ProgressResult) ykMessage.getData()).getMac())) {
+                                showProDlg("硬件升级中...", Integer.valueOf(((ProgressResult) ykMessage.getData()).getProgress().replaceAll("%", "")));
+                            }
+                        }
+                        break;
+                    case UpdateSuc:
+                        dismissPro();
+                        if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof ProgressResult) {
+                            if (App.curMac.equals(((ProgressResult) ykMessage.getData()).getMac())) {
+                                DlgUtils.createDefDlg(activity, "升级成功!");
+                            }
+                        }
+                        break;
+                    case UpdateFail:
+                        if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof ProgressResult) {
+                            if (App.curMac.equals(((ProgressResult) ykMessage.getData()).getMac())) {
+                                dismissPro();
+                                DlgUtils.createDefDlg(activity, "升级失败");
+                            }
+                        }
+                        break;
+                    case Other:
+                        if (ykMessage != null) {
+                            Message message = mHandler.obtainMessage();
+                            message.what = OTHER_FAIL;
+                            message.obj = ykMessage.getMsg();
+                            mHandler.sendMessage(message);
+                        }
+                        break;
                 }
-                break;
-            case Brands:
-                if (ykMessage != null && ykMessage.getCode() == 0) {
-                    BrandResult brandResult = (BrandResult) ykMessage.getData();
-                    if (brandResult != null) {
-                        mBrandResult = brandResult;
-                        mHandler.sendEmptyMessage(HAND_BRANDS_SUC);
-                    }
-                } else if (ykMessage != null) {
-                    Log.e(TAG, ykMessage.toString());
-                }
-                break;
-            case DeviceInfo:
-            case otaVersion:
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        DlgUtils.createDefDlg(activity, ykMessage.getMsg());
-                    }
-                });
-                break;
-            case Other:
-                if (ykMessage != null) {
-                    Message message = mHandler.obtainMessage();
-                    message.what = OTHER_FAIL;
-                    message.obj = ykMessage.getMsg();
-                    mHandler.sendMessage(message);
-                }
-                break;
-        }
+            }
+        });
     }
 
 
@@ -211,7 +268,7 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                     spBrands.setAdapter(brandAdapter);
                     break;
                 case OTHER_FAIL:
-                    toast((String) msg.obj);
+                    DlgUtils.createDefDlg(activity, (String) msg.obj);
                     log((String) msg.obj);
                 default:
                     break;

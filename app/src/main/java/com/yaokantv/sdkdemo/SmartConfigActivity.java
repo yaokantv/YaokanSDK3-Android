@@ -11,6 +11,7 @@ import com.yaokantv.yaokansdk.callback.YaokanSDKListener;
 import com.yaokantv.yaokansdk.manager.Yaokan;
 import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
+import com.yaokantv.yaokansdk.utils.DlgUtils;
 
 public class SmartConfigActivity extends BaseActivity implements View.OnClickListener, YaokanSDKListener {
     TextView tvSsid;
@@ -58,6 +59,7 @@ public class SmartConfigActivity extends BaseActivity implements View.OnClickLis
                                 Yaokan.instance().stopSmartConfig();
                             }
                         });
+                        dialog.setCancelable(false);
                         dialog.show();
                     }
                 });
@@ -68,7 +70,7 @@ public class SmartConfigActivity extends BaseActivity implements View.OnClickLis
                         @Override
                         public void run() {
                             dialog.dismiss();
-                            toast(ykMessage.getMsg());
+                            DlgUtils.createDefDlg(activity, ykMessage.getMsg());
                         }
                     });
                 }

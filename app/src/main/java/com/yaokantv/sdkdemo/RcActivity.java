@@ -1,5 +1,6 @@
 package com.yaokantv.sdkdemo;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.widget.Toolbar;
@@ -8,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -43,6 +45,8 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
     String curMode, curSpeed, curTemp, curVer, curHor;
     int modeIndex, speedIndex, tempIndex, verIndex, horIndex;
     CountDownTimer countDownTime;
+    EditText etName;
+    boolean isStudy = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
         initToolbar(R.string.rc_detail);
         Yaokan.instance().addSdkListener(this);
         String rid = getIntent().getStringExtra(RID);
+        etName = findViewById(R.id.et_name);
         if (!TextUtils.isEmpty(rid)) {
             rc = Yaokan.instance().getRcData(rid);
             if (rc != null && rc.getRcCmd() != null && rc.getRcCmd().size() > 0) {
@@ -58,6 +63,9 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
             } else if (rc != null && !TextUtils.isEmpty(rc.getAirCmdString())) {
                 initAir();
             }
+        }
+        if (rc != null) {
+            etName.setText(rc.getName());
         }
         toolbar.inflateMenu(R.menu.toolbar_menu);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -92,28 +100,48 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
     }
 
     private void initNormal() {
+
         gridView = findViewById(R.id.gv);
         gridView.setVisibility(View.VISIBLE);
         adapter = new CommonAdapter<RcCmd>(this, rc.getRcCmd(), android.R.layout.simple_list_item_1) {
             @Override
             public void convert(ViewHolder helper, RcCmd item, int position) {
                 helper.setText(android.R.id.text1, item.getName());
-                helper.setBgResource(android.R.id.text1, R.drawable.shape_btn);
+                helper.setBgResource(android.R.id.text1, item.getStand_key() == 1 ? R.drawable.shape_blue_btn : R.drawable.shape_btn);
             }
         };
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Yaokan.instance().sendCmd(App.curDid, rc.getRid(), rc.getRcCmd().get(position).getValue(), rc.getBe_rc_type(), rc.getStudyId());
+                if (!isStudy) {
+                    Yaokan.instance().sendCmd(App.curDid, rc.getRid(), rc.getRcCmd().get(position).getValue(), rc.getBe_rc_type(), rc.getStudyId());
+                }
             }
         });
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Yaokan.instance().study(App.curMac, App.curDid, rc, rc.getRcCmd().get(position).getValue());
-                showDlg("请对准小苹果发码...");
+                if (isStudy) {
+                    return false;
+                }
+                if (rc.getBe_rc_type() >= 21 && rc.getBe_rc_type() <= 24) {
+                    Yaokan.instance().studyRf(App.curMac, App.curDid, rc, rc.getRcCmd().get(position).getValue());
+                } else {
+                    Yaokan.instance().study(App.curMac, App.curDid, rc, rc.getRcCmd().get(position).getValue());
+                }
+                showDlg("请对准小苹果发码...", new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        isStudy = false;
+                        if (countDownTime != null) {
+                            countDownTime.cancel();
+                        }
+                        Yaokan.instance().stopStudy(App.curMac, App.curDid);
+                    }
+                });
                 newCountDownTime();
+                isStudy = true;
                 return false;
             }
         });
@@ -132,6 +160,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
 
             @Override
             public void onFinish() {
+                isStudy = false;
                 dismiss();
                 DlgUtils.createDefDlg(activity, "学习超时");
             }
@@ -277,6 +306,12 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.btn_rename:
+                if (etName.getText().toString().length() > 0) {
+                    rc.setName(etName.getText().toString());
+                    Yaokan.instance().updateRc(rc);
+                }
+                break;
             case R.id.btn_on:
                 Yaokan.instance().sendCmd(App.curDid, rc.getRid(), "on", rc.getBe_rc_type());
                 break;
@@ -363,27 +398,35 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
 
     @Override
     public void onReceiveMsg(final MsgType msgType, final YkMessage ykMessage) {
-        switch (msgType) {
-            case StudyError:
-                dismiss();
-                if (countDownTime != null) {
-                    countDownTime.cancel();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                switch (msgType) {
+                    case StudyError:
+                        isStudy = false;
+                        dismiss();
+                        if (countDownTime != null) {
+                            countDownTime.cancel();
+                        }
+                        DlgUtils.createDefDlg(activity, ykMessage.toString());
+                        break;
+                    case StudySuccess:
+                        isStudy = false;
+                        dismiss();
+                        if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof RemoteCtrl) {
+                            RemoteCtrl ctrl = (RemoteCtrl) ykMessage.getData();
+                            Yaokan.instance().updateRc(ctrl);
+                            if (countDownTime != null) {
+                                countDownTime.cancel();
+                            }
+                            DlgUtils.createDefDlg(activity, getString(R.string.study_suc));
+                        }
+                        break;
+                    case SendCodeResponse:
+                        log(ykMessage.toString());
+                        break;
                 }
-                log(ykMessage.toString());
-                break;
-            case StudySuccess:
-                dismiss();
-                if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof RemoteCtrl) {
-                    RemoteCtrl ctrl = (RemoteCtrl) ykMessage.getData();
-                    Yaokan.instance().updateRc(ctrl);
-                    if (countDownTime != null) {
-                        countDownTime.cancel();
-                    }
-                }
-                break;
-            case SendCodeResponse:
-                log(ykMessage.toString());
-                break;
-        }
+            }
+        });
     }
 }

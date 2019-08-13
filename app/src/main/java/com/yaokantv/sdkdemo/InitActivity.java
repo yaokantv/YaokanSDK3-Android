@@ -43,7 +43,7 @@ public class InitActivity extends BaseActivity implements YaokanSDKListener, Vie
                             //初始化成功
                         } else {
                             //初始化失败
-                            DlgUtils.createDefDlg(InitActivity.this,ykMessage.toString());
+                            DlgUtils.createDefDlg(InitActivity.this,ykMessage.getMsg());
                         }
                         break;
                 }

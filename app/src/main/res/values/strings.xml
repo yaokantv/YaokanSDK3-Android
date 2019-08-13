@@ -8,4 +8,6 @@
     <string name="tv_provider">电视运营商</string>
     <string name="t_smart_config">配置入网</string>
     <string name="t_init">初始化</string>
+    <string name="t_rf">射频对码/学习</string>
+    <string name="study_suc">学习成功</string>
 </resources>
