@@ -2,11 +2,12 @@
 <litepal>
     <dbname value="yaoaknsdk"></dbname>
 
-    <version value="6"></version>
+    <version value="8"></version>
     <list>
         <mapping class="com.yaokantv.yaokansdk.model.RemoteCtrl" />
         <mapping class="com.yaokantv.yaokansdk.model.RcCmd" />
         <mapping class="com.yaokantv.yaokansdk.model.YkDevice" />
         <mapping class="com.yaokantv.yaokansdk.model.CrashLog" />
+        <mapping class="com.yaokantv.yaokansdk.model.KeyStatus" />
     </list>
 </litepal>

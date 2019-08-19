@@ -36,6 +36,7 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
     ArrayAdapter<String> typeAdapter, brandAdapter;
     DeviceType currDeviceType = null; // 当前设备类型
     Brand currBrand = null; // 当前品牌
+    boolean isFirst = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,9 +124,6 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                     }
                 }
                 break;
-            case R.id.btn_rc_list:
-                startActivity(new Intent(this, RcListActivity.class));
-                break;
             case R.id.btn_light_on:
                 Yaokan.instance().lightOn(App.curMac, App.curDid);
                 break;
@@ -196,9 +194,14 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                                             dialog.dismiss();
                                         }
                                     });
+                                } else {
+                                    if (!isFirst) {
+                                        DlgUtils.createDefDlg(activity, "当前已是最新版本：" + result.getOtaversion());
+                                    }
                                 }
                             }
                         }
+                        isFirst = false;
                         break;
                     case UpdateStart:
                         if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof ProgressResult) {
@@ -251,7 +254,7 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                     if (mTypeResult != null && mTypeResult.getResult() != null) {
                         nameType.clear();
                         for (DeviceType deviceType : mTypeResult.getResult()) {
-                            nameType.add(deviceType.getName());
+                            nameType.add(deviceType.getName()+(deviceType.getRf()==1?"(射频)":""));
                         }
                     }
                     typeAdapter.notifyDataSetInvalidated();

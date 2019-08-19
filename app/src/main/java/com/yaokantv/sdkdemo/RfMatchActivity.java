@@ -37,6 +37,7 @@ public class RfMatchActivity extends BaseActivity implements YaokanSDKListener {
             @Override
             public void onClick(View v) {
                 if (rc.getId() == 0) {
+                    rc.setMac(App.curMac);
                     Yaokan.instance().saveRc(rc);
                 }
                 AppManager.getAppManager().finishActivities(BrandActivity.class);
@@ -53,7 +54,7 @@ public class RfMatchActivity extends BaseActivity implements YaokanSDKListener {
             @Override
             public void convert(ViewHolder helper, RcCmd item, int position) {
                 helper.setText(android.R.id.text1, item.getName());
-                helper.setBgResource(android.R.id.text1, R.drawable.shape_btn);
+                helper.setBgResource(android.R.id.text1, item.getStand_key() == 1 ? R.drawable.shape_blue_btn : R.drawable.shape_btn);
             }
         };
         gridView.setAdapter(adapter);
@@ -72,6 +73,7 @@ public class RfMatchActivity extends BaseActivity implements YaokanSDKListener {
                     return false;
                 }
                 if (rc.getId() == 0) {
+                    rc.setMac(App.curMac);
                     Yaokan.instance().saveRc(rc);
                 }
                 Yaokan.instance().studyRf(App.curMac, App.curDid, rc, rc.getRcCmd().get(position).getValue());
@@ -82,7 +84,7 @@ public class RfMatchActivity extends BaseActivity implements YaokanSDKListener {
                         if (countDownTime != null) {
                             countDownTime.cancel();
                         }
-                        Yaokan.instance().stopStudyRf(App.curMac, App.curDid);
+                        Yaokan.instance().stopStudyRf(App.curMac, App.curDid, rc);
                     }
                 });
                 newCountDownTime();

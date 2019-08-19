@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.yaokantv.yaokansdk.callback.YaokanSDKListener;
 import com.yaokantv.yaokansdk.manager.Yaokan;
+import com.yaokantv.yaokansdk.model.SmartConfigResult;
 import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
 import com.yaokantv.yaokansdk.utils.DlgUtils;
@@ -70,7 +71,18 @@ public class SmartConfigActivity extends BaseActivity implements View.OnClickLis
                         @Override
                         public void run() {
                             dialog.dismiss();
-                            DlgUtils.createDefDlg(activity, ykMessage.getMsg());
+                            DlgUtils.createDefDlg(activity, "", ykMessage.getMsg(), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof SmartConfigResult) {
+                                        SmartConfigResult result = (SmartConfigResult) ykMessage.getData();
+                                        if (result.isResult()) {
+                                            //result = true 配网成功
+                                            finish();
+                                        }
+                                    }
+                                }
+                            });
                         }
                     });
                 }

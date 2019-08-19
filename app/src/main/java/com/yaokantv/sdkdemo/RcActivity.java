@@ -47,6 +47,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
     CountDownTimer countDownTime;
     EditText etName;
     boolean isStudy = false;
+    private String did;//小苹果重置后Did会改变！
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
         }
         if (rc != null) {
             etName.setText(rc.getName());
+            did = Yaokan.instance().getDid(rc.getMac());
         }
         toolbar.inflateMenu(R.menu.toolbar_menu);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -73,7 +75,9 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_delete_rc:
-                        Yaokan.instance().deleteRc(rc.getRid());
+                        //用Rid删除遥控器的方法已过期，建议使用deleteRcByUUID
+//                        Yaokan.instance().deleteRc(rc.getRid());
+                        Yaokan.instance().deleteRcByUUID(rc.getUuid());
                         finish();
                         break;
                     default:
@@ -115,7 +119,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!isStudy) {
-                    Yaokan.instance().sendCmd(App.curDid, rc.getRid(), rc.getRcCmd().get(position).getValue(), rc.getBe_rc_type(), rc.getStudyId());
+                    Yaokan.instance().sendCmd(did, rc.getRid(), rc.getRcCmd().get(position).getValue(), rc.getBe_rc_type(), rc.getStudyId());
                 }
             }
         });
@@ -126,9 +130,9 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
                     return false;
                 }
                 if (rc.getBe_rc_type() >= 21 && rc.getBe_rc_type() <= 24) {
-                    Yaokan.instance().studyRf(App.curMac, App.curDid, rc, rc.getRcCmd().get(position).getValue());
+                    Yaokan.instance().studyRf(rc.getMac(), did, rc, rc.getRcCmd().get(position).getValue());
                 } else {
-                    Yaokan.instance().study(App.curMac, App.curDid, rc, rc.getRcCmd().get(position).getValue());
+                    Yaokan.instance().study(rc.getMac(), did, rc, rc.getRcCmd().get(position).getValue());
                 }
                 showDlg("请对准小苹果发码...", new DialogInterface.OnCancelListener() {
                     @Override
@@ -137,7 +141,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
                         if (countDownTime != null) {
                             countDownTime.cancel();
                         }
-                        Yaokan.instance().stopStudy(App.curMac, App.curDid);
+                        Yaokan.instance().stopStudy(rc.getMac(), did);
                     }
                 });
                 newCountDownTime();
@@ -181,7 +185,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
     }
 
     private void sendCmd() {
-        Yaokan.instance().sendAirCmd(App.curDid, rc.getRid(), new AirOrder(curMode, curSpeed, curTemp, curVer, curHor));
+        Yaokan.instance().sendAirCmd(did, rc.getRid(), new AirOrder(curMode, curSpeed, curTemp, curVer, curHor));
         setText();
     }
 
@@ -313,10 +317,10 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
                 }
                 break;
             case R.id.btn_on:
-                Yaokan.instance().sendCmd(App.curDid, rc.getRid(), "on", rc.getBe_rc_type());
+                Yaokan.instance().sendCmd(did, rc.getRid(), "on", rc.getBe_rc_type());
                 break;
             case R.id.btn_off:
-                Yaokan.instance().sendCmd(App.curDid, rc.getRid(), "off", rc.getBe_rc_type());
+                Yaokan.instance().sendCmd(did, rc.getRid(), "off", rc.getBe_rc_type());
                 break;
             case R.id.btn_mode:
                 modeIndex++;
@@ -343,7 +347,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
                 if (rc.getAirCmd().getAttributes().getVerticalIndependent() == 1) {
                     verIndex++;
                     boolean isOpen = (verIndex % 2 == 1);
-                    Yaokan.instance().sendAirCmd(App.curDid, rc.getRid(), Swing.Ver, isOpen);
+                    Yaokan.instance().sendAirCmd(did, rc.getRid(), Swing.Ver, isOpen);
                     ((TextView) findViewById(R.id.tv_ver)).setText(getShowText(isOpen ? "verOn" : "verOff"));
                 } else {
                     verIndex++;
@@ -362,7 +366,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
                 if (rc.getAirCmd().getAttributes().getVerticalIndependent() == 1) {
                     horIndex++;
                     boolean isOpen = (horIndex % 2 == 1);
-                    Yaokan.instance().sendAirCmd(App.curDid, rc.getRid(), Swing.Hor, isOpen);
+                    Yaokan.instance().sendAirCmd(did, rc.getRid(), Swing.Hor, isOpen);
                     ((TextView) findViewById(R.id.tv_ver)).setText(getShowText(isOpen ? "horOn" : "horOff"));
                 } else {
                     horIndex++;

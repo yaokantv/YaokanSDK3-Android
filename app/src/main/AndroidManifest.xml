@@ -18,8 +18,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RfMatchActivity"></activity>
-        <activity android:name=".InitActivity">
+        <activity
+            android:name=".RfMatchActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".InitActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,28 +32,36 @@
         </activity>
         <activity
             android:name=".MatchActivity"
-            android:label="一级匹配" />
+            android:label="一级匹配"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SecondMatchActivity"
-            android:label="二级匹配" />
+            android:label="二级匹配"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".RcListActivity"
-            android:label="遥控器列表" />
+            android:label="遥控器列表"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".RcActivity"
-            android:label="遥控器详情" />
+            android:label="遥控器详情"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".BrandActivity"
-            android:label="遥控器品牌" />
+            android:label="遥控器品牌"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SelectProviderActivity"
-            android:label="电视运营商" />
+            android:label="电视运营商"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SmartConfigActivity"
-            android:label="配置入网" />
-        <activity android:name=".MainActivity">
-
-        </activity>
+            android:label="配置入网"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

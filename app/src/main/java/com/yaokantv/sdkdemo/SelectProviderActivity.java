@@ -233,7 +233,7 @@ public class SelectProviderActivity extends BaseActivity implements View.OnClick
     }
 
     @Override
-    public void onReceiveMsg(MsgType msgType, final YkMessage ykMessage) {
+    public void onReceiveMsg(final MsgType msgType, final YkMessage ykMessage) {
         switch (msgType) {
             case Province:
                 if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof List) {

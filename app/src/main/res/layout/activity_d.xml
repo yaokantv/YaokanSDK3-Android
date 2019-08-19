@@ -74,14 +74,6 @@
             android:text="进入一级匹配界面" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_rc_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="40dp"
-        android:onClick="onClick"
-        android:text="本地遥控器列表" />
 
     <LinearLayout
         android:layout_width="match_parent"

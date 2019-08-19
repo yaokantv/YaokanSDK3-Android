@@ -66,7 +66,7 @@ public class SecondMatchActivity extends BaseActivity implements View.OnClickLis
                 @Override
                 public void convert(ViewHolder helper, RcCmd item, int position) {
                     helper.setText(android.R.id.text1, item.getName());
-                    helper.setBgResource(android.R.id.text1, R.drawable.shape_btn);
+                    helper.setBgResource(android.R.id.text1, item.getStand_key() == 1 ? R.drawable.shape_blue_btn : R.drawable.shape_btn);
                 }
             };
             gv.setAdapter(adapter);
@@ -120,6 +120,7 @@ public class SecondMatchActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.btn_save:
                 rc.setName(App.curBName + App.curTName + " " + rc.getRmodel());
+                rc.setMac(App.curMac);
                 Yaokan.instance().saveRc(rc);
                 AppManager.getAppManager().finishActivities(SelectProviderActivity.class,
                         BrandActivity.class, MatchActivity.class);
