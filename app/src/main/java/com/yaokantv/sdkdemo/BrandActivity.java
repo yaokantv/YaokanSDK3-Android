@@ -117,7 +117,7 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                     App.curBid = currBrand.getBid();
                     if (App.curTid == 7) {
                         startActivity(new Intent(this, SecondMatchActivity.class));
-                    } else if (currDeviceType.getRf()==1) {
+                    } else if (currDeviceType.getRf() == 1) {
                         startActivity(new Intent(this, RfMatchActivity.class));
                     } else {
                         startActivity(new Intent(this, MatchActivity.class));
@@ -254,7 +254,7 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                     if (mTypeResult != null && mTypeResult.getResult() != null) {
                         nameType.clear();
                         for (DeviceType deviceType : mTypeResult.getResult()) {
-                            nameType.add(deviceType.getName()+(deviceType.getRf()==1?"(射频)":""));
+                            nameType.add(deviceType.getName() + (deviceType.getRf() == 1 ? "(射频)" : ""));
                         }
                     }
                     typeAdapter.notifyDataSetInvalidated();

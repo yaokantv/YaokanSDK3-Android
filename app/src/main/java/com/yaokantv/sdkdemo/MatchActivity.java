@@ -71,7 +71,7 @@ public class MatchActivity extends BaseActivity implements View.OnClickListener,
 
     private void match() {
         if (mMatch != null) {
-            Yaokan.instance().sendCmd(App.curDid, mMatch.getRid(), mMatch.getCmd(), App.curTid);
+            Yaokan.instance().sendCmd(App.curDid, mMatch.getRid(), mMatch.getCmd(), App.curTid,null,null);
         }
     }
 

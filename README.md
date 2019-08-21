@@ -226,7 +226,7 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
    - 常规遥控器发码
 
         发送非空调遥控指令，包括红外遥控和射频指令
-
+       
         ```java
         /**
         * 常规遥控器发码
@@ -234,8 +234,10 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
         * @param rid 遥控器Rid
         * @param key 指令名称
         * @param type 设备类型
+        * @param studyId 学习ID，在遥控器对象内,红外匹配阶段传null
+        * @param rf 是否为射频遥控，在遥控器对象内,红外匹配阶段传null
         */
-        Yaokan.instance().sendCmd(did,rid,key,type);
+        Yaokan.instance().sendCmd(did,rid,key,type,studyId,rf);
         ```
    - 空调遥控器发码
 

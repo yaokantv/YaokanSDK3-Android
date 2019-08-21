@@ -119,7 +119,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!isStudy) {
-                    Yaokan.instance().sendCmd(did, rc.getRid(), rc.getRcCmd().get(position).getValue(), rc.getBe_rc_type(), rc.getStudyId());
+                    Yaokan.instance().sendCmd(did, rc.getRid(), rc.getRcCmd().get(position).getValue(), rc.getBe_rc_type(), rc.getStudyId(), rc.getRf());
                 }
             }
         });
@@ -317,10 +317,10 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
                 }
                 break;
             case R.id.btn_on:
-                Yaokan.instance().sendCmd(did, rc.getRid(), "on", rc.getBe_rc_type());
+                Yaokan.instance().sendCmd(did, rc.getRid(), "on", rc.getBe_rc_type(), null, null);
                 break;
             case R.id.btn_off:
-                Yaokan.instance().sendCmd(did, rc.getRid(), "off", rc.getBe_rc_type());
+                Yaokan.instance().sendCmd(did, rc.getRid(), "off", rc.getBe_rc_type(), null, null);
                 break;
             case R.id.btn_mode:
                 modeIndex++;

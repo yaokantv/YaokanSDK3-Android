@@ -74,7 +74,7 @@ public class SecondMatchActivity extends BaseActivity implements View.OnClickLis
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     String key = codeKeys.get(position).getValue();
-                    Yaokan.instance().sendCmd(App.curDid, rc.getRid(), key, rc.getBe_rc_type());
+                    Yaokan.instance().sendCmd(App.curDid, rc.getRid(), key, rc.getBe_rc_type(),null,null);
                 }
             });
         }
@@ -136,10 +136,10 @@ public class SecondMatchActivity extends BaseActivity implements View.OnClickLis
                 }
                 break;
             case R.id.btn_on:
-                Yaokan.instance().sendCmd(App.curDid, rc.getRid(), "on", rc.getBe_rc_type());
+                Yaokan.instance().sendCmd(App.curDid, rc.getRid(), "on", rc.getBe_rc_type(),null,null);
                 break;
             case R.id.btn_off:
-                Yaokan.instance().sendCmd(App.curDid, rc.getRid(), "off", rc.getBe_rc_type());
+                Yaokan.instance().sendCmd(App.curDid, rc.getRid(), "off", rc.getBe_rc_type(),null,null);
                 break;
             case R.id.btn_mode:
                 modeIndex++;
