@@ -117,7 +117,7 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                     App.curBid = currBrand.getBid();
                     if (App.curTid == 7) {
                         startActivity(new Intent(this, SecondMatchActivity.class));
-                    } else if (App.curTid >= 21 && App.curTid <= 24) {
+                    } else if (currDeviceType.getRf()==1) {
                         startActivity(new Intent(this, RfMatchActivity.class));
                     } else {
                         startActivity(new Intent(this, MatchActivity.class));
