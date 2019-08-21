@@ -14,7 +14,7 @@ import com.yaokantv.yaokansdk.utils.ViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RcListActivity extends BaseActivity  {
+public class RcListActivity extends BaseActivity {
     ListView listView;
     CommonAdapter<RemoteCtrl> adapter;
     List<RemoteCtrl> mList = new ArrayList<>();
@@ -50,10 +50,11 @@ public class RcListActivity extends BaseActivity  {
 
     private void initView() {
         listView = findViewById(R.id.lv);
-        adapter = new CommonAdapter<RemoteCtrl>(this, mList, android.R.layout.simple_list_item_1) {
+        adapter = new CommonAdapter<RemoteCtrl>(this, mList, R.layout.lv_rc_item) {
             @Override
             public void convert(ViewHolder helper, RemoteCtrl item, int position) {
-                helper.setText(android.R.id.text1, item.getName());
+                helper.setText(R.id.text1, item.getName());
+                helper.setText(R.id.text2, item.getMac());
             }
         };
         listView.setAdapter(adapter);

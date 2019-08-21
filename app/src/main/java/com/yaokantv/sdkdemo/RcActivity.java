@@ -107,11 +107,12 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
 
         gridView = findViewById(R.id.gv);
         gridView.setVisibility(View.VISIBLE);
-        adapter = new CommonAdapter<RcCmd>(this, rc.getRcCmd(), android.R.layout.simple_list_item_1) {
+        adapter = new CommonAdapter<RcCmd>(this, rc.getRcCmd(), R.layout.lv_key_item) {
             @Override
             public void convert(ViewHolder helper, RcCmd item, int position) {
-                helper.setText(android.R.id.text1, item.getName());
-                helper.setBgResource(android.R.id.text1, item.getStand_key() == 1 ? R.drawable.shape_blue_btn : R.drawable.shape_btn);
+                helper.setText(R.id.text1, item.getName());
+                helper.setText(R.id.text2, item.getValue());
+                helper.setBgResource(R.id.rl, item.getStand_key() == 1 ? R.drawable.shape_blue_btn : R.drawable.shape_btn);
             }
         };
         gridView.setAdapter(adapter);
@@ -407,6 +408,9 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
             public void run() {
                 switch (msgType) {
                     case StudyError:
+                        if (!isStudy) {
+                            return;
+                        }
                         isStudy = false;
                         dismiss();
                         if (countDownTime != null) {
@@ -415,6 +419,9 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
                         DlgUtils.createDefDlg(activity, ykMessage.toString());
                         break;
                     case StudySuccess:
+                        if (!isStudy) {
+                            return;
+                        }
                         isStudy = false;
                         dismiss();
                         if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof RemoteCtrl) {
