@@ -38,10 +38,14 @@ public class RfMatchActivity extends BaseActivity implements YaokanSDKListener {
             public void onClick(View v) {
                 if (rc.getId() == 0) {
                     rc.setMac(App.curMac);
-                    Yaokan.instance().saveRc(rc);
+                    //射频按键没有学习直接创建时，调用此接口
+                    showDlg();
+                    Yaokan.instance().uploadRfAndSave(App.curMac, rc);
+//                    Yaokan.instance().saveRc(rc);
+                } else {
+                    AppManager.getAppManager().finishActivities(BrandActivity.class);
+                    finish();
                 }
-                AppManager.getAppManager().finishActivities(BrandActivity.class);
-                finish();
             }
         });
     }
@@ -153,6 +157,23 @@ public class RfMatchActivity extends BaseActivity implements YaokanSDKListener {
                             }
                             DlgUtils.createDefDlg(activity, getString(R.string.study_suc));
                         }
+                        break;
+                    case RfUploadSuccess:
+                        dismiss();
+                        DlgUtils.createDefDlg(activity, "", "上传并保存成功", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        });
+                        break;
+                    case RfUploadFail:
+                        dismiss();
+                        DlgUtils.createDefDlg(activity, "", "上传失败："+ykMessage.getMsg(), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
                         break;
                 }
             }

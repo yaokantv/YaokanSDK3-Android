@@ -31,7 +31,7 @@ import java.util.List;
 
 
 public class RcActivity extends BaseActivity implements View.OnClickListener, YaokanSDKListener {
-    public static final String RID = "RID";
+    public static final String UUID = "UUID";
     RemoteCtrl rc;
 
     GridView gridView;
@@ -55,10 +55,10 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
         setContentView(R.layout.activity_rc);
         initToolbar(R.string.rc_detail);
         Yaokan.instance().addSdkListener(this);
-        String rid = getIntent().getStringExtra(RID);
+        String uuid = getIntent().getStringExtra(UUID);
         etName = findViewById(R.id.et_name);
-        if (!TextUtils.isEmpty(rid)) {
-            rc = Yaokan.instance().getRcData(rid);
+        if (!TextUtils.isEmpty(uuid)) {
+            rc = Yaokan.instance().getRcDataByUUID(uuid);
             if (rc != null && rc.getRcCmd() != null && rc.getRcCmd().size() > 0) {
                 initNormal();
             } else if (rc != null && !TextUtils.isEmpty(rc.getAirCmdString())) {

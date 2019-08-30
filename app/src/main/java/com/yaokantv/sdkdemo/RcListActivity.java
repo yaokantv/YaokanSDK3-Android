@@ -62,7 +62,7 @@ public class RcListActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(RcListActivity.this, RcActivity.class);
-                intent.putExtra(RcActivity.RID, mList.get(position).getRid());
+                intent.putExtra(RcActivity.UUID, mList.get(position).getUuid());
                 startActivity(intent);
             }
         });
