@@ -206,14 +206,14 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                     case UpdateStart:
                         if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof ProgressResult) {
                             if (App.curMac.equals(((ProgressResult) ykMessage.getData()).getMac())) {
-                                showProDlg("硬件升级中...", 0);
+                                showProDlg("固件升级中...", 0);
                             }
                         }
                         break;
                     case UpdateProgress:
                         if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof ProgressResult) {
                             if (App.curMac.equals(((ProgressResult) ykMessage.getData()).getMac())) {
-                                showProDlg("硬件升级中...", Integer.valueOf(((ProgressResult) ykMessage.getData()).getProgress().replaceAll("%", "")));
+                                showProDlg("固件升级中...", Integer.valueOf(((ProgressResult) ykMessage.getData()).getProgress().replaceAll("%", "")));
                             }
                         }
                         break;
@@ -254,6 +254,10 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                     if (mTypeResult != null && mTypeResult.getResult() != null) {
                         nameType.clear();
                         for (DeviceType deviceType : mTypeResult.getResult()) {
+                            if (deviceType.getRf() == 1 && Integer.valueOf(App.curRf) != 1) {
+                                //设备不支持射频遥控则跳过
+                                continue;
+                            }
                             nameType.add(deviceType.getName() + (deviceType.getRf() == 1 ? "(射频)" : ""));
                         }
                     }

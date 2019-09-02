@@ -16,6 +16,7 @@ import org.acra.annotation.ReportsCrashes;
 public class App extends Application {
     public static String curMac = "";//设备MAC
     public static String curDid = "";//设备DID
+    public static String curRf = "0";//设备是否支持射频
     public static String curTName = "";//设备类型
     public static String curBName = "";//品牌名称
     public static int curTid = 0;//设备类型ID

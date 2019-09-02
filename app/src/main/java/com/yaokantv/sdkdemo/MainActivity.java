@@ -131,6 +131,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 Intent intent = new Intent(MainActivity.this, BrandActivity.class);
                 App.curMac = mList.get(position).getMac();
                 App.curDid = mList.get(position).getDid();
+                App.curRf = mList.get(position).getRf();
                 startActivity(intent);
             }
         });
