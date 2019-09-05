@@ -139,6 +139,9 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
             case R.id.btn_check_version:
                 Yaokan.instance().checkDeviceVersion(App.curMac, App.curDid);
                 break;
+            case R.id.btn_device_info:
+                Yaokan.instance().deviceInfo(App.curMac, App.curDid);
+                break;
         }
     }
 
@@ -176,6 +179,10 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                         }
                         break;
                     case DeviceInfo:
+                        if (!TextUtils.isEmpty(ykMessage.getMsg())) {
+                            DlgUtils.createDefDlg(activity, ykMessage.getMsg());
+                        }
+                        break;
                     case otaVersion:
                         if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof CheckVersionResult) {
                             CheckVersionResult result = (CheckVersionResult) ykMessage.getData();
