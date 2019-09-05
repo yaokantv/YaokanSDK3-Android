@@ -2,7 +2,7 @@
 <litepal>
     <dbname value="yaoaknsdk"></dbname>
 
-    <version value="11"></version>
+    <version value="12"></version>
     <list>
         <mapping class="com.yaokantv.yaokansdk.model.RemoteCtrl" />
         <mapping class="com.yaokantv.yaokansdk.model.RcCmd" />
