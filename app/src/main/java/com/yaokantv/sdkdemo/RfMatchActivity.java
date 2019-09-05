@@ -163,13 +163,14 @@ public class RfMatchActivity extends BaseActivity implements YaokanSDKListener {
                         DlgUtils.createDefDlg(activity, "", "上传并保存成功", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                AppManager.getAppManager().finishActivities(BrandActivity.class);
                                 finish();
                             }
                         });
                         break;
                     case RfUploadFail:
                         dismiss();
-                        DlgUtils.createDefDlg(activity, "", "上传失败："+ykMessage.getMsg(), new DialogInterface.OnClickListener() {
+                        DlgUtils.createDefDlg(activity, "", "上传失败：" + ykMessage.getMsg(), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                             }

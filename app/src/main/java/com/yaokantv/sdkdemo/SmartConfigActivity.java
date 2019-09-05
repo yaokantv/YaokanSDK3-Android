@@ -22,12 +22,18 @@ public class SmartConfigActivity extends BaseActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_smart_config);
         initToolbar(R.string.t_smart_config);
-
+        Yaokan.instance().addSdkListener(this);
         tvSsid = findViewById(R.id.tv_ssid);
         String ssid = Yaokan.instance().getSsid(this);
         if (!TextUtils.isEmpty(ssid)) {
             tvSsid.setText(ssid);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Yaokan.instance().removeSdkListener(this);
     }
 
     @Override
@@ -45,6 +51,9 @@ public class SmartConfigActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onReceiveMsg(MsgType msgType, final YkMessage ykMessage) {
+        if (isFinishing()) {
+            return;
+        }
         if (ykMessage != null) {
             log(msgType.name() + ": " + ykMessage.getMsg());
         }

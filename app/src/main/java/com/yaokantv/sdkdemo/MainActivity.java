@@ -82,7 +82,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         Yaokan.instance().clearCrashLog();
                         break;
                     case R.id.about:
-                        String text = "当前版本：" + Yaokan.SDK_VERSION + "\n";
+                        String text = "当前版本：" + Yaokan.SDK_VERSION + "\n" + "发布日期：" + Yaokan.RELEASE_DATA;
                         DlgUtils.createDefDlg(activity, text);
                         break;
                     default:
