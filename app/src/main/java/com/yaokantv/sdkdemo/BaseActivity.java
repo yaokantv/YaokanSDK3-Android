@@ -132,7 +132,7 @@ public class BaseActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    dialog.setMessage(getString(com.yaokantv.yaokansdk.R.string.loading));
+                    dialog.setMessage(getString( R.string.loading));
                     dialog.show();
                 }
             });

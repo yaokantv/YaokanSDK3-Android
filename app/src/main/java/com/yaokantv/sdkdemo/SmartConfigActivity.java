@@ -62,14 +62,13 @@ public class SmartConfigActivity extends BaseActivity implements View.OnClickLis
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        dialog.setMessage(getString(com.yaokantv.yaokansdk.R.string.smart_config));
+                        dialog.setMessage(getString( R.string.smart_config));
                         dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                             @Override
                             public void onCancel(DialogInterface dialog) {
                                 Yaokan.instance().stopSmartConfig();
                             }
                         });
-                        dialog.setCancelable(false);
                         dialog.show();
                     }
                 });
