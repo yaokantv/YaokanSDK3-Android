@@ -1,8 +1,8 @@
-# Yaokan SDK3 Android 开发文档
+# Yaokan SDK4 Android 开发文档
 
 
-    文件编号：YKSDK3ANDROID-20190723
-    版本：v1.1
+    文件编号：YKSDK4ANDROID-20200522
+    版本：v1.0
 
     深圳遥看科技有限公司
     （版权所有，切勿拷贝）
@@ -11,18 +11,16 @@
 
 | 版本 | 说明 | 备注 | 日期 |
 | --- | --- | --- | --- |
-| v1 | 新建 | Dong | 20190723 |
-| v1.1 | 增加API | Peer | 20190801 |
-|   |   |   |   |   |
+| v4 | 新建 | Peer | 20200522 |
 
 
 
 ## 1. 概述
-YaokanSDK3 提供完整的设备配网，设备管理，遥控器管理功能，开箱即用，快速与已有App对接的目的。
+YaokanSDK4 提供完整的设备配网，设备管理，遥控器管理功能，开箱即用，快速与已有App对接的目的。
 
 
 ## 2. 文档阅读对象
-使用 YaokanSDK3 Android 版的客户
+使用 YaokanSDK4 Android 版的客户
 
 ## 3. 环境配置
 1. 清单文件
@@ -30,13 +28,18 @@ YaokanSDK3 提供完整的设备配网，设备管理，遥控器管理功能，
     `AndroidManifest.xml` 添加如下权限
 
     ```xml
-    <uses-permission android:name="android.permission.INTERNET" />
+     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     ```
 
 2. 网络配置
@@ -92,7 +95,7 @@ YaokanSDK3 提供完整的设备配网，设备管理，遥控器管理功能，
         implementation fileTree(dir: 'libs', include: ['*.jar'])
         implementation 'com.android.support:appcompat-v7:28.0.0'//这里改为你项目里的版本
         implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-        implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.0'
+        implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0'
         implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
         implementation 'com.google.code.gson:gson:2.8.2'
         implementation 'com.squareup.okhttp3:okhttp:3.11.0'
@@ -115,6 +118,11 @@ class App extends Application {
         super.onCreate();
         Yaokan.initialize(this);
     }
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        Yaokan.instance().onTerminate(this);
+    }
 }
 
 class YourActivity extends Activity {
@@ -122,7 +130,7 @@ class YourActivity extends Activity {
     public void onCreate() {
         super.onCreate();
         Yaokan.instance().init(getApplication(), "appId", "appSecret");
-    }    
+    }
 }
 
 Yaokan.instance().addSdkListener(YaokanSDKListener);
@@ -147,16 +155,20 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
 1. 配置入网
 
     - 使用非5G Wi-Fi 网络配网
-        
-        使用非5G Wi-Fi 网络配网
+
 
         ```java
         **
         * @param context 上下文
         * @param psw Wi-Fi密码
-        * @param yaokanSDKListener 回调监听器
+        * @param model 产品类型
         */
-        Yaokan.instance().smartConfig(context,psw, yaokanSDKListener);
+        Yaokan.instance().softApConfig(context,psw,model);
+
+        /**
+        * 停止配置入网
+        */
+        Yaokan.instance().stopSoftApConfig();
         ```
 
     - 回调
@@ -165,10 +177,10 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
         @Override
         public void onReceiveMsg(MsgTypemsgType, final YkMessage ykMessage {
             switch (msgType) {
-                case StartSmartConfig:
+                case SoftApConfigStart:
                 //配网开始
                     break;
-                case SmartConfigResult:
+                case SoftApConfigResult:
                 //配网结果
                     break;
             }
@@ -190,7 +202,7 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
     List<YkDevice> mList = Yaokan.instance().getDeviceList();
     ```
 1. 导入设备列表
-    
+
     导入设备，客户可以用来同步用户的设备列表
 
     - 导入设备方式一：字符串格式导入
@@ -204,11 +216,15 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
         Yaokan.instance().inputYkDevicesToDB(mList);
     }
     ```
-1. 删除设备
+1. 刷新设备列表
    ```java
-   Yaokan.instance().deleteDevice(mac);
-   ```     
-    
+   Yaokan.instance().loadDevices(List<YkDevice> devices);
+   ```
+1. 删除设备
+    ```java
+    Yaokan.instance().deleteDevice(mac);
+    ```
+
 1. 设备测试
 
     发送测试指令，设备收到后指示灯会快闪一次
@@ -216,17 +232,17 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
     ```java
     /**
     *
-    * @param mac 设备Mac
     * @param did 设备Did
     */
-    Yaokan.instance().test(mac, did);
+    Yaokan.instance().test(did);
     ```
+
 1. 发送命令
 
    - 常规遥控器发码
 
         发送非空调遥控指令，包括红外遥控和射频指令
-       
+
         ```java
         /**
         * 常规遥控器发码
@@ -234,10 +250,8 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
         * @param rid 遥控器Rid
         * @param key 指令名称
         * @param type 设备类型
-        * @param studyId 学习ID，在遥控器对象内,红外匹配阶段传null
-        * @param rf 是否为射频遥控，在遥控器对象内,红外匹配阶段传null
         */
-        Yaokan.instance().sendCmd(did,rid,key,type,studyId,rf);
+        Yaokan.instance().sendCmd(did,rid,key,type);
         ```
    - 空调遥控器发码
 
@@ -275,7 +289,7 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
         */
         public void sendAirCmd(did,rid,swing,isOn)
         ```
-        
+
         ```java
         @Override
         public void onReceiveMsg(final MsgType msgType, final YkMessage ykMessage) {
@@ -286,7 +300,7 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
             }
         }
         ```
-        
+
 1. 学习红外和射频
 
     修改已创建遥控器的按键功能
@@ -294,21 +308,20 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
     ```java
     /**
     *
-    * @param mac 设备Mac
     * @param did 设备Did
     * @param rc 遥控器对象
     * @param key 要学习的指令名称
     */
-    Yaokan.instance().study(mac,did,rc,key)
-    
+    Yaokan.instance().study(did,rc,key)
+
     //停止红外学习
-    Yaokan.instance().stopStudy(mac,did)
-    
+    Yaokan.instance().stopStudy(did)
+
     //开始射频学习
-    Yaokan.instance().studyRf(mac,did,rc,key)
-    
+    Yaokan.instance().studyRf(did,rc,key)
+
     //停止射频学习
-    Yaokan.instance().stopStudyRf(mac,did,rc)
+    Yaokan.instance().stopStudyRf(did,rc)
     ```
 
     ```java
@@ -324,17 +337,16 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
         }
     }
     ```
-    
-    
+
 1. 设备开灯/关灯
 
     控制设备的指示灯开关
 
     ```java
     //开灯
-    Yaokan.instance().lightOn(mac,did);
+    Yaokan.instance().lightOn(did);
     //关灯
-    Yaokan.instance().lightOff(mac,did);
+    Yaokan.instance().lightOff(did);
     ```
 
 1. 硬件升级OTA
@@ -342,15 +354,46 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
     OTA升级硬件固件，支持显示升级进度
 
     ```java
-    Yaokan.instance().updateDevice(mac,did);
+    Yaokan.instance().updateDevice(did);
     ```
+1. 获取设备内的遥控器列表
 
+    ```java
+    /**
+     * 获取设备内的遥控器列表
+     * @param did
+     * @param start 开始位 比如 0
+     * @param size 获取个数 最大15
+     */
+    Yaokan.instance().deviceCtrlList(String did, String start, int size);
+    ```
+1. 删除设备内的遥控器
+
+    ```java
+     /**
+     * 删除设备内的遥控器
+     * @param curDid
+     * @param rid
+     */
+    Yaokan.instance().deleteDeviceCode(String curDid, String rid);
+    ```
+1. 获取遥控器名称
+
+    ```java
+     /**
+     * 获取遥控器名称
+     *
+     * @param rid
+     * @return
+     */
+    public String getNameByRid(String rid);
+    ```
 1. 获取硬件版本
 
     获取硬件当前的版本号,显示硬件版本号，格式为 x.x.x
 
     ```java
-    Yaokan.instance().checkDeviceVersion(mac,did);
+    Yaokan.instance().checkDeviceVersion(did);
     ```
     ```java
     @Override
@@ -366,12 +409,12 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
 1. 设备复位
 
     复位设备，进入配网状态
-    
+
     ```java
     Yaokan.instance().resetApple(mac,did);
     ```
 
-### 4.2 遥控器接口
+### 4.3 遥控器接口
 1. 获取被遥控设备类型列表
 
     ```java
@@ -389,7 +432,7 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
     Yaokan.instance().getBrandsByType(tid)
     ```
 1. 进入一级匹配
-    
+
     ```java
     /**
     *
@@ -435,14 +478,69 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
 
 1. 保存遥控器
 
-    匹配完成后，可以通过遥控器id下载详情保存至本地
+    匹配完成后，先要将码库下载到设备，下载成功后可以通过遥控器id下载详情保存至本地
 
     ```java
     /**
-    *
+     * 将码库下载到设备
+     *
+     * @param rid  遥控器ID
+     * @param type 设备类型
+     */
+    Yaokan.instance().downloadCodeToDevice(App.curDid, rc.getRid(), rc.getBe_rc_type());
+    /**
+     * 将射频码库下载到设备
+     *
+     * @param rid  遥控器ID
+     * @param type 设备类型
+     */
+    Yaokan.instance().downloadRFCodeToDevice(App.curDid, rc.getRid(), rc.getBe_rc_type());
+
+    /**
     * @param rc 遥控器对象
     */
     Yaokan.instance().saveRc(rc);
+    ```
+
+    ```java
+    @Override
+    public void onReceiveMsg(final MsgType msgType, final YkMessage ykMessage) {
+        switch (msgType) {
+            case DownloadCode:
+                final DeviceResult result = (DeviceResult) ykMessage.getData();
+                switch (result.getCode()) {
+                    case Contants.YK_DOWNLOAD_CODE_RESULT_START_FAIL:
+                        msg = "开启下载遥控器失败";
+                        break;
+                    case Contants.YK_DOWNLOAD_CODE_RESULT_START:
+                    //开始下载遥控器
+                        break;
+                    case Contants.YK_DOWNLOAD_CODE_RESULT_SUC:
+                    //下载遥控器成功
+                        break;
+                    case Contants.YK_DOWNLOAD_CODE_RESULT_FAIL:
+                        msg = "下载遥控器失败";
+                        break;
+                    case Contants.YK_DOWNLOAD_CODE_RESULT_EXIST:
+                        msg = "遥控器已存在设备中";
+                        break;
+                    case Contants.YK_DOWNLOAD_CODE_RESULT_AIR_MAX:
+                        msg = "空调遥控器达到极限";
+                        break;
+                    case Contants.YK_DOWNLOAD_CODE_RESULT_IR_MAX:
+                        msg = "非空调遥控器达到极限";
+                        break;
+                    case Contants.YK_DOWNLOAD_CODE_RESULT_RF_MAX:
+                        msg = "射频遥控器达到极限";
+                        break;
+                    case Contants.YK_DOWNLOAD_CODE_RESULT_DOOR_MAX:
+                        msg = "门铃遥控器达到极限";
+                        break;
+                    }
+                break;
+
+        }
+    }
     ```
 1. 更新遥控器
 
@@ -455,24 +553,72 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
 1. 删除遥控器
 
     ```java
-    //用Rid删除遥控器的方法已过期，建议使用deleteRcByUUID
-    Yaokan.instance().deleteRc(rid);
-    //UUID为本地生成的遥控器唯一ID
-    Yaokan.instance().deleteRcByUUID(rc.getUuid());
+
+     /**
+     * 删除设备端的遥控器
+     * @param did
+     * @param rid 遥控器ID
+     */
+     Yaokan.instance().deleteDeviceRc(rc.getRid());
+     //在设备端删除成功后在删除手机数据库里的遥控器
+
+
+     /**
+     * 删除数据库中的遥控器
+     *
+     * @param uuid UUID为本地生成的遥控器唯一ID
+     */
+    Yaokan.instance().deleteRcByUUID(String uuid)
+
+    /**
+     * 删除设备内所有遥控器
+     * @param did
+     */
+    Yaokan.instance().deleteAllDevice(String did)
+
+    /**
+     * 删除手机数据库内所有遥控器
+     * @param did
+     */
+    Yaokan.instance().deleteAllRcDevice()
+    ```
+     ```java
+    @Override
+    public void onReceiveMsg(final MsgType msgType, final YkMessage ykMessage) {
+        switch (msgType) {
+            case DelAppleCtrl:
+            DeviceResult result = (DeviceResult) ykMessage.getData();
+            switch (result.getCode()) {
+                case Contants.YK_DELETE_CODE_RESULT_SINGLE_SUC:
+                    //删除遥控器成功
+                    break;
+                case Contants.YK_DELETE_CODE_RESULT_SINGLE_FAIL:
+                    //删除遥控器失败
+                    break;
+                case Contants.YK_DELETE_CODE_RESULT_ALL_SUC:
+                    //删除所有遥控器成功
+                    break;
+                case Contants.YK_DELETE_CODE_RESULT_ALL_FAIL:
+                    //删除所有遥控器失败
+                    break;
+            }
+                break;
+        }
+    }
     ```
 1. 获取遥控器详情
 
     遥控器详情，用于在二级匹配中切换时调用
-    
+
     ```java
-    RemoteCtrl rc = Yaokan.instance().getRcData(rid);
+    RemoteCtrl rc = Yaokan.instance().getRcDataByUUID(uuid);
     ```
 1. 获取遥控器列表
 
     ```java
     List<RemoteCtrl> list = Yaokan.instance().getRcList();
     ```
-    
+
 1. 导出遥控器JSON数据
 
     ```java
@@ -483,22 +629,39 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
     ```java
     Yaokan.instance().saveRcList(json);
     ```
+### 4.4 其他接口
+1. 设置发码是否震动
 
-### 4.3	SDK错误码表
-主要列出了调用SDK的时候，SDK回调返回的错误码信息
+    ```java
+    /**
+     * 发码时是否震动
+     *
+     * @param b
+     */
+    Yaokan.instance().setVibrate(boolean b);
+    ```
+1. 机顶盒运营商相关
 
-| 值 | 代码 | 说明 |
-| --- | --- | --- |
-| 0 | YKSDK_SUCC | 操作成功 |
-| 1001 | YKSDK_APPID_INVALID | APPID无效 |
-| 1002 | YKSDK_SMARTCONFIG_TIMEOUT  | 设备配置超时 |
-| 1003 | YKSDK_DEVICE_DID_INVALID | 设备 did 无效 |
-| 1004 | YKSDK_DEVICE_DID_INVALID | 设备 did 无效 |
-| 1005 | YKSDK_CONNECTION_TIMEOUT | 连接超时 |
-| 1006 | YKSDK_CONNECTION_REFUSED | 连接被拒绝 |
-| 1007 | YKSDK_CONNECTION_ERROR | 连接错误 |
-| 1008 | YKSDK_CONNECTION_CLOSED | 连接被关闭 |
-| 1009 | YKSDK_SSL_HANDSHAKE_FAILED | ssl 握手失败 |
-| 1010 | YKSDK_INTERNET_NOT_REACHABLE | 当前外网不可达 |
-| 1011 | YKSDK_NOT_INITIALIZED| SDK 未初始化 |
-| 1012 | YKSDK_PERMISSION_NOT_SET | app 权限不足 |
+    ```java
+    /**
+     * 获取区域信息
+     *
+     * @param id 地区ID，传0表示获取省级和直辖市行政单位
+     */
+    Yaokan.instance().getArea(int id);
+    /**
+     * 获取运营商列表
+     *
+     * @param id 地区ID
+     */
+    public void getProvidersByAreaId(int id);
+    ```
+1. 获取设备信息
+    ```java
+    /**
+     * 硬件信息
+     *
+     * @param did
+     */
+    Yaokan.instance().deviceInfo(String did);
+    ```
