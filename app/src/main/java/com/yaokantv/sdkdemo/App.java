@@ -4,13 +4,14 @@ import android.app.Application;
 
 import com.yaokantv.yaokansdk.crash.YKSenderfactory;
 import com.yaokantv.yaokansdk.manager.Yaokan;
+import com.yaokantv.yaokansdk.model.Operators;
 
 import org.acra.ReportField;
 import org.acra.annotation.ReportsCrashes;
 
 @ReportsCrashes(
-        reportSenderFactoryClasses ={YKSenderfactory.class},
-        customReportContent = { ReportField.APP_VERSION_CODE, ReportField.APP_VERSION_NAME, ReportField.ANDROID_VERSION, ReportField.PHONE_MODEL, ReportField.CUSTOM_DATA, ReportField.STACK_TRACE, ReportField.LOGCAT },
+        reportSenderFactoryClasses = {YKSenderfactory.class},
+        customReportContent = {ReportField.APP_VERSION_CODE, ReportField.APP_VERSION_NAME, ReportField.ANDROID_VERSION, ReportField.PHONE_MODEL, ReportField.CUSTOM_DATA, ReportField.STACK_TRACE, ReportField.LOGCAT},
         resToastText = R.string.loading
 )
 public class App extends Application {
@@ -22,6 +23,7 @@ public class App extends Application {
     public static int curTid = 0;//设备类型ID
     public static int curBid = 0;//品牌ID
     public static int curGid = 0;//组ID
+    public static Operators operators = null;//运营商对象
 
     @Override
     public void onCreate() {

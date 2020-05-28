@@ -7,20 +7,25 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.yaokantv.yaokansdk.Contants;
 import com.yaokantv.yaokansdk.callback.YaokanSDKListener;
 import com.yaokantv.yaokansdk.manager.Yaokan;
-import com.yaokantv.yaokansdk.model.SmartConfigResult;
+import com.yaokantv.yaokansdk.model.SoftApConfigResult;
 import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
 import com.yaokantv.yaokansdk.utils.DlgUtils;
+import com.yaokantv.yaokansdk.utils.Logger;
 
-public class SmartConfigActivity extends BaseActivity implements View.OnClickListener, YaokanSDKListener {
+/**
+ * SoftAp配网
+ */
+public class SoftApConfigActivity extends BaseActivity implements View.OnClickListener, YaokanSDKListener {
     TextView tvSsid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_smart_config);
+        setContentView(R.layout.activity_soft_ap_config);
         initToolbar(R.string.t_smart_config);
         Yaokan.instance().addSdkListener(this);
         tvSsid = findViewById(R.id.tv_ssid);
@@ -43,7 +48,7 @@ public class SmartConfigActivity extends BaseActivity implements View.OnClickLis
                 EditText editText = findViewById(R.id.et_psw);
                 String psw = editText.getText().toString();
                 if (!TextUtils.isEmpty(psw)) {
-                    Yaokan.instance().smartConfig(this, psw, this);
+                    Yaokan.instance().softApConfig(this, psw, Contants.YKK_MODEL_1013_RF);
                 }
                 break;
         }
@@ -58,22 +63,24 @@ public class SmartConfigActivity extends BaseActivity implements View.OnClickLis
             log(msgType.name() + ": " + ykMessage.getMsg());
         }
         switch (msgType) {
-            case StartSmartConfig:
+            //开始配网
+            case SoftApConfigStart:
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        dialog.setMessage(getString( R.string.smart_config));
+                        dialog.setMessage(getString(com.yaokantv.yaokansdk.R.string.smart_config));
                         dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                             @Override
                             public void onCancel(DialogInterface dialog) {
-                                Yaokan.instance().stopSmartConfig();
+                                Yaokan.instance().stopSoftApConfig();
                             }
                         });
                         dialog.show();
                     }
                 });
                 break;
-            case SmartConfigResult:
+            //配网结束
+            case SoftApConfigResult:
                 if (dialog != null) {
                     runOnUiThread(new Runnable() {
                         @Override
@@ -82,8 +89,9 @@ public class SmartConfigActivity extends BaseActivity implements View.OnClickLis
                             DlgUtils.createDefDlg(activity, "", ykMessage.getMsg(), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof SmartConfigResult) {
-                                        SmartConfigResult result = (SmartConfigResult) ykMessage.getData();
+                                    if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof SoftApConfigResult) {
+                                        SoftApConfigResult result = (SoftApConfigResult) ykMessage.getData();
+                                        Logger.e(result.toString());
                                         if (result.isResult()) {
                                             //result = true 配网成功
                                             finish();

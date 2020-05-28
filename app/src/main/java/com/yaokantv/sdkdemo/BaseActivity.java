@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,8 +19,6 @@ public class BaseActivity extends AppCompatActivity {
     ProgressDialog dialog;
     ProgressDialog progressDialog;
     static final String TAG = "YaokanSDK";
-    protected String[] rcItem = {"删除"};
-    protected String[] rcListItem = {"查询小苹果内的遥控器"};
     Activity activity;
     Toolbar toolbar;
 
@@ -30,6 +29,7 @@ public class BaseActivity extends AppCompatActivity {
         dialog = new ProgressDialog(this);
         progressDialog = new ProgressDialog(this);
         AppManager.getAppManager().addActivity(activity);
+
 
     }
 
@@ -53,6 +53,10 @@ public class BaseActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    protected void toast(final int s) {
+        toast(activity.getString(s));
     }
 
     protected void toast(final String s) {
@@ -132,7 +136,7 @@ public class BaseActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    dialog.setMessage(getString( R.string.loading));
+                    dialog.setMessage(getString(com.yaokantv.yaokansdk.R.string.loading));
                     dialog.show();
                 }
             });
@@ -194,6 +198,47 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    CountDownTimer timer;
+
+    /**
+     * @param time 超时时间
+     * @param s
+     */
+    protected void showDlg(int time, String s, OnDownloadTimerOutListener onDownloadTimerOutListener) {
+        this.onDownloadTimerOutListener = onDownloadTimerOutListener;
+        if (timer != null) {
+            timer.cancel();
+        }
+        timer = new CountDownTimer(time * 1000, 900) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                if (onDownloadTimerOutListener != null) {
+                    onDownloadTimerOutListener.onTimeOut();
+                }
+                timer.cancel();
+                timer = null;
+                dismiss();
+            }
+        };
+        timer.start();
+        showForceDlg(s);
+    }
+
+    OnDownloadTimerOutListener onDownloadTimerOutListener;
+
+    public void setOnDownloadTimerOutListener(OnDownloadTimerOutListener onDownloadTimerOutListener) {
+        this.onDownloadTimerOutListener = onDownloadTimerOutListener;
+    }
+
+    interface OnDownloadTimerOutListener {
+        void onTimeOut();
+    }
+
     protected void showDlg(final String s, final DialogInterface.OnCancelListener listener) {
         if (dialog != null && !dialog.isShowing()) {
             runOnUiThread(new Runnable() {
@@ -209,6 +254,10 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void dismiss() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
         if (dialog != null && dialog.isShowing()) {
             runOnUiThread(new Runnable() {
                 @Override

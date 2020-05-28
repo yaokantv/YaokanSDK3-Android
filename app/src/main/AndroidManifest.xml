@@ -18,6 +18,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".SoftApConfigActivity"></activity>
+        <activity android:name=".AppleCtrlListActivity" />
         <activity
             android:name=".RfMatchActivity"
             android:screenOrientation="portrait"></activity>
@@ -54,10 +56,6 @@
         <activity
             android:name=".SelectProviderActivity"
             android:label="电视运营商"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".SmartConfigActivity"
-            android:label="配置入网"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"

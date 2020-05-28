@@ -13,6 +13,9 @@ import com.yaokantv.yaokansdk.model.e.MsgType;
 
 import java.util.List;
 
+/**
+ * 一级匹配
+ */
 public class MatchActivity extends BaseActivity implements View.OnClickListener, YaokanSDKListener {
     int index = 0;
     List<MatchingData> dataList;
@@ -71,7 +74,7 @@ public class MatchActivity extends BaseActivity implements View.OnClickListener,
 
     private void match() {
         if (mMatch != null) {
-            Yaokan.instance().sendCmd(App.curDid, mMatch.getRid(), mMatch.getCmd(), App.curTid,null,null);
+            Yaokan.instance().sendCmd(App.curDid, mMatch.getRid(), mMatch.getCmd(), App.curTid, null, null);
         }
     }
 

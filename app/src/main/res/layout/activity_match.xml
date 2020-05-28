@@ -6,6 +6,7 @@
     android:orientation="vertical"
     tools:context=".MatchActivity">
     <include layout="@layout/layout_title" />
+
     <TextView
         android:id="@+id/tips"
         android:layout_width="wrap_content"

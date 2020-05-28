@@ -8,4 +8,9 @@
         android:orderInCategory="100"
         android:title="删除遥控器"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/export_single"
+        android:orderInCategory="100"
+        android:title="导出遥控器"
+        app:showAsAction="never" />
 </menu>

@@ -46,7 +46,8 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
         Yaokan.instance().addSdkListener(this);
         initToolbar(App.curMac);
         //检测更新
-        Yaokan.instance().checkDeviceVersion(App.curMac, App.curDid);
+        Yaokan.instance().checkDeviceVersion(App.curDid);
+
     }
 
     @Override
@@ -125,22 +126,25 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                 }
                 break;
             case R.id.btn_light_on:
-                Yaokan.instance().lightOn(App.curMac, App.curDid);
+                Yaokan.instance().lightOn(App.curDid);
                 break;
             case R.id.btn_light_off:
-                Yaokan.instance().lightOff(App.curMac, App.curDid);
+                Yaokan.instance().lightOff(App.curDid);
                 break;
             case R.id.btn_update_device:
-                Yaokan.instance().updateDevice(App.curMac, App.curDid);
+                Yaokan.instance().updateDevice(App.curDid);
                 break;
             case R.id.btn_reset_apple:
                 Yaokan.instance().resetApple(App.curMac, App.curDid);
                 break;
             case R.id.btn_check_version:
-                Yaokan.instance().checkDeviceVersion(App.curMac, App.curDid);
+                Yaokan.instance().checkDeviceVersion(App.curDid);
                 break;
             case R.id.btn_device_info:
-                Yaokan.instance().deviceInfo(App.curMac, App.curDid);
+                Yaokan.instance().deviceInfo(App.curDid);
+                break;
+            case R.id.btn_ctrl_list:
+                startActivity(new Intent(activity, AppleCtrlListActivity.class));
                 break;
         }
     }
@@ -187,13 +191,15 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                         if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof CheckVersionResult) {
                             CheckVersionResult result = (CheckVersionResult) ykMessage.getData();
                             if (!TextUtils.isEmpty(result.getOtaversion()) && !TextUtils.isEmpty(result.getVersion())) {
-                                if (!result.getOtaversion().equals(result.getVersion())) {
+                                int newV = Integer.valueOf(result.getOtaversion().replace('.', '0'));
+                                int curV = Integer.valueOf(result.getVersion().replace('.', '0'));
+                                if (newV > curV) {
                                     DlgUtils.createDefDlg(activity, "版本更新", "硬件检测到新版本，是否更新？" + "\n当前版本：" + result.getVersion()
                                             + "\n最新版本：" + result.getOtaversion(), new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             dialog.dismiss();
-                                            Yaokan.instance().updateDevice(App.curMac, App.curDid);
+                                            Yaokan.instance().updateDevice(App.curDid);
                                         }
                                     }, new DialogInterface.OnClickListener() {
                                         @Override
@@ -203,7 +209,7 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                                     });
                                 } else {
                                     if (!isFirst) {
-                                        DlgUtils.createDefDlg(activity, "当前已是最新版本：" + result.getOtaversion());
+                                        DlgUtils.createDefDlg(activity, "当前已是最新版本：" + result.getVersion());
                                     }
                                 }
                             }

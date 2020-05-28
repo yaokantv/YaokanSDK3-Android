@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.ListView;
 
 import com.yaokantv.yaokansdk.callback.YaokanSDKListener;
 import com.yaokantv.yaokansdk.manager.Yaokan;
+import com.yaokantv.yaokansdk.model.RemoteCtrl;
 import com.yaokantv.yaokansdk.model.YkDevice;
 import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
@@ -100,7 +102,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 helper.setOnclickListener(R.id.btn_test, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Yaokan.instance().test(item.getMac(), item.getDid());
+                        Yaokan.instance().test(item.getDid());
                     }
                 });
                 helper.setOnclickListener(R.id.btn_del, new View.OnClickListener() {
@@ -131,7 +133,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 Intent intent = new Intent(MainActivity.this, BrandActivity.class);
                 App.curMac = mList.get(position).getMac();
                 App.curDid = mList.get(position).getDid();
-                App.curRf = mList.get(position).getRf();
+                App.curRf = mList.get(position).getName().contains("RF") ? "1" : "0";
                 startActivity(intent);
             }
         });
@@ -146,11 +148,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_smart_config:
+            case R.id.btn_soft_ap_config:
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    startActivity(new Intent(this, SmartConfigActivity.class));
+                    startActivity(new Intent(this, SoftApConfigActivity.class));
                 } else {
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 99);
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 98);
                 }
                 break;
             case R.id.btn_input_device_list:
@@ -181,51 +183,50 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 DlgUtils.createDefDlg(activity, s2);
                 break;
             case R.id.btn_input_rc_list:
-                String json = "[{\"name\":\"海尔风扇 1-0-0\",\"rid\":\"20150724144229\",\"rmodel\":\"1-0-0\",\"be_rmodel\":\"1\",\"be_rc_type\":6,\"bid\":71,\"mac\":\"84F3EB30F05D\",\"rf\":\"0\",\"study_id\":\"0\",\"rc_command\":{\"mode\":{\"name\":\"模式\",\"value\":\"mode\",\"stand_key\":1,\"order_no\":1},\"timer\":{\"name\":\"定时\",\"value\":\"timer\",\"stand_key\":1,\"order_no\":1},\"fanspeed\":{\"name\":\"风速\",\"value\":\"fanspeed\",\"stand_key\":1,\"order_no\":1},\"poweroff\":{\"name\":\"关机\",\"value\":\"poweroff\",\"stand_key\":1,\"order_no\":1},\"oscillation\":{\"name\":\"摇头 \",\"value\":\"oscillation\",\"stand_key\":1,\"order_no\":1},\"power\":{\"name\":\"电源\",\"value\":\"power\",\"stand_key\":1,\"order_no\":1}}},{\"name\":\"易百珑开关\",\"rid\":\"4\",\"be_rc_type\":21,\"bid\":3175,\"mac\":\"84F3EB30F05D\",\"rf\":\"1\",\"study_id\":\"0\",\"rc_command\":{\"power\":{\"name\":\"电源\",\"value\":\"power\",\"stand_key\":1,\"order_no\":1},\"on\":{\"name\":\"开\",\"value\":\"on\",\"stand_key\":1,\"order_no\":2},\"off\":{\"name\":\"关\",\"value\":\"off\",\"stand_key\":1,\"order_no\":3},\"key1\":{\"name\":\"自定义1\",\"value\":\"key1\",\"stand_key\":0,\"order_no\":4},\"key2\":{\"name\":\"自定义2\",\"value\":\"key2\",\"stand_key\":0,\"order_no\":5},\"key3\":{\"name\":\"自定义3\",\"value\":\"key3\",\"stand_key\":0,\"order_no\":6},\"key4\":{\"name\":\"自定义4\",\"value\":\"key4\",\"stand_key\":0,\"order_no\":7},\"key5\":{\"name\":\"自定义5\",\"value\":\"key5\",\"stand_key\":0,\"order_no\":8},\"key6\":{\"name\":\"自定义6\",\"value\":\"key6\",\"stand_key\":0,\"order_no\":9},\"key7\":{\"name\":\"自定义7\",\"value\":\"key7\",\"stand_key\":0,\"order_no\":10},\"key8\":{\"name\":\"自定义8\",\"value\":\"key8\",\"stand_key\":0,\"order_no\":11},\"key9\":{\"name\":\"自定义9\",\"value\":\"key9\",\"stand_key\":0,\"order_no\":12}}},{\"name\":\"海尔(小超人)空调 a19\",\"rid\":\"20181120083237\",\"rmodel\":\"a19\",\"be_rmodel\":\"空调\",\"be_rc_type\":7,\"bid\":72,\"mac\":\"DC4F22529E01\",\"rf\":\"0\",\"study_id\":\"0\",\"rc_command\":{\"mode\":[\"auto\",\"cold\",\"dry\",\"hot\",\"wind\"],\"attributes\":{\"verticalIndependent\":0,\"horizontalIndependent\":0,\"auto\":{\"speed\":[0],\"swing\":[\"verticalOff\",\"verticalOn\"],\"temperature\":[]},\"dry\":{\"speed\":[1],\"swing\":[\"verticalOff\",\"verticalOn\"],\"temperature\":[]},\"hot\":{\"speed\":[0,1,2,3],\"swing\":[\"verticalOff\",\"verticalOn\"],\"temperature\":[16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]},\"cold\":{\"speed\":[0,1,2,3],\"swing\":[\"verticalOff\",\"verticalOn\"],\"temperature\":[16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]},\"wind\":{\"speed\":[1,2,3],\"swing\":[\"verticalOff\",\"verticalOn\"],\"temperature\":[16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]}}}}]";
-                Yaokan.instance().inputRcString(json);
+                String data = "[{\"name\":\"常新灯 a_CX-01\",\"rid\":\"201907040903133\",\"rmodel\":\"a_CX-01\",\"be_rmodel\":\"a_CX-01\",\"be_rc_type\":8,\"bid\":3416,\"mac\":\"BCDDC2E37233\",\"rf\":\"0\",\"rf_body\":\"\",\"rc_command_type\":1,\"study_id\":\"0\",\"rc_command\":{\"power\":{\"name\":\"电源\",\"value\":\"power\",\"stand_key\":1,\"order_no\":1}}}]";
+                List<RemoteCtrl> list = Yaokan.instance().inputRcString(data);
+                for (RemoteCtrl ctrl : list) {
+                    Log.e(TAG, ctrl.toString());
+                }
                 break;
 
         }
+
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 99 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            startActivity(new Intent(this, SmartConfigActivity.class));
+        if (requestCode == 98 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            startActivity(new Intent(this, SoftApConfigActivity.class));
         }
     }
 
     @Override
-    public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
-        switch (msgType) {
-            case DeviceOnline:
-                if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof YkDevice) {
-                    YkDevice device = (YkDevice) ykMessage.getData();
-                    Yaokan.instance().inputYkDeviceToDB(device);
-                    if (mList.contains(device)) {
-                        mList.remove(device);
-                    }
-                    if (!TextUtils.isEmpty(device.getDid())) {
-                        mList.add(device);
-                        notifyList();
-                    }
+    public void onReceiveMsg(final MsgType msgType, final YkMessage ykMessage) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                switch (msgType) {
+                    case DeviceOnline:
+                    case DeviceOffline:
+
+                        if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof YkDevice) {
+                            YkDevice device = (YkDevice) ykMessage.getData();
+                            //设备上线之后要把设备保存进去
+                            Yaokan.instance().inputYkDeviceToDB(device);
+                            if (mList.contains(device)) {
+                                mList.remove(device);
+                            }
+                            if (!TextUtils.isEmpty(device.getDid())) {
+                                mList.add(device);
+                                notifyList();
+                            }
+                        }
+                        break;
                 }
-                break;
-            case DeviceOffline:
-                if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof YkDevice) {
-                    YkDevice device = (YkDevice) ykMessage.getData();
-                    Yaokan.instance().inputYkDeviceToDB(device);
-                    if (mList.contains(device)) {
-                        mList.remove(device);
-                    }
-                    if (!TextUtils.isEmpty(device.getDid())) {
-                        mList.add(device);
-                        notifyList();
-                    }
-                }
-                break;
-        }
+            }
+        });
     }
 
     void notifyList() {

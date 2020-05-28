@@ -1,5 +1,6 @@
 package com.yaokantv.sdkdemo;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -7,9 +8,11 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.yaokantv.yaokansdk.Contants;
 import com.yaokantv.yaokansdk.callback.YaokanSDKListener;
 import com.yaokantv.yaokansdk.manager.Yaokan;
 import com.yaokantv.yaokansdk.model.AirOrder;
+import com.yaokantv.yaokansdk.model.DeviceResult;
 import com.yaokantv.yaokansdk.model.MatchingData;
 import com.yaokantv.yaokansdk.model.Mode;
 import com.yaokantv.yaokansdk.model.RcCmd;
@@ -18,6 +21,8 @@ import com.yaokantv.yaokansdk.model.Swing;
 import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
 import com.yaokantv.yaokansdk.utils.CommonAdapter;
+import com.yaokantv.yaokansdk.utils.DlgUtils;
+import com.yaokantv.yaokansdk.utils.Logger;
 import com.yaokantv.yaokansdk.utils.ViewHolder;
 
 import java.util.ArrayList;
@@ -74,7 +79,7 @@ public class SecondMatchActivity extends BaseActivity implements View.OnClickLis
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     String key = codeKeys.get(position).getValue();
-                    Yaokan.instance().sendCmd(App.curDid, rc.getRid(), key, rc.getBe_rc_type(),null,null);
+                    Yaokan.instance().sendCmd(App.curDid, rc.getRid(), key, rc.getBe_rc_type(), null, null);
                 }
             });
         }
@@ -121,10 +126,12 @@ public class SecondMatchActivity extends BaseActivity implements View.OnClickLis
             case R.id.btn_save:
                 rc.setName(App.curBName + App.curTName + " " + rc.getRmodel());
                 rc.setMac(App.curMac);
-                Yaokan.instance().saveRc(rc);
-                AppManager.getAppManager().finishActivities(SelectProviderActivity.class,
-                        BrandActivity.class, MatchActivity.class);
-                finish();
+                if (rc.getBe_rc_type() == 1 && App.operators != null) {//机顶盒有运营商数据
+                    rc.setProvider(App.operators.getJson());
+                    App.operators = null;
+                }
+                Yaokan.instance().downloadCodeToDevice(App.curDid, rc.getRid(), rc.getBe_rc_type());
+
                 break;
             case R.id.btn_get_again:
                 showDlg();
@@ -136,10 +143,10 @@ public class SecondMatchActivity extends BaseActivity implements View.OnClickLis
                 }
                 break;
             case R.id.btn_on:
-                Yaokan.instance().sendCmd(App.curDid, rc.getRid(), "on", rc.getBe_rc_type(),null,null);
+                Yaokan.instance().sendCmd(App.curDid, rc.getRid(), "on", rc.getBe_rc_type(), null, null);
                 break;
             case R.id.btn_off:
-                Yaokan.instance().sendCmd(App.curDid, rc.getRid(), "off", rc.getBe_rc_type(),null,null);
+                Yaokan.instance().sendCmd(App.curDid, rc.getRid(), "off", rc.getBe_rc_type(), null, null);
                 break;
             case R.id.btn_mode:
                 modeIndex++;
@@ -374,7 +381,7 @@ public class SecondMatchActivity extends BaseActivity implements View.OnClickLis
     }
 
     @Override
-    public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
+    public void onReceiveMsg(final MsgType msgType, final YkMessage ykMessage) {
         switch (msgType) {
             case SecondMatching:
                 if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof List) {
@@ -390,6 +397,76 @@ public class SecondMatchActivity extends BaseActivity implements View.OnClickLis
                 if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof RemoteCtrl) {
                     rc = (RemoteCtrl) ykMessage.getData();
                     setRcData();
+                }
+                break;
+            case DownloadCode:
+                if (!isFinishing()) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final DeviceResult result = (DeviceResult) ykMessage.getData();
+                            Logger.e("DownloadCode" + result.toString());
+                            if (result != null && !TextUtils.isEmpty(App.curMac) && App.curMac.equals(result.getMac())) {
+                                String msg = "";
+                                switch (result.getCode()) {
+                                    case Contants.YK_DOWNLOAD_CODE_RESULT_START_FAIL:
+                                        dismiss();
+                                        msg = "开启下载遥控器失败";
+                                        break;
+                                    case Contants.YK_DOWNLOAD_CODE_RESULT_START://开始下载遥控器
+                                        Logger.e("开始下载遥控器");
+                                        showDlg(120, "正在下载码库到设备...", new OnDownloadTimerOutListener() {
+                                            @Override
+                                            public void onTimeOut() {
+                                                DlgUtils.createDefDlg(activity, "下载超时");
+                                            }
+                                        });
+                                        break;
+                                    case Contants.YK_DOWNLOAD_CODE_RESULT_SUC://下载遥控器成功
+                                        Logger.e("下载遥控器成功");
+                                        dismiss();
+                                        DlgUtils.createDefDlg(activity, "", "下载成功", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Yaokan.instance().saveRc(rc);
+                                                AppManager.getAppManager().finishActivities(SelectProviderActivity.class,
+                                                        BrandActivity.class, MatchActivity.class);
+                                                finish();
+                                            }
+                                        }, false);
+
+                                        break;
+                                    case Contants.YK_DOWNLOAD_CODE_RESULT_FAIL:
+                                        msg = "下载遥控器失败";
+                                        break;
+                                    case Contants.YK_DOWNLOAD_CODE_RESULT_EXIST:
+                                        msg = "遥控器已存在设备中";
+                                        break;
+                                    case Contants.YK_DOWNLOAD_CODE_RESULT_AIR_MAX:
+                                        msg = "空调遥控器达到极限";
+                                        break;
+                                    case Contants.YK_DOWNLOAD_CODE_RESULT_IR_MAX:
+                                        msg = "非空调遥控器达到极限";
+                                        break;
+                                    case Contants.YK_DOWNLOAD_CODE_RESULT_RF_MAX:
+                                        msg = "射频遥控器达到极限";
+                                        break;
+                                    case Contants.YK_DOWNLOAD_CODE_RESULT_DOOR_MAX:
+                                        msg = "门铃遥控器达到极限";
+                                        break;
+                                }
+                                if (!TextUtils.isEmpty(msg)) {
+                                    dismiss();
+                                    DlgUtils.createDefDlg(activity, "", msg, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                        }
+                                    }, false);
+                                }
+                            }
+                        }
+                    });
                 }
                 break;
         }

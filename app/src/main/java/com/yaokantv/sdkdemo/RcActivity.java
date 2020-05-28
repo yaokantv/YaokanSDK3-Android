@@ -13,9 +13,11 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.yaokantv.yaokansdk.Contants;
 import com.yaokantv.yaokansdk.callback.YaokanSDKListener;
 import com.yaokantv.yaokansdk.manager.Yaokan;
 import com.yaokantv.yaokansdk.model.AirOrder;
+import com.yaokantv.yaokansdk.model.DeviceResult;
 import com.yaokantv.yaokansdk.model.Mode;
 import com.yaokantv.yaokansdk.model.RcCmd;
 import com.yaokantv.yaokansdk.model.RemoteCtrl;
@@ -74,11 +76,19 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
+                    case R.id.export_single:
+                        String json = Yaokan.instance().exportRcString(rc.getUuid());
+                        DlgUtils.createDefDlg(RcActivity.this, json);
+                        break;
                     case R.id.action_delete_rc:
-                        //用Rid删除遥控器的方法已过期，建议使用deleteRcByUUID
-//                        Yaokan.instance().deleteRc(rc.getRid());
-                        Yaokan.instance().deleteRcByUUID(rc.getUuid());
-                        finish();
+                        if (Yaokan.instance().isDeviceOnline(rc.getMac())) {
+                            //如果设备在线先删除设备端的遥控器
+                            Yaokan.instance().deleteDeviceRc(did, rc.getRid());
+                        } else {
+                            //如果不在线则只能删除手机数据库中的遥控器
+                            Yaokan.instance().deleteRcByUUID(rc.getUuid());
+                            finish();
+                        }
                         break;
                     default:
                         break;
@@ -120,7 +130,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!isStudy) {
-                    Yaokan.instance().sendCmd(did, rc.getRid(), rc.getRcCmd().get(position).getValue(), rc.getBe_rc_type(), rc.getStudyId(), rc.getRf());
+                    Yaokan.instance().sendCmd(did, rc.getRid(), rc.getRcCmd().get(position).getValue(), rc.getBe_rc_type(), rc.getStudy_id(), rc.getRf());
                 }
             }
         });
@@ -131,9 +141,9 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
                     return false;
                 }
                 if (rc.getBe_rc_type() >= 21 && rc.getBe_rc_type() <= 24) {
-                    Yaokan.instance().studyRf(rc.getMac(), did, rc, rc.getRcCmd().get(position).getValue());
+                    Yaokan.instance().studyRf(did, rc, rc.getRcCmd().get(position).getValue());
                 } else {
-                    Yaokan.instance().study(rc.getMac(), did, rc, rc.getRcCmd().get(position).getValue());
+                    Yaokan.instance().study(did, rc, rc.getRcCmd().get(position).getValue());
                 }
                 showDlg("请对准小苹果发码...", new DialogInterface.OnCancelListener() {
                     @Override
@@ -142,7 +152,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
                         if (countDownTime != null) {
                             countDownTime.cancel();
                         }
-                        Yaokan.instance().stopStudy(rc.getMac(), did);
+                        Yaokan.instance().stopStudy(did);
                     }
                 });
                 newCountDownTime();
@@ -407,6 +417,8 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
             @Override
             public void run() {
                 switch (msgType) {
+                    case EmptyDid:
+                        break;
                     case StudyError:
                         if (!isStudy) {
                             return;
@@ -435,6 +447,21 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
                         break;
                     case SendCodeResponse:
                         log(ykMessage.toString());
+                        break;
+                    case DelAppleCtrl:
+                        if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof DeviceResult) {
+                            DeviceResult result = (DeviceResult) ykMessage.getData();
+                            switch (result.getCode()) {
+                                case Contants.YK_DELETE_CODE_RESULT_SINGLE_SUC:
+                                    toast(R.string.app_delete_success);
+                                    Yaokan.instance().deleteRcByUUID(rc.getUuid());
+                                    finish();
+                                    break;
+                                case Contants.YK_DELETE_CODE_RESULT_SINGLE_FAIL:
+                                    toast(R.string.app_delete_failed);
+                                    break;
+                            }
+                        }
                         break;
                 }
             }

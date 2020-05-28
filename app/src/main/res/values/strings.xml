@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">YaokanSDK3</string>
+    <string name="app_name">SDK4.0</string>
     <string name="first_match">一级匹配</string>
     <string name="second_match">二级匹配</string>
     <string name="rc_list">遥控器列表</string>
@@ -10,4 +10,6 @@
     <string name="t_init">初始化</string>
     <string name="t_rf">射频对码/学习</string>
     <string name="study_suc">学习成功</string>
+    <string name="app_delete_success">删除成功</string>
+    <string name="app_delete_failed">删除失败</string>
 </resources>

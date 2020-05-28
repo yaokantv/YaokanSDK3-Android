@@ -3,18 +3,21 @@ package com.yaokantv.sdkdemo;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.yaokantv.yaokansdk.callback.YaokanSDKListener;
 import com.yaokantv.yaokansdk.manager.Yaokan;
+import com.yaokantv.yaokansdk.model.DeviceResult;
 import com.yaokantv.yaokansdk.model.RcCmd;
 import com.yaokantv.yaokansdk.model.RemoteCtrl;
 import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
 import com.yaokantv.yaokansdk.utils.CommonAdapter;
 import com.yaokantv.yaokansdk.utils.DlgUtils;
+import com.yaokantv.yaokansdk.utils.Logger;
 import com.yaokantv.yaokansdk.utils.ViewHolder;
 
 public class RfMatchActivity extends BaseActivity implements YaokanSDKListener {
@@ -25,12 +28,13 @@ public class RfMatchActivity extends BaseActivity implements YaokanSDKListener {
     CountDownTimer countDownTime;
     boolean isStudy = false;
 
+    boolean isDownloadToDevice = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rf_match);
         initToolbar(R.string.t_rf);
-//        initNormal();
         Yaokan.instance().addSdkListener(this);
         Yaokan.instance().getRfMatchingResult(App.curMac, App.curTid, App.curBid);
         findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
@@ -40,11 +44,11 @@ public class RfMatchActivity extends BaseActivity implements YaokanSDKListener {
                     rc.setMac(App.curMac);
                     //射频按键没有学习直接创建时，调用此接口
                     showDlg();
-                    Yaokan.instance().uploadRfAndSave(App.curMac, rc);
-//                    Yaokan.instance().saveRc(rc);
+                    rc = Yaokan.instance().uploadRfAndSave(App.curMac, rc);
+
                 } else {
-                    AppManager.getAppManager().finishActivities(BrandActivity.class);
-                    finish();
+                    showDlg();
+                    Yaokan.instance().downloadRFCodeToDevice(App.curDid, rc.getRid(), rc.getBe_rc_type());
                 }
             }
         });
@@ -66,7 +70,7 @@ public class RfMatchActivity extends BaseActivity implements YaokanSDKListener {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!isStudy) {
-                    Yaokan.instance().sendCmd(App.curDid, rc.getRid(), rc.getRcCmd().get(position).getValue(), rc.getBe_rc_type(), rc.getStudyId(), rc.getRf());
+                    Yaokan.instance().sendCmd(App.curDid, rc.getRid(), rc.getRcCmd().get(position).getValue(), rc.getBe_rc_type(), rc.getStudy_id(), rc.getRf());
                 }
             }
         });
@@ -78,9 +82,9 @@ public class RfMatchActivity extends BaseActivity implements YaokanSDKListener {
                 }
                 if (rc.getId() == 0) {
                     rc.setMac(App.curMac);
-                    Yaokan.instance().saveRc(rc);
+                    rc = Yaokan.instance().saveRc(rc);
                 }
-                Yaokan.instance().studyRf(App.curMac, App.curDid, rc, rc.getRcCmd().get(position).getValue());
+                Yaokan.instance().studyRf(  App.curDid, rc, rc.getRcCmd().get(position).getValue());
                 showDlg("请对准小苹果发码...", new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
@@ -88,7 +92,7 @@ public class RfMatchActivity extends BaseActivity implements YaokanSDKListener {
                         if (countDownTime != null) {
                             countDownTime.cancel();
                         }
-                        Yaokan.instance().stopStudyRf(App.curMac, App.curDid, rc);
+                        Yaokan.instance().stopStudyRf(  App.curDid, rc);
                     }
                 });
                 newCountDownTime();
@@ -96,7 +100,6 @@ public class RfMatchActivity extends BaseActivity implements YaokanSDKListener {
                 return false;
             }
         });
-
     }
 
     private void newCountDownTime() {
@@ -122,6 +125,9 @@ public class RfMatchActivity extends BaseActivity implements YaokanSDKListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (!isDownloadToDevice && rc.getId() != 0) {//如果没有将码库下载到设备 则删除本地的遥控器
+            Yaokan.instance().deleteRcByUUID(rc.getUuid());
+        }
         Yaokan.instance().removeSdkListener(this);
     }
 
@@ -151,6 +157,7 @@ public class RfMatchActivity extends BaseActivity implements YaokanSDKListener {
                         dismiss();
                         if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof RemoteCtrl) {
                             RemoteCtrl ctrl = (RemoteCtrl) ykMessage.getData();
+                            rc = ctrl;
                             Yaokan.instance().updateRc(ctrl);
                             if (countDownTime != null) {
                                 countDownTime.cancel();
@@ -159,14 +166,7 @@ public class RfMatchActivity extends BaseActivity implements YaokanSDKListener {
                         }
                         break;
                     case RfUploadSuccess:
-                        dismiss();
-                        DlgUtils.createDefDlg(activity, "", "上传并保存成功", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                AppManager.getAppManager().finishActivities(BrandActivity.class);
-                                finish();
-                            }
-                        });
+                        Yaokan.instance().downloadRFCodeToDevice(App.curDid, rc.getRid(), rc.getBe_rc_type());
                         break;
                     case RfUploadFail:
                         dismiss();
@@ -175,6 +175,76 @@ public class RfMatchActivity extends BaseActivity implements YaokanSDKListener {
                             public void onClick(DialogInterface dialog, int which) {
                             }
                         });
+                        break;
+                    case DownloadCode:
+                        if (!isFinishing()) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    final DeviceResult result = (DeviceResult) ykMessage.getData();
+                                    Logger.e("DownloadCode" + result.toString());
+                                    if (result != null && !TextUtils.isEmpty(App.curMac) && App.curMac.equals(result.getMac())) {
+                                        String msg = "";
+                                        switch (result.getCode()) {
+                                            case "00":
+                                                dismiss();
+                                                msg = "开启下载遥控器失败";
+                                                break;
+                                            case "01"://开始下载遥控器
+                                                Logger.e("开始下载遥控器");
+                                                showDlg(120, "正在下载码库到设备...", new OnDownloadTimerOutListener() {
+                                                    @Override
+                                                    public void onTimeOut() {
+                                                        DlgUtils.createDefDlg(activity, "下载超时");
+                                                    }
+                                                });
+                                                break;
+                                            case "03"://下载遥控器成功
+                                                Logger.e("下载遥控器成功");
+                                                dismiss();
+                                                DlgUtils.createDefDlg(activity, "", "下载成功", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        isDownloadToDevice = true;
+                                                        AppManager.getAppManager().finishActivities(SelectProviderActivity.class,
+                                                                BrandActivity.class, MatchActivity.class);
+                                                        finish();
+                                                    }
+                                                }, false);
+
+                                                break;
+                                            case "04":
+                                                msg = "下载遥控器失败";
+                                                break;
+                                            case "05":
+                                                msg = "遥控器已存在设备中";
+                                                break;
+                                            case "06":
+                                                msg = "空调遥控器达到极限";
+                                                break;
+                                            case "07":
+                                                msg = "非空调遥控器达到极限";
+                                                break;
+                                            case "08":
+                                                msg = "射频遥控器达到极限";
+                                                break;
+                                            case "09":
+                                                msg = "门铃遥控器达到极限";
+                                                break;
+                                        }
+                                        if (!TextUtils.isEmpty(msg)) {
+                                            dismiss();
+                                            DlgUtils.createDefDlg(activity, "", msg, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+
+                                                }
+                                            }, false);
+                                        }
+                                    }
+                                }
+                            });
+                        }
                         break;
                 }
             }

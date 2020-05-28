@@ -225,6 +225,7 @@ public class SelectProviderActivity extends BaseActivity implements View.OnClick
                     App.curBName = operators.getName();
                     App.curTid = 1;
                     App.curBid = operators.getBid();
+                    App.operators = operators;
                     startActivity(new Intent(this, MatchActivity.class));
                 }
 
