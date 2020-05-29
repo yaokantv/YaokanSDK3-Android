@@ -3,7 +3,6 @@ package com.yaokantv.sdkdemo;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +11,8 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.Toolbar;
 
 import com.yaokantv.yaokansdk.Contants;
 import com.yaokantv.yaokansdk.callback.YaokanSDKListener;
@@ -26,6 +27,7 @@ import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
 import com.yaokantv.yaokansdk.utils.CommonAdapter;
 import com.yaokantv.yaokansdk.utils.DlgUtils;
+import com.yaokantv.yaokansdk.utils.Logger;
 import com.yaokantv.yaokansdk.utils.ViewHolder;
 
 import java.util.ArrayList;
@@ -50,6 +52,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
     EditText etName;
     boolean isStudy = false;
     private String did;//小苹果重置后Did会改变！
+    boolean isCodeChange = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
             did = Yaokan.instance().getDid(rc.getMac());
         }
         toolbar.inflateMenu(R.menu.toolbar_menu);
+
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -82,8 +86,10 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
                         break;
                     case R.id.action_delete_rc:
                         if (Yaokan.instance().isDeviceOnline(rc.getMac())) {
-                            //如果设备在线先删除设备端的遥控器
+                            //删除设备端和手机内的的遥控器
                             Yaokan.instance().deleteDeviceRc(did, rc.getRid());
+                            Yaokan.instance().deleteRcByUUID(rc.getUuid());
+                            finish();
                         } else {
                             //如果不在线则只能删除手机数据库中的遥控器
                             Yaokan.instance().deleteRcByUUID(rc.getUuid());
@@ -96,6 +102,16 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        //如果射频码库有改变要通知设备去下载
+        if (isCodeChange && "1".equals(rc.getRf())) {
+            Yaokan.instance().downloadRFCodeToDevice(App.curDid, rc.getStudy_id(), rc.getBe_rc_type());
+            return;
+        }
+        super.onBackPressed();
     }
 
     @Override
@@ -140,7 +156,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
                 if (isStudy) {
                     return false;
                 }
-                if (rc.getBe_rc_type() >= 21 && rc.getBe_rc_type() <= 24) {
+                if ("1".equals(rc.getRf())) {
                     Yaokan.instance().studyRf(did, rc, rc.getRcCmd().get(position).getValue());
                 } else {
                     Yaokan.instance().study(did, rc, rc.getRcCmd().get(position).getValue());
@@ -435,6 +451,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
                             return;
                         }
                         isStudy = false;
+                        isCodeChange = true;
                         dismiss();
                         if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof RemoteCtrl) {
                             RemoteCtrl ctrl = (RemoteCtrl) ykMessage.getData();
@@ -454,13 +471,79 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
                             switch (result.getCode()) {
                                 case Contants.YK_DELETE_CODE_RESULT_SINGLE_SUC:
                                     toast(R.string.app_delete_success);
-                                    Yaokan.instance().deleteRcByUUID(rc.getUuid());
-                                    finish();
                                     break;
                                 case Contants.YK_DELETE_CODE_RESULT_SINGLE_FAIL:
+                                    //有可能是设备端没有这个遥控器（设备被复位了）
                                     toast(R.string.app_delete_failed);
                                     break;
                             }
+                        }
+                        break;
+                    case DownloadCode:
+                        if (!isFinishing()) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    final DeviceResult result = (DeviceResult) ykMessage.getData();
+                                    Logger.e("DownloadCode" + result.toString());
+                                    if (result != null && !TextUtils.isEmpty(App.curMac) && App.curMac.equals(result.getMac())) {
+                                        String msg = "";
+                                        switch (result.getCode()) {
+                                            case "00":
+                                                dismiss();
+                                                msg = "开启下载遥控器失败";
+                                                break;
+                                            case "01"://开始下载遥控器
+                                                Logger.e("开始下载遥控器");
+                                                showDlg(120, "正在下载码库到设备...", new OnDownloadTimerOutListener() {
+                                                    @Override
+                                                    public void onTimeOut() {
+                                                        DlgUtils.createDefDlg(activity, "下载超时");
+                                                    }
+                                                });
+                                                break;
+                                            case "03"://下载遥控器成功
+                                                Logger.e("下载遥控器成功");
+                                                dismiss();
+                                                DlgUtils.createDefDlg(activity, "", "下载成功", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        finish();
+                                                    }
+                                                }, false);
+
+                                                break;
+                                            case "04":
+                                                msg = "下载遥控器失败";
+                                                break;
+                                            case "05":
+                                                msg = "遥控器已存在设备中";
+                                                break;
+                                            case "06":
+                                                msg = "空调遥控器达到极限";
+                                                break;
+                                            case "07":
+                                                msg = "非空调遥控器达到极限";
+                                                break;
+                                            case "08":
+                                                msg = "射频遥控器达到极限";
+                                                break;
+                                            case "09":
+                                                msg = "门铃遥控器达到极限";
+                                                break;
+                                        }
+                                        if (!TextUtils.isEmpty(msg)) {
+                                            dismiss();
+                                            DlgUtils.createDefDlg(activity, "", msg, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+
+                                                }
+                                            }, false);
+                                        }
+                                    }
+                                }
+                            });
                         }
                         break;
                 }

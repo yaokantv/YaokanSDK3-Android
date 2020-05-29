@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.orhanobut.hawk.Hawk;
 import com.yaokantv.yaokansdk.Contants;
 import com.yaokantv.yaokansdk.callback.YaokanSDKListener;
 import com.yaokantv.yaokansdk.manager.Yaokan;
@@ -21,6 +22,9 @@ import com.yaokantv.yaokansdk.utils.Logger;
  */
 public class SoftApConfigActivity extends BaseActivity implements View.OnClickListener, YaokanSDKListener {
     TextView tvSsid;
+    String ssid;
+    String psw;
+    EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +33,13 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
         initToolbar(R.string.t_smart_config);
         Yaokan.instance().addSdkListener(this);
         tvSsid = findViewById(R.id.tv_ssid);
-        String ssid = Yaokan.instance().getSsid(this);
+        editText = findViewById(R.id.et_psw);
+        ssid = Yaokan.instance().getSsid(this);
         if (!TextUtils.isEmpty(ssid)) {
             tvSsid.setText(ssid);
+            if (Hawk.get(ssid) != null) {
+                editText.setText((String) Hawk.get(ssid));
+            }
         }
     }
 
@@ -45,8 +53,7 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_smart_config:
-                EditText editText = findViewById(R.id.et_psw);
-                String psw = editText.getText().toString();
+                psw = editText.getText().toString();
                 if (!TextUtils.isEmpty(psw)) {
                     Yaokan.instance().softApConfig(this, psw, Contants.YKK_MODEL_1013_RF);
                 }
@@ -94,6 +101,7 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
                                         Logger.e(result.toString());
                                         if (result.isResult()) {
                                             //result = true 配网成功
+                                            Hawk.put(ssid, psw);
                                             finish();
                                         }
                                     }

@@ -5,9 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -15,6 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 
 import com.yaokantv.yaokansdk.callback.YaokanSDKListener;
 import com.yaokantv.yaokansdk.manager.Yaokan;
@@ -111,6 +112,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         DlgUtils.createDefDlg(activity, "", "是否删除该设备?", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                Yaokan.instance().deleteRemoteByMac(item.getMac());
                                 Yaokan.instance().resetApple(item.getMac(), item.getDid());
                                 Yaokan.instance().deleteDevice(item.getMac());
                                 mList.remove(item);
@@ -161,7 +163,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                    Yaokan.instance().inputYkDevicesToDB(mList);
 //                }
                 //导入设备方式二
-                Yaokan.instance().inputYkDevicesToDB("[{\"did\":\"XXXXXXXXXXXXXXXX\",\"mac\":\"XXXXXXXXXXXX\",\"name\":\"YKK_1.0\"}]");
+                Yaokan.instance().inputYkDevicesToDB("[{\"did\":\"457790F30EA28AB4\",\"mac\":\"A4CF12A9334E\",\"name\":\"YKK-1013-RF\"}]");
                 break;
             case R.id.btn_device_list:
                 //导出设备方式一
@@ -183,7 +185,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 DlgUtils.createDefDlg(activity, s2);
                 break;
             case R.id.btn_input_rc_list:
-                String data = "[{\"name\":\"常新灯 a_CX-01\",\"rid\":\"201907040903133\",\"rmodel\":\"a_CX-01\",\"be_rmodel\":\"a_CX-01\",\"be_rc_type\":8,\"bid\":3416,\"mac\":\"BCDDC2E37233\",\"rf\":\"0\",\"rf_body\":\"\",\"rc_command_type\":1,\"study_id\":\"0\",\"rc_command\":{\"power\":{\"name\":\"电源\",\"value\":\"power\",\"stand_key\":1,\"order_no\":1}}}]";
+                String data = "[{\"name\":\" a_3\",\"rid\":\"201907041018161756\",\"rmodel\":\"a_3\",\"be_rmodel\":\"a_3\",\"be_rc_type\":2,\"bid\":3582,\"mac\":\"DC4F22529E01\",\"rf\":\"0\",\"rc_command_type\":1,\"study_id\":\"0\",\"rc_command\":{\"ch+\":{\"name\":\"频道+\",\"value\":\"ch+\",\"stand_key\":1,\"order_no\":1},\"ch-\":{\"name\":\"频道-\",\"value\":\"ch-\",\"stand_key\":1,\"order_no\":1},\"mute\":{\"name\":\"静音\",\"value\":\"mute\",\"stand_key\":1,\"order_no\":1},\"vol-\":{\"name\":\"音量-\",\"value\":\"vol-\",\"stand_key\":1,\"order_no\":1},\"vol+\":{\"name\":\"音量+\",\"value\":\"vol+\",\"stand_key\":1,\"order_no\":1},\"0\":{\"name\":\"0\",\"value\":\"0\",\"stand_key\":1,\"order_no\":1},\"1\":{\"name\":\"1\",\"value\":\"1\",\"stand_key\":1,\"order_no\":1},\"2\":{\"name\":\"2\",\"value\":\"2\",\"stand_key\":1,\"order_no\":1},\"3\":{\"name\":\"3\",\"value\":\"3\",\"stand_key\":1,\"order_no\":1},\"4\":{\"name\":\"4\",\"value\":\"4\",\"stand_key\":1,\"order_no\":1},\"5\":{\"name\":\"5\",\"value\":\"5\",\"stand_key\":1,\"order_no\":1},\"6\":{\"name\":\"6\",\"value\":\"6\",\"stand_key\":1,\"order_no\":1},\"7\":{\"name\":\"7\",\"value\":\"7\",\"stand_key\":1,\"order_no\":1},\"8\":{\"name\":\"8\",\"value\":\"8\",\"stand_key\":1,\"order_no\":1},\"9\":{\"name\":\"9\",\"value\":\"9\",\"stand_key\":1,\"order_no\":1},\"power\":{\"name\":\"电源\",\"value\":\"power\",\"stand_key\":1,\"order_no\":1},\"normal\":{\"name\":\"正常\",\"value\":\"normal\",\"stand_key\":0,\"order_no\":1},\"screendisplay\":{\"name\":\"场景显示\",\"value\":\"screendisplay\",\"stand_key\":0,\"order_no\":1},\"track\":{\"name\":\"声道\",\"value\":\"track\",\"stand_key\":0,\"order_no\":1},\"drop out\":{\"name\":\"退出\",\"value\":\"drop out\",\"stand_key\":0,\"order_no\":1}}}]";
                 List<RemoteCtrl> list = Yaokan.instance().inputRcString(data);
                 for (RemoteCtrl ctrl : list) {
                     Log.e(TAG, ctrl.toString());

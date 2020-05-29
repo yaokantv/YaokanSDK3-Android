@@ -5,15 +5,17 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 
 public class BaseActivity extends AppCompatActivity {
     ProgressDialog dialog;
@@ -29,7 +31,6 @@ public class BaseActivity extends AppCompatActivity {
         dialog = new ProgressDialog(this);
         progressDialog = new ProgressDialog(this);
         AppManager.getAppManager().addActivity(activity);
-
 
     }
 

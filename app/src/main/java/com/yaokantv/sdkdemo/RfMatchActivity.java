@@ -166,7 +166,7 @@ public class RfMatchActivity extends BaseActivity implements YaokanSDKListener {
                         }
                         break;
                     case RfUploadSuccess:
-                        Yaokan.instance().downloadRFCodeToDevice(App.curDid, rc.getRid(), rc.getBe_rc_type());
+                        Yaokan.instance().downloadRFCodeToDevice(App.curDid, rc.getStudy_id(), rc.getBe_rc_type());
                         break;
                     case RfUploadFail:
                         dismiss();

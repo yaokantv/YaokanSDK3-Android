@@ -2,9 +2,12 @@ package com.yaokantv.sdkdemo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import androidx.appcompat.widget.Toolbar;
 
 import com.yaokantv.yaokansdk.manager.Yaokan;
 import com.yaokantv.yaokansdk.model.RemoteCtrl;
@@ -64,6 +67,20 @@ public class RcListActivity extends BaseActivity {
                 Intent intent = new Intent(RcListActivity.this, RcActivity.class);
                 intent.putExtra(RcActivity.UUID, mList.get(position).getUuid());
                 startActivity(intent);
+            }
+        });
+        toolbar.inflateMenu(R.menu.rc_list_menu);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.delete_all:
+                        Yaokan.instance().deleteAllRcDevice();
+                        break;
+                    default:
+                        break;
+                }
+                return false;
             }
         });
     }

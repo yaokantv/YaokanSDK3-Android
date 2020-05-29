@@ -2,18 +2,10 @@ package com.yaokantv.sdkdemo;
 
 import android.app.Application;
 
-import com.yaokantv.yaokansdk.crash.YKSenderfactory;
+import com.orhanobut.hawk.Hawk;
 import com.yaokantv.yaokansdk.manager.Yaokan;
 import com.yaokantv.yaokansdk.model.Operators;
 
-import org.acra.ReportField;
-import org.acra.annotation.ReportsCrashes;
-
-@ReportsCrashes(
-        reportSenderFactoryClasses = {YKSenderfactory.class},
-        customReportContent = {ReportField.APP_VERSION_CODE, ReportField.APP_VERSION_NAME, ReportField.ANDROID_VERSION, ReportField.PHONE_MODEL, ReportField.CUSTOM_DATA, ReportField.STACK_TRACE, ReportField.LOGCAT},
-        resToastText = R.string.loading
-)
 public class App extends Application {
     public static String curMac = "";//设备MAC
     public static String curDid = "";//设备DID
@@ -29,6 +21,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         Yaokan.initialize(this);
+        Hawk.init(this).build();
     }
 
     @Override

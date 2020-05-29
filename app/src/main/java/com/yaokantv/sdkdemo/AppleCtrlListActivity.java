@@ -35,7 +35,12 @@ public class AppleCtrlListActivity extends BaseActivity implements YaokanSDKList
         Yaokan.instance().addSdkListener(this);
         initView();
         initToolbar(App.curMac);
-        showDlg();
+        showDlg(10, "加载中...", new OnDownloadTimerOutListener() {
+            @Override
+            public void onTimeOut() {
+                dismiss();
+            }
+        });
         Yaokan.instance().deviceCtrlList(App.curDid, "01", 15);
         findViewById(R.id.btn_load).setOnClickListener(new View.OnClickListener() {
             @Override
