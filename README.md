@@ -93,13 +93,13 @@ YaokanSDK4 提供完整的设备配网，设备管理，遥控器管理功能，
 
     dependencies {
         implementation fileTree(dir: 'libs', include: ['*.jar'])
-        implementation 'com.android.support:appcompat-v7:28.0.0'//这里改为你项目里的版本
+        implementation 'androidx.appcompat:appcompat:1.0.0'
         implementation 'com.android.support.constraint:constraint-layout:1.1.3'
         implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0'
         implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
         implementation 'com.google.code.gson:gson:2.8.2'
         implementation 'com.squareup.okhttp3:okhttp:3.11.0'
-        implementation 'ch.acra:acra:4.9.0'
+        implementation "com.orhanobut:hawk:2.0.1"//用于记录数据
         implementation(name:'yaokansdk', ext:'aar')
     }
 
@@ -276,7 +276,7 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
         */
         public AirOrder(String mode, String speed, String temp, String ver, String hor)
         ```
-   - 有独立开关的空调遥控器的扫风发码
+   - 有独立扫风开关的空调遥控器的扫风发码
 
         ```java
         /**
@@ -581,6 +581,12 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
      * @param did
      */
     Yaokan.instance().deleteAllRcDevice()
+
+    /**
+     * 删除数据库中包含该Mac的遥控器
+     * @param mac
+     */
+    Yaokan.instance().deleteRemoteByMac(String mac);
     ```
      ```java
     @Override
