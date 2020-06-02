@@ -18,6 +18,11 @@
 ## 1. 概述
 YaokanSDK4 提供完整的设备配网，设备管理，遥控器管理功能，开箱即用，快速与已有App对接的目的。
 
+![image](https://github.com/yaokantv/YaokanSDK3-Android/blob/master/img/net_config.png)
+
+![image](https://github.com/yaokantv/YaokanSDK3-Android/blob/master/img/create_rc.png)
+
+![image](https://github.com/yaokantv/YaokanSDK3-Android/blob/master/img/create_stb.png)
 
 ## 2. 文档阅读对象
 使用 YaokanSDK4 Android 版的客户
