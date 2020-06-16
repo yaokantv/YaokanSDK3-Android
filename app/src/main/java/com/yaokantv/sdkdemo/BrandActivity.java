@@ -135,7 +135,7 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                 Yaokan.instance().updateDevice(App.curDid);
                 break;
             case R.id.btn_reset_apple:
-                Yaokan.instance().resetApple(App.curMac, App.curDid);
+                Yaokan.instance().resetDevice(App.curMac, App.curDid);
                 break;
             case R.id.btn_check_version:
                 Yaokan.instance().checkDeviceVersion(App.curDid);

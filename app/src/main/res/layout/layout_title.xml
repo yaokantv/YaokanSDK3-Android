@@ -4,7 +4,6 @@
     android:id="@+id/toolbar"
     app:subtitleTextColor="#fff"
     app:titleTextColor="#fff"
-    app:navigationIcon="@mipmap/back"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:background="@color/colorPrimary"

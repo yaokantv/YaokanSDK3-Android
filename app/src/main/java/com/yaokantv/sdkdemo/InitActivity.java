@@ -20,10 +20,10 @@ public class InitActivity extends BaseActivity implements YaokanSDKListener, Vie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_init);
+        showDlg();
+        Yaokan.instance().init(getApplication(), appId, appSecret).addSdkListener(this);
         initToolbar(R.string.t_init);
         if (!TextUtils.isEmpty(appId)) {
-            showDlg();
-            Yaokan.instance().init(getApplication(), appId, appSecret).addSdkListener(this);
             ((EditText) findViewById(R.id.et_appid)).setText(appId);
             ((EditText) findViewById(R.id.et_app_secret)).setText(appSecret);
         }
@@ -43,7 +43,7 @@ public class InitActivity extends BaseActivity implements YaokanSDKListener, Vie
                             //初始化成功
                         } else {
                             //初始化失败
-                            DlgUtils.createDefDlg(InitActivity.this,ykMessage.getMsg());
+                            DlgUtils.createDefDlg(InitActivity.this, ykMessage.getMsg());
                         }
                         break;
                 }
