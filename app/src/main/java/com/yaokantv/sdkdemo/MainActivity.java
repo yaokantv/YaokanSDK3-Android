@@ -113,7 +113,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Yaokan.instance().deleteRemoteByMac(item.getMac());
-                                Yaokan.instance().resetDevice(item.getMac(), item.getDid());
+                                Yaokan.instance().apReset(item.getMac(), item.getDid());
                                 Yaokan.instance().deleteDevice(item.getMac());
                                 mList.remove(item);
                                 adapter.notifyDataSetChanged();

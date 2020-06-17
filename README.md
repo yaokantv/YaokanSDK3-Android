@@ -11,7 +11,7 @@
 
 | 版本 | 说明 | 备注 | 日期 |
 | --- | --- | --- | --- |
-| v4 | 新建 | Peer | 20200522 |
+| v4 | 新建 | Peer | 20200617 |
 
 
 
@@ -159,38 +159,57 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
 
 1. 配置入网
 
+
+    SmartConfig（广播配网）为旧的配网方式，成功率较低，所以新增了SoftAp（热点配网）的配网方式，成功率有较大的提升，建议后来接入的客户都使用SoftAp
+
     - 使用非5G Wi-Fi 网络配网
 
 
-        ```java
-        **
-        * @param context 上下文
-        * @param psw Wi-Fi密码
-        * @param model 产品类型
-        */
-        Yaokan.instance().softApConfig(context,psw,model);
+     /**
+     * @param context 上下文
+     * @param ssid    WI-FI名称
+     * @param psw     WI-FI密码
+     * @param hotspot 产品类型  YKK-1011/YKK-1013/YKK-DS16A 分别对应小苹果/大苹果/空调伴侣
+     */
+    Yaokan.instance().softApConfig(context,ssid,psw,hotspot);
 
-        /**
-        * 停止配置入网
-        */
-        Yaokan.instance().stopSoftApConfig();
-        ```
+    /**
+    * 停止配置入网
+    */
+    Yaokan.instance().stopSoftApConfig();
 
+    /**
+     * 配置入网
+     *
+     * @param context 上下文
+     * @param psw     Wi-Fi密码
+     */
+    Yaokan.instance().smartConfig(context,psw);
+    /**
+     * 停止配置入网
+     */
+    Yaokan.instance().stopSmartConfig();
     - 回调
 
-        ```java
-        @Override
-        public void onReceiveMsg(MsgTypemsgType, final YkMessage ykMessage {
-            switch (msgType) {
-                case SoftApConfigStart:
-                //配网开始
-                    break;
-                case SoftApConfigResult:
-                //配网结果
-                    break;
-            }
+    ```java
+    @Override
+    public void onReceiveMsg(MsgTypemsgType, final YkMessage ykMessage {
+        switch (msgType) {
+            case SoftApConfigStart:
+            //SoftAp配网开始
+                break;
+            case SoftApConfigResult:
+            //SoftAp配网结果
+                break;
+            case StartSmartConfig:
+            //SmartConfig配网开始
+                break;
+            case SmartConfigResult:
+            //SmartConfig配网结果
+                break;
         }
-        ```
+    }
+    ```
 
 1. 获取设备列表
 
@@ -413,10 +432,15 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
 
 1. 设备复位
 
-    复位设备，进入配网状态
+    - 复位设备，进入SmartConfig配网状态
 
     ```java
     Yaokan.instance().resetApple(mac,did);
+    ```
+    - 复位设备，进入SoftAp配网状态
+
+    ```java
+    Yaokan.instance().apReset(mac,did);
     ```
 
 ### 4.3 遥控器接口
