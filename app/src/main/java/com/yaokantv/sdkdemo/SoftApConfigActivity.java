@@ -194,6 +194,7 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
                                         SmartConfigResult result = (SmartConfigResult) ykMessage.getData();
                                         if (result.isResult()) {
                                             //result = true 配网成功
+                                            Hawk.put(ssid, psw);
                                             finish();
                                         }
                                     }
