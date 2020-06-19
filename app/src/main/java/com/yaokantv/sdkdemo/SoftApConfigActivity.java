@@ -147,15 +147,6 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
                     }
                 });
                 break;
-            case WifiNotFind:
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        dialog.dismiss();
-                        DlgUtils.createDefDlg(activity, "扫描不到设备热点");
-                    }
-                });
-                break;
             //配网结束
             case SoftApConfigResult:
                 if (dialog != null) {

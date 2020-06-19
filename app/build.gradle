@@ -44,6 +44,5 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation "com.orhanobut:hawk:2.0.1"//用于记录数据
-    implementation 'com.thanosfisherman.wifiutils:wifiutils:1.6.1'
     implementation(name:'yaokansdk', ext:'aar')
 }
