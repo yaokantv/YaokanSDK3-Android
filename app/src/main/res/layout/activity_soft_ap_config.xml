@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <include layout="@layout/layout_title" />
 
@@ -18,23 +18,69 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="当前配网方式: "
+            android:text="配网方式: "
             android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/tv_type"
+        <RadioGroup
+            android:id="@+id/rg_config"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SoftAp配网" />
-        <Button
-            android:id="@+id/btn_switch"
-            android:text="切换配网方式"
-            android:onClick="onClick"
-            android:layout_marginStart="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
+            android:orientation="horizontal">
 
+            <RadioButton
+                android:id="@+id/cb_soft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="SoftAp" />
+
+            <RadioButton
+                android:id="@+id/cb_smart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SmartConfig" />
+        </RadioGroup>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="配网设备: "
+            android:textSize="18sp" />
+
+        <RadioGroup
+            android:id="@+id/rg_device"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/cb_1101"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="小苹果" />
+
+            <RadioButton
+                android:id="@+id/cb_1103"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="大苹果" />
+            <RadioButton
+                android:id="@+id/cb_ds16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="空调伴侣" />
+        </RadioGroup>
+
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

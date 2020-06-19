@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -24,11 +25,13 @@ import com.yaokantv.yaokansdk.utils.Logger;
  * SoftAp配网
  */
 public class SoftApConfigActivity extends BaseActivity implements View.OnClickListener, YaokanSDKListener {
-    TextView tvSsid, tvType;
+    TextView tvSsid;
     String ssid;
     String psw;
     EditText editText;
     boolean isAp = true;
+    RadioGroup rgConfigType, rgDeviceType;
+    String deviceType = Contants.YKK_MODEL_1011;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +40,9 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
         initToolbar(R.string.t_smart_config);
         Yaokan.instance().addSdkListener(this);
         tvSsid = findViewById(R.id.tv_ssid);
-        tvType = findViewById(R.id.tv_type);
         editText = findViewById(R.id.et_psw);
+        rgConfigType = findViewById(R.id.rg_config);
+        rgDeviceType = findViewById(R.id.rg_device);
         ssid = Yaokan.instance().getSsid(this);
         if (!TextUtils.isEmpty(ssid)) {
             tvSsid.setText(ssid);
@@ -46,6 +50,28 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
                 editText.setText((String) Hawk.get(ssid));
             }
         }
+        rgDeviceType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.cb_1101:
+                        deviceType = Contants.YKK_MODEL_1011;
+                        break;
+                    case R.id.cb_1103:
+                        deviceType = Contants.YKK_MODEL_1013;
+                        break;
+                    case R.id.cb_ds16:
+                        deviceType = Contants.YKK_MODEL_DS16A;
+                        break;
+                }
+            }
+        });
+        rgConfigType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                isAp = (checkedId == R.id.cb_soft);
+            }
+        });
     }
 
     @Override
@@ -69,37 +95,11 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_switch:
-                isAp = !isAp;
-                tvType.setText(isAp ? "SoftAp配网" : "SmartConfig配网");
-                break;
             case R.id.btn_smart_config:
                 psw = editText.getText().toString();
                 Hawk.put(ssid, psw);//用于保存数据
                 if (isAp) {
-                    final String[] items = {"小苹果", "大苹果", "空调伴侣"};
-                    AlertDialog.Builder listDialog =
-                            new AlertDialog.Builder(this);
-                    listDialog.setTitle("请选择需要配网的设备");
-                    listDialog.setItems(items, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            String mode = "";
-                            switch (which) {
-                                case 0:
-                                    mode = Contants.YKK_MODEL_1011;
-                                    break;
-                                case 1:
-                                    mode = Contants.YKK_MODEL_1013;
-                                    break;
-                                case 2:
-                                    mode = Contants.YKK_MODEL_DS16A;
-                                    break;
-                            }
-                            Yaokan.instance().softApConfig(SoftApConfigActivity.this, ssid, psw, mode);
-                        }
-                    });
-                    listDialog.show();
+                    Yaokan.instance().softApConfig(SoftApConfigActivity.this, ssid, psw, deviceType);
                 } else {
                     Yaokan.instance().smartConfig(this, psw);
                 }
@@ -194,7 +194,6 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
                                         SmartConfigResult result = (SmartConfigResult) ykMessage.getData();
                                         if (result.isResult()) {
                                             //result = true 配网成功
-                                            Hawk.put(ssid, psw);
                                             finish();
                                         }
                                     }
