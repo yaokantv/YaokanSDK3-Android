@@ -5,10 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".RcListActivity">
+    tools:context="com.yaokantv.yaokanui.RcListActivity">
 
-    <include layout="@layout/layout_title" />
-
+    <include
+        android:id="@+id/top"
+        layout="@layout/top" />
     <ListView
         android:id="@+id/lv"
         android:layout_width="match_parent"

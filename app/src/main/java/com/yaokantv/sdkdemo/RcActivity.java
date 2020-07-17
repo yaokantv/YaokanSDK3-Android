@@ -108,7 +108,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
     public void onBackPressed() {
         //如果射频码库有改变要通知设备去下载
         if (isCodeChange && "1".equals(rc.getRf())) {
-            Yaokan.instance().downloadRFCodeToDevice(App.curDid, rc.getStudy_id(), rc.getBe_rc_type());
+            Yaokan.instance().downloadRFCodeToDevice(App.curDid, rc.getStudyId(), rc.getBe_rc_type());
             return;
         }
         super.onBackPressed();
@@ -146,7 +146,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener, Ya
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!isStudy) {
-                    Yaokan.instance().sendCmd(did, rc.getRid(), rc.getRcCmd().get(position).getValue(), rc.getBe_rc_type(), rc.getStudy_id(), rc.getRf());
+                    Yaokan.instance().sendCmd(did, rc.getRid(), rc.getRcCmd().get(position).getValue(), rc.getBe_rc_type(), rc.getStudyId(), rc.getRf());
                 }
             }
         });

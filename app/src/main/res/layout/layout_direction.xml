@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="200dp"
+    android:layout_height="200dp"
+    android:background="@drawable/shape_cir_white_solid">
+
+    <ImageButton
+        android:id="@+id/btn_up"
+        style="@style/x_btn"
+        android:layout_centerHorizontal="true"
+        android:onClick="onClick"
+        android:src="@drawable/btn_point" />
+
+    <ImageButton
+        android:id="@+id/btn_down"
+        style="@style/x_btn"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/btn_point" />
+
+    <ImageButton
+        android:id="@+id/btn_left"
+        style="@style/x_btn"
+        android:layout_centerVertical="true"
+        android:src="@drawable/btn_point" />
+
+    <ImageButton
+        android:id="@+id/btn_right"
+        style="@style/x_btn"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/btn_point" />
+
+    <RelativeLayout
+        android:id="@+id/btn_ok"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/btn_ok"
+        android:enabled="false"
+        android:onClick="onClick">
+
+        <TextView
+            android:id="@+id/tv_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fontFamily="sans-serif-thin"
+            android:text="OK"
+            android:textColor="@drawable/rc_btn_text"
+            android:textSize="25dp" />
+    </RelativeLayout>
+</RelativeLayout>

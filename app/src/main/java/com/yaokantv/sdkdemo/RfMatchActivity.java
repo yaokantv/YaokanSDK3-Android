@@ -70,7 +70,7 @@ public class RfMatchActivity extends BaseActivity implements YaokanSDKListener {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!isStudy) {
-                    Yaokan.instance().sendCmd(App.curDid, rc.getRid(), rc.getRcCmd().get(position).getValue(), rc.getBe_rc_type(), rc.getStudy_id(), rc.getRf());
+                    Yaokan.instance().sendCmd(App.curDid, rc.getRid(), rc.getRcCmd().get(position).getValue(), rc.getBe_rc_type(), rc.getStudyId(), rc.getRf());
                 }
             }
         });
@@ -166,7 +166,7 @@ public class RfMatchActivity extends BaseActivity implements YaokanSDKListener {
                         }
                         break;
                     case RfUploadSuccess:
-                        Yaokan.instance().downloadRFCodeToDevice(App.curDid, rc.getStudy_id(), rc.getBe_rc_type());
+                        Yaokan.instance().downloadRFCodeToDevice(App.curDid, rc.getStudyId(), rc.getBe_rc_type());
                         break;
                     case RfUploadFail:
                         dismiss();

@@ -8,6 +8,12 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
 
     <application
         android:name=".App"
@@ -18,11 +24,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SoftApConfigActivity"></activity>
+        <activity android:name="com.yaokantv.yaokanui.DeviceListActivity"></activity>
+        <activity android:name="com.yaokantv.yaokanui.SoftApConfigActivity" />
         <activity android:name=".AppleCtrlListActivity" />
         <activity
             android:name=".RfMatchActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".InitActivity"
             android:screenOrientation="portrait">
@@ -41,7 +48,7 @@
             android:label="二级匹配"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".RcListActivity"
+            android:name="com.yaokantv.yaokanui.RcListActivity"
             android:label="遥控器列表"
             android:screenOrientation="portrait" />
         <activity
@@ -59,7 +66,14 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name="com.yaokantv.yaokanui.SelectDeviceActivity" />
+        <activity android:name="com.yaokantv.yaokanui.BrandListActivity" />
+        <activity android:name="com.yaokantv.yaokanui.SelectProviderActivity" />
+        <activity android:name="com.yaokantv.yaokanui.NewMatchActivity" />
+        <activity android:name="com.yaokantv.yaokanui.RcActivity" />
+        <activity android:name="com.yaokantv.yaokanui.SettingActivity" />
+        <activity android:name="com.yaokantv.yaokanui.SecondMatchActivity" />
     </application>
 
 </manifest>

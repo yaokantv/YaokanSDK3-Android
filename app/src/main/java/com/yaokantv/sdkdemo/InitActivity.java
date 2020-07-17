@@ -11,10 +11,12 @@ import com.yaokantv.yaokansdk.manager.Yaokan;
 import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
 import com.yaokantv.yaokansdk.utils.DlgUtils;
+import com.yaokantv.yaokanui.DeviceListActivity;
 
 public class InitActivity extends BaseActivity implements YaokanSDKListener, View.OnClickListener {
     String appId = "";
     String appSecret = "";
+    boolean isUi = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +40,7 @@ public class InitActivity extends BaseActivity implements YaokanSDKListener, Vie
                     case Init:
                         dismiss();
                         if (ykMessage != null && ykMessage.getCode() == 0) {
-                            startActivity(new Intent(InitActivity.this, MainActivity.class));
+                            startActivity(new Intent(InitActivity.this, (isUi ? DeviceListActivity.class : MainActivity.class)));
                             finish();
                             //初始化成功
                         } else {

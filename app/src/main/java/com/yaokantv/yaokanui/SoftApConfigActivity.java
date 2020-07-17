@@ -1,4 +1,4 @@
-package com.yaokantv.sdkdemo;
+package com.yaokantv.yaokanui;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -8,9 +8,8 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
-
 import com.orhanobut.hawk.Hawk;
+import com.yaokantv.sdkdemo.R;
 import com.yaokantv.yaokansdk.Contants;
 import com.yaokantv.yaokansdk.callback.YaokanSDKListener;
 import com.yaokantv.yaokansdk.manager.Yaokan;
@@ -25,7 +24,7 @@ import com.yaokantv.yaokansdk.utils.Logger;
  * SoftAp配网
  */
 public class SoftApConfigActivity extends BaseActivity implements View.OnClickListener, YaokanSDKListener {
-    TextView tvSsid;
+    TextView tvSsid, tvTips;
     String ssid;
     String psw;
     EditText editText;
@@ -37,9 +36,13 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_soft_ap_config);
-        initToolbar(R.string.t_smart_config);
-        Yaokan.instance().addSdkListener(this);
+        setMTitle(R.string.t_smart_config, TITLE_LOCATION_CENTER);
+    }
+
+    @Override
+    protected void initView() {
         tvSsid = findViewById(R.id.tv_ssid);
+        tvTips = findViewById(R.id.tv_cfg_tips);
         editText = findViewById(R.id.et_psw);
         rgConfigType = findViewById(R.id.rg_config);
         rgDeviceType = findViewById(R.id.rg_device);
@@ -70,8 +73,14 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 isAp = (checkedId == R.id.cb_soft);
+                setTips();
             }
         });
+        setTips();
+    }
+
+    private void setTips() {
+        tvTips.setText(isAp ? R.string.net_config_ap_tips : R.string.net_config_smart_tips);
     }
 
     @Override
@@ -90,6 +99,7 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
     protected void onDestroy() {
         super.onDestroy();
         Yaokan.instance().removeSdkListener(this);
+
     }
 
     @Override
@@ -99,7 +109,7 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
                 psw = editText.getText().toString();
                 Hawk.put(ssid, psw);//用于保存数据
                 if (isAp) {
-                    Yaokan.instance().softApConfig(SoftApConfigActivity.this, ssid, psw, deviceType);
+                    Yaokan.instance().softApConfigSwitch(SoftApConfigActivity.this, ssid, psw, deviceType);
                 } else {
                     Yaokan.instance().smartConfig(this, psw);
                 }
@@ -107,16 +117,32 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
+
+
     @Override
     public void onReceiveMsg(MsgType msgType, final YkMessage ykMessage) {
         if (isFinishing()) {
             return;
         }
-        if (ykMessage != null) {
-            log(msgType.name() + ": " + ykMessage.getMsg());
-        }
+
         switch (msgType) {
             //开始配网
+            case SendToDevice:
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.setMessage("向设备发送信息成功");
+                    }
+                });
+                break;
+            case SwitchWifi:
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.setMessage("如果WI-FI未自动切换\n至:" + deviceType + "，请手动连接。");
+                    }
+                });
+                break;
             case SoftApConfigStart:
                 runOnUiThread(new Runnable() {
                     @Override
@@ -144,6 +170,15 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
                             }
                         });
                         dialog.show();
+                    }
+                });
+                break;
+            case WifiNotFind:
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.dismiss();
+                        DlgUtils.createDefDlg(activity, "扫描不到设备热点");
                     }
                 });
                 break;
@@ -195,5 +230,10 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
                 }
                 break;
         }
+    }
+
+    @Override
+    protected void reload() {
+
     }
 }

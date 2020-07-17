@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/top_gray">
+
+    <com.yaokantv.yaokanui.widget.CustScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <ImageButton
+                android:id="@+id/btn_charge"
+                style="@style/nor_btn"
+                android:layout_margin="30dp"
+                android:src="@drawable/btn_home" />
+
+            <RelativeLayout
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/shape_cir_white_solid">
+
+                <ImageButton
+                    android:id="@+id/btn_up"
+                    style="@style/x_btn"
+                    android:layout_centerHorizontal="true"
+                    android:onClick="onClick"
+                    android:src="@drawable/btn_point" />
+
+                <ImageButton
+                    android:id="@+id/btn_down"
+                    style="@style/x_btn"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/btn_point" />
+
+                <ImageButton
+                    android:id="@+id/btn_left"
+                    style="@style/x_btn"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/btn_point" />
+
+                <ImageButton
+                    android:id="@+id/btn_right"
+                    style="@style/x_btn"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/btn_point" />
+
+                <RelativeLayout
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/btn_ok">
+
+                    <ImageButton
+                        android:id="@+id/btn_pause"
+                        style="@style/xx_btn"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/btn_pause" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ll_two"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="50dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.yaokantv.yaokanui.widget.NoScrollGridView
+                    android:id="@+id/gv"
+                    style="@style/extra_grid" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.yaokantv.yaokanui.widget.CustScrollView>
+</RelativeLayout>

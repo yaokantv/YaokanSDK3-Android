@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/empty"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/top_gray"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/tv_empty_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="页面加载失败，点击重新加载" />
+
+    <com.yaokantv.yaokanui.widget.YkButton
+        android:id="@+id/btn_reload"
+        android:layout_width="@dimen/btn_w"
+        android:layout_height="@dimen/btn_h"
+        android:layout_below="@+id/tv_empty_tip"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/shape_cir_white"
+        android:gravity="center"
+        android:text="重新加载"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_nor" />
+</RelativeLayout>

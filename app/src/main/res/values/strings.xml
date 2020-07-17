@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SDK_4.0</string>
+    <string name="app_name">SDK4.0Demo</string>
     <string name="first_match">一级匹配</string>
     <string name="second_match">二级匹配</string>
     <string name="rc_list">遥控器列表</string>
@@ -9,7 +9,111 @@
     <string name="t_smart_config">配置入网</string>
     <string name="t_init">初始化</string>
     <string name="t_rf">射频对码/学习</string>
-    <string name="study_suc">学习成功</string>
     <string name="app_delete_success">删除成功</string>
     <string name="app_delete_failed">删除失败</string>
+
+    <string name="net_config_smart_tips">1、接通设备的电源\n2、若指示灯处于快闪，直接“下一步”\n3、如果指示灯慢闪，需要复位后操作，长按复位按键5秒，当指示灯亮起再熄灭，松开按键，指示灯快闪，表示复位成功。\n4、如指示灯闪2次停1下，需要长按复位按键10秒，当指示灯亮起再熄灭，松开按键，指示灯快闪，表示已切换到一键配网方式。</string>
+    <string name="net_config_ap_tips">1、接通设备的电源\n2、若指示灯处于快闪，直接“下一步”\n3、如果指示灯慢闪，需要复位后操作，长按复位按键5秒，当指示灯再次亮起，松开按键，指示灯快闪，表示复位成功。\n4、如指示灯闪2次停1下，需要长按复位按键10秒，当指示灯亮起再熄灭，松开按键，指示灯快闪，表示已切换到热点配网方式。</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="smart_config">配网中...</string>
+    <string name="ota_start">OTA升级中...</string>
+    <string name="loading">加载数据中...</string>
+    <string name="app_confirm">确定</string>
+    <string name="ir_ctrl_device">红外遥控设备</string>
+    <string name="title_select_device">选择遥控设备类型</string>
+    <string name="title_select_brand">选择设备品牌</string>
+    <string name="title_select_provider">选择电视运营商</string>
+    <string name="title_step_match">逐个匹配</string>
+    <string name="rf_ctrl_device">RF(433/315)射频遥控设备</string>
+    <string name="long_matched_prompt">长按可以逐个连续匹配</string>
+    <string name="default_matched_prompt_stb">匹配前，请将机顶盒电源打开\n如果电视上出现音量调整图标\n表示匹配成功，点击"下一步"</string>
+
+    <string name="stb">电视机顶盒</string>
+    <string name="tv">电视机</string>
+    <string name="dvd">DVD播放机</string>
+    <string name="projector">投影仪</string>
+    <string name="fan">风扇</string>
+    <string name="air">空调</string>
+    <string name="light">灯</string>
+    <string name="box">电视盒子</string>
+    <string name="stb2">卫星机顶盒</string>
+    <string name="sweeper">扫地机</string>
+    <string name="audio">音响</string>
+    <string name="air_p">空气净化器</string>
+    <string name="camera">照相机</string>
+    <string name="switch_">开关</string>
+    <string name="jack">插座</string>
+    <string name="curtain">窗帘</string>
+    <string name="hanger">晾衣架</string>
+    <string name="light_ctrl">灯控器</string>
+    <string name="fan_light">风扇灯</string>
+    <string name="water_heater">热水器</string>
+    <string name="liangba">凉霸</string>
+
+    <string name="power_on">电源开</string>
+    <string name="power_off">电源关</string>
+    <string name="power_switch">电源开关</string>
+    <string name="open">开</string>
+    <string name="open_air_first">请先打开空调</string>
+    <string name="close">关</string>
+    <string name="add_other_rc">添加其他遥控器</string>
+    <string name="select_rc_type">选择遥控家电类型</string>
+    <string name="select_brand">选择品牌</string>
+
+    <string name="tv_power">电视机开关</string>
+    <string name="stb_power">机顶盒开关</string>
+    <string name="dvd_power">DVD开关</string>
+    <string name="pro_focus">画面</string>
+    <string name="camera_long_prompt">提示：长按可连续拍</string>
+
+    <string name="signal">输入选择</string>
+    <string name="boot">主页</string>
+    <string name="zero">0</string>
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+    <string name="four">4</string>
+    <string name="five">5</string>
+    <string name="six">6</string>
+    <string name="seven">7</string>
+    <string name="eight">8</string>
+    <string name="nine">9</string>
+    <string name="channel_name">频道</string>
+    <string name="volume">音量</string>
+    <string name="exit">退出</string>
+    <string name="save_rc_data">正在保存遥控器数据...</string>
+    <string name="apple_is_offline">小苹果未连接</string>
+    <string name="brand_common">常用</string>
+    <string name="mode">模式</string>
+    <string name="wind">风量</string>
+    <string name="s_u">上下</string>
+    <string name="s_l">左右</string>
+    <string name="temp">温度</string>
+    <string name="finish">完成</string>
+    <string name="camera_single">单拍</string>
+    <string name="camera_delay">延时拍</string>
+    <string name="camera_series">连拍</string>
+
+    <string name="setting">设置</string>
+    <string name="delete_device">删除设备</string>
+    <string name="is_delete_rc">是否删除该遥控器</string>
+
+    <string name="long_press_learning_state">长按要学习的按键，进入学习状态，此键和指示灯会闪烁，等待学习</string>
+    <string name="study_ing">将遥控器正对准小苹果，按一下相应按键，对码完成后指示灯常亮</string>
+    <string name="study_fail">对码失败，请再次长按你想学习的按键，重新对码</string>
+    <string name="study_suc">对码成功，可点击该按键测试是否正确，如果不对，可再次对码</string>
+    <string name="stop">停止</string>
+    <string name="low">低风</string>
+    <string name="mid">中风</string>
+    <string name="key_high">高风</string>
+    <string name="timing">定时</string>
+    <string name="update_name">更改遥控器名称</string>
+    <string name="ps_input_name">请输入遥控器名称</string>
+    <string name="cancel">取消</string>
+    <string name="diglog_ok">确定</string>
+    <string name="device_offline">设备不在线</string>
+    <string name="study_ctrl">按键学习</string>
+    <string name="title_device_list">设备列表</string>
+
 </resources>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/top_gray">
+
+    <include
+        android:id="@+id/top"
+        layout="@layout/top" />
+
+
+    <LinearLayout
+        android:id="@+id/rl_content"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/rl_delete"
+            style="@style/home_LinearLayout">
+
+            <TextView
+                style="@style/home_textview"
+                android:text="@string/delete_device" />
+
+            <TextView
+                android:id="@+id/tv_name"
+                style="@style/home_textview_end" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/line_h"
+                android:layout_alignParentBottom="true"
+                android:background="@color/trans_black_50" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_update"
+            style="@style/home_LinearLayout">
+
+            <TextView
+                style="@style/home_textview"
+                android:text="@string/update_name" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/line_h"
+                android:layout_alignParentBottom="true"
+                android:background="@color/trans_black_50" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rl_study"
+            style="@style/home_LinearLayout">
+
+            <TextView
+                style="@style/home_textview"
+                android:text="@string/study_ctrl" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/line_h"
+                android:layout_alignParentBottom="true"
+                android:background="@color/trans_black_50" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <include
+        android:id="@+id/empty"
+        layout="@layout/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/top"
+        android:visibility="gone" />
+</RelativeLayout>

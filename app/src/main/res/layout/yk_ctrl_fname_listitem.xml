@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/v_cc"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <View
+        android:id="@+id/v_ccd"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_h"
+        android:layout_alignBottom="@+id/v_cc"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/white" />
+
+    <TextView
+        android:id="@+id/catalog"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:gravity="center_vertical|start"
+        android:paddingStart="20dip"
+        android:paddingLeft="20dip"
+        android:paddingTop="2dip"
+        android:paddingBottom="2dip"
+        android:text="1"
+        android:textColor="@android:color/black"
+        android:textSize="15dp" />
+
+    <TextView
+        android:id="@+id/tv_showname"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_below="@+id/catalog"
+        android:layout_alignParentStart="true"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingLeft="20dp"
+        android:paddingEnd="65dp"
+        android:paddingRight="65dp"
+        android:text="华为机顶盒"
+        android:textColor="@android:color/black"
+        android:textSize="15dp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_h"
+        android:layout_alignBottom="@+id/tv_showname"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/white" />
+</RelativeLayout>

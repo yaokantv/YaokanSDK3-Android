@@ -47,7 +47,6 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
         initToolbar(App.curMac);
         //检测更新
         Yaokan.instance().checkDeviceVersion(App.curDid);
-
     }
 
     @Override
@@ -73,8 +72,14 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
-                currDeviceType = mTypeResult.getResult()[pos];
-                App.curTName = currDeviceType.getName();
+                for (DeviceType deviceType : mTypeResult.getResult()) {
+                    if (nameType.get(pos).equals(deviceType.getName())) {
+                        currDeviceType = deviceType;
+                        App.curTName = currDeviceType.getName();
+                        break;
+                    }
+                }
+
             }
 
             @Override
@@ -186,6 +191,9 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                         if (!TextUtils.isEmpty(ykMessage.getMsg())) {
                             DlgUtils.createDefDlg(activity, ykMessage.getMsg());
                         }
+                        break;
+                    case getOtaVersionFail:
+                        DlgUtils.createDefDlg(activity, "OTA版本获取失败");
                         break;
                     case otaVersion:
                         if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof CheckVersionResult) {

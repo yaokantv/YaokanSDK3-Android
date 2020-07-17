@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/top_gray"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/top"
+        layout="@layout/top" />
+
+    <RelativeLayout
+        android:id="@+id/rl_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/top">
+
+        <ScrollView
+            android:id="@+id/sl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_top"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@color/white"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center"
+                    android:text="@string/ir_ctrl_device"
+                    android:textColor="@color/black"
+                    android:textSize="13dp" />
+
+                <com.yaokantv.yaokanui.widget.NoScrollGridView
+                    android:id="@+id/gv_device_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:fadingEdge="none"
+                    android:horizontalSpacing="3dp"
+                    android:numColumns="3"
+                    android:scrollbarStyle="outsideOverlay"
+                    android:scrollbars="none"
+                    android:verticalSpacing="3dp" />
+
+                <TextView
+                    android:id="@+id/tv_rf"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:text="@string/rf_ctrl_device"
+                    android:textColor="@color/black"
+                    android:textSize="13dp"
+                    android:visibility="gone" />
+
+                <com.yaokantv.yaokanui.widget.NoScrollGridView
+                    android:id="@+id/gv_rf_device_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:fadingEdge="none"
+                    android:horizontalSpacing="3dp"
+                    android:numColumns="3"
+                    android:scrollbarStyle="outsideOverlay"
+                    android:scrollbars="none"
+                    android:verticalSpacing="3dp"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+
+    <include
+        android:id="@+id/empty"
+        layout="@layout/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/top"
+        android:visibility="gone" />
+</RelativeLayout>

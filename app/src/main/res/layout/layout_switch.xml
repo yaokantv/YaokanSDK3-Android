@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="50dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/c_btn_open"
+            style="@style/c_text_btn"
+            android:text="@string/open" />
+
+        <Button
+            android:id="@+id/c_btn_close"
+            style="@style/c_text_btn"
+            android:layout_marginStart="80dp"
+            android:text="@string/close" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/c_btn_power"
+        android:layout_width="@dimen/c_ctrl_btn_w"
+        android:layout_height="@dimen/c_ctrl_btn_w"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/btn_circle"
+        android:scaleType="fitXY"
+        android:src="@drawable/btn_c_power" />
+</LinearLayout>
