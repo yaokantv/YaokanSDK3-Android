@@ -90,6 +90,8 @@ public class RcActivity extends BaseActivity implements View.OnClickListener {
         });
     }
 
+    boolean isRfStudy = false;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -101,13 +103,29 @@ public class RcActivity extends BaseActivity implements View.OnClickListener {
             findViewById(R.id.study_finish).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showcontrol.setVisibility(View.GONE);
-                    actType = Config.TYPE_RC;
-                    Config.IS_MATCH = false;
-                    frgRc.saveRc();
+                    if ("1".equals(rc.getRf())) {
+                        if (Yaokan.instance().isBigApple(rc.getMac())) {
+                            isRfStudy = true;
+                            dialog.setMessage(getString(R.string.download_to_big_apple));
+                            dialog.show();
+                            Yaokan.instance().downloadCodeToDevice(App.curDid, rc.getStudyId(), rc.getBe_rc_type());
+                        } else {
+                            studyFinish();
+                        }
+                    } else {
+                        studyFinish();
+                    }
                 }
             });
         }
+    }
+
+    private void studyFinish() {
+        showSetting(true);
+        showcontrol.setVisibility(View.GONE);
+        actType = Config.TYPE_RC;
+        Config.IS_MATCH = false;
+        frgRc.saveRc();
     }
 
     @Override
@@ -133,11 +151,18 @@ public class RcActivity extends BaseActivity implements View.OnClickListener {
                 @Override
                 public void onClick(View v) {
                     YKAppManager.getAppManager().finishActivities(BrandListActivity.class, SelectDeviceActivity.class);
-                    showcontrol.setVisibility(View.GONE);
-                    showSetting(true);
-                    actType = Config.TYPE_RC;
-                    Config.IS_MATCH = false;
-                    frgRc.saveRc();
+                    if ("1".equals(rc.getRf())) {
+                        if (Yaokan.instance().isBigApple(rc.getMac())) {
+                            isRfStudy = true;
+                            dialog.setMessage(getString(R.string.download_to_big_apple));
+                            dialog.show();
+                            Yaokan.instance().downloadCodeToDevice(App.curDid, rc.getStudyId(), rc.getBe_rc_type());
+                        } else {
+                            studyFinish();
+                        }
+                    } else {
+                        studyFinish();
+                    }
                 }
             });
             Yaokan.instance().getRfMatchingResult(Config.MAC, rcTid, getIntent().getIntExtra(Config.S_BID, 0));
@@ -262,7 +287,11 @@ public class RcActivity extends BaseActivity implements View.OnClickListener {
             if (Yaokan.instance().isBigApple(rc.getMac())) {
                 dialog.setMessage(getString(R.string.download_to_big_apple));
                 dialog.show();
-                Yaokan.instance().downloadCodeToDevice(App.curDid, rc.getRid(), rc.getBe_rc_type());
+                if (!TextUtils.isEmpty(rc.getRid())) {
+                    Yaokan.instance().downloadCodeToDevice(App.curDid, rc.getRid(), rc.getBe_rc_type());
+                } else if (!TextUtils.isEmpty(rc.getStudyId())) {
+                    Yaokan.instance().downloadCodeToDevice(App.curDid, rc.getStudyId(), rc.getBe_rc_type());
+                }
             } else {
                 saveTo();
             }
@@ -359,7 +388,11 @@ public class RcActivity extends BaseActivity implements View.OnClickListener {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 timerCancel();
-                                                saveTo();
+                                                if (isRfStudy) {
+                                                    studyFinish();
+                                                } else {
+                                                    saveTo();
+                                                }
                                             }
                                         }, false);
 
