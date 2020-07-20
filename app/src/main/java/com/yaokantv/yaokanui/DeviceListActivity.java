@@ -1,19 +1,16 @@
 package com.yaokantv.yaokanui;
 
-import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-
 import com.yaokantv.sdkdemo.App;
+import com.yaokantv.sdkdemo.AppManager;
+import com.yaokantv.sdkdemo.BrandActivity;
 import com.yaokantv.sdkdemo.R;
 import com.yaokantv.yaokansdk.callback.YaokanSDKListener;
 import com.yaokantv.yaokansdk.manager.Yaokan;
@@ -52,22 +49,29 @@ public class DeviceListActivity extends BaseActivity implements YaokanSDKListene
         showSetting(R.mipmap.add, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    startActivity(new Intent(activity, SoftApConfigActivity.class));
-                } else {
-                    ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 98);
-                }
+                startActivity(new Intent(activity, SoftApConfigActivity.class));
             }
         });
         adapter = new CommonAdapter<YkDevice>(this, mList, R.layout.lv_item) {
             @Override
             public void convert(ViewHolder helper, final YkDevice item, int position) {
                 String status = item.isOnline() ? "在线" : "离线";
-                helper.setText(R.id.tv_item, " MAC:" + getMac(item.getMac()) + " " + status);
+                helper.setText(R.id.tv_item, getMac(item.getMac()) + " " + status);
                 helper.setOnclickListener(R.id.btn_test, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Yaokan.instance().test(item.getDid());
+                    }
+                });
+                helper.setOnclickListener(R.id.btn_more, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(DeviceListActivity.this, BrandActivity.class);
+                        intent.putExtra("from", "d");
+                        App.curMac = mList.get(position).getMac();
+                        App.curDid = mList.get(position).getDid();
+                        App.curRf = mList.get(position).getName().contains("RF") ? "1" : "0";
+                        startActivity(intent);
                     }
                 });
                 helper.setOnclickListener(R.id.btn_del, new View.OnClickListener() {
@@ -107,14 +111,6 @@ public class DeviceListActivity extends BaseActivity implements YaokanSDKListene
         });
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 98 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            startActivity(new Intent(this, SoftApConfigActivity.class));
-        }
-    }
-
     String getMac(String mac) {
         if (!TextUtils.isEmpty(mac)) {
             StringBuilder newM = new StringBuilder();
@@ -129,6 +125,12 @@ public class DeviceListActivity extends BaseActivity implements YaokanSDKListene
             mac = newM.toString();
         }
         return mac;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        AppManager.getAppManager().AppExit(this);
     }
 
     @Override

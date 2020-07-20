@@ -8,23 +8,33 @@
     <TextView
         android:id="@+id/tv_item"
         android:layout_width="match_parent"
-        android:textColor="#000"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
-        android:text="设备" />
-    <Button
-        android:id="@+id/btn_del"
-        android:text="删除"
-        android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content" />
+        android:text="设备"
+        android:textColor="#000" />
+
     <Button
         android:id="@+id/btn_test"
-        android:text="测试"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toStartOf="@+id/btn_del"
+        android:text="测试" />
+
+    <Button
+        android:id="@+id/btn_del"
         android:layout_width="60dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/btn_more"
+        android:layout_centerVertical="true"
+        android:text="删除" />
+
+    <Button
+        android:id="@+id/btn_more"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:text="更多" />
 </RelativeLayout>

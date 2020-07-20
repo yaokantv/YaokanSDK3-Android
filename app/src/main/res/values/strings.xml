@@ -115,5 +115,7 @@
     <string name="device_offline">设备不在线</string>
     <string name="study_ctrl">按键学习</string>
     <string name="title_device_list">设备列表</string>
+    <string name="delete_rc">删除遥控器</string>
+    <string name="download_to_big_apple">下载码库到大苹果...</string>
 
 </resources>

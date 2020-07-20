@@ -43,6 +43,9 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_d);
         initView();
+        if (getIntent() != null && !TextUtils.isEmpty(getIntent().getStringExtra("from"))) {
+            findViewById(R.id.ll_1).setVisibility(View.GONE);
+        }
         Yaokan.instance().addSdkListener(this);
         initToolbar(App.curMac);
         //检测更新

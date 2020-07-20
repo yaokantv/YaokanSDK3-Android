@@ -1,5 +1,6 @@
 package com.yaokantv.yaokanui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,12 +16,20 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.jaeger.library.StatusBarUtil;
+import com.yaokantv.sdkdemo.App;
+import com.yaokantv.sdkdemo.AppManager;
+import com.yaokantv.sdkdemo.BrandActivity;
+import com.yaokantv.sdkdemo.MatchActivity;
 import com.yaokantv.sdkdemo.R;
+import com.yaokantv.yaokansdk.Contants;
 import com.yaokantv.yaokansdk.manager.Yaokan;
+import com.yaokantv.yaokansdk.model.DeviceResult;
 import com.yaokantv.yaokansdk.model.MatchingData;
 import com.yaokantv.yaokansdk.model.RemoteCtrl;
 import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
+import com.yaokantv.yaokansdk.utils.DlgUtils;
+import com.yaokantv.yaokansdk.utils.Logger;
 import com.yaokantv.yaokanui.bean.UiRc;
 import com.yaokantv.yaokanui.frag.BaseRcFragment;
 import com.yaokantv.yaokanui.key.TabEntity;
@@ -46,7 +55,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener {
     private View mDecorView;
     private ViewPager mViewPager;
     private CommonTabLayout mTabLayout_2;
-    BaseRcFragment frgRc ;
+    BaseRcFragment frgRc;
     RelativeLayout showcontrol;
     TextView tvTips;
     RemoteCtrl rc;
@@ -249,13 +258,24 @@ public class RcActivity extends BaseActivity implements View.OnClickListener {
                 rc.setProvider(Config.operators.getJson());
                 Config.operators = null;
             }
-            Yaokan.instance().saveRc(rc);
-            showSetting(true);
-            setMTitle(rc.getName(), TITLE_LOCATION_LEFT);
-            YKAppManager.getAppManager().finishActivities(SelectProviderActivity.class,
-                    NewMatchActivity.class, SelectDeviceActivity.class, BrandListActivity.class);
-            showcontrol.setVisibility(View.GONE);
+            //设备列表中必须有此设备
+            if (Yaokan.instance().isBigApple(rc.getMac())) {
+                dialog.setMessage(getString(R.string.download_to_big_apple));
+                dialog.show();
+                Yaokan.instance().downloadCodeToDevice(App.curDid, rc.getRid(), rc.getBe_rc_type());
+            } else {
+                saveTo();
+            }
         }
+    }
+
+    private void saveTo() {
+        Yaokan.instance().saveRc(rc);
+        showSetting(true);
+        setMTitle(rc.getName(), TITLE_LOCATION_LEFT);
+        YKAppManager.getAppManager().finishActivities(SelectProviderActivity.class,
+                NewMatchActivity.class, SelectDeviceActivity.class, BrandListActivity.class);
+        showcontrol.setVisibility(View.GONE);
     }
 
 
@@ -307,6 +327,75 @@ public class RcActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case RfUploadSuccess:
                 dismiss();
+                break;
+            case DownloadCode:
+                if (!isFinishing()) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final DeviceResult result = (DeviceResult) ykMessage.getData();
+                            Logger.e("DownloadCode" + result.toString());
+                            if (result != null && !TextUtils.isEmpty(App.curMac) && App.curMac.equals(result.getMac())) {
+                                String msg = "";
+                                switch (result.getCode()) {
+                                    case Contants.YK_DOWNLOAD_CODE_RESULT_START_FAIL:
+                                        dismiss();
+                                        msg = "开启下载遥控器失败";
+                                        break;
+                                    case Contants.YK_DOWNLOAD_CODE_RESULT_START://开始下载遥控器
+                                        Logger.e("开始下载遥控器");
+                                        showDlg(120, "正在下载码库到设备...", new OnDownloadTimerOutListener() {
+                                            @Override
+                                            public void onTimeOut() {
+                                                dismiss();
+                                                DlgUtils.createDefDlg(activity, "下载超时");
+                                            }
+                                        });
+                                        break;
+                                    case Contants.YK_DOWNLOAD_CODE_RESULT_SUC://下载遥控器成功
+                                        Logger.e("下载遥控器成功");
+                                        dismiss();
+                                        DlgUtils.createDefDlg(activity, "", "下载成功", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                timerCancel();
+                                                saveTo();
+                                            }
+                                        }, false);
+
+                                        break;
+                                    case Contants.YK_DOWNLOAD_CODE_RESULT_FAIL:
+                                        msg = "下载遥控器失败";
+                                        break;
+                                    case Contants.YK_DOWNLOAD_CODE_RESULT_EXIST:
+                                        msg = "遥控器已存在设备中";
+                                        break;
+                                    case Contants.YK_DOWNLOAD_CODE_RESULT_AIR_MAX:
+                                        msg = "空调遥控器达到极限";
+                                        break;
+                                    case Contants.YK_DOWNLOAD_CODE_RESULT_IR_MAX:
+                                        msg = "非空调遥控器达到极限";
+                                        break;
+                                    case Contants.YK_DOWNLOAD_CODE_RESULT_RF_MAX:
+                                        msg = "射频遥控器达到极限";
+                                        break;
+                                    case Contants.YK_DOWNLOAD_CODE_RESULT_DOOR_MAX:
+                                        msg = "门铃遥控器达到极限";
+                                        break;
+                                }
+                                if (!TextUtils.isEmpty(msg)) {
+                                    dismiss();
+                                    DlgUtils.createDefDlg(activity, "", msg, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                        }
+                                    }, false);
+                                }
+                            }
+                        }
+                    });
+                }
                 break;
         }
     }

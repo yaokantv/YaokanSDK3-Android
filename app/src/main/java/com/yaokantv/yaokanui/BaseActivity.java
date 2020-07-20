@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -67,6 +68,16 @@ public abstract class BaseActivity extends AppCompatActivity implements YaokanSD
         }
     }
 
+    OnDownloadTimerOutListener onDownloadTimerOutListener;
+
+    public void setOnDownloadTimerOutListener(OnDownloadTimerOutListener onDownloadTimerOutListener) {
+        this.onDownloadTimerOutListener = onDownloadTimerOutListener;
+    }
+
+    interface OnDownloadTimerOutListener {
+        void onTimeOut();
+    }
+
     protected void showSetting(boolean isShow) {
         View v = findViewById(R.id.setting);
         if (v != null) {
@@ -74,11 +85,11 @@ public abstract class BaseActivity extends AppCompatActivity implements YaokanSD
         }
     }
 
-    protected void showSetting(int res,View.OnClickListener listener) {
+    protected void showSetting(int res, View.OnClickListener listener) {
         showSetting(true);
         ImageView v = findViewById(R.id.setting);
         if (v != null) {
-            if(res!=0){
+            if (res != 0) {
                 v.setImageResource(res);
             }
             v.setOnClickListener(listener);
@@ -247,6 +258,43 @@ public abstract class BaseActivity extends AppCompatActivity implements YaokanSD
                 }
             });
         }
+    }
+
+    CountDownTimer timer;
+
+    protected void timerCancel() {
+        if (timer != null) {
+            timer.cancel();
+        }
+    }
+
+    /**
+     * @param time 超时时间
+     * @param s
+     */
+    protected void showDlg(int time, String s, OnDownloadTimerOutListener onDownloadTimerOutListener) {
+        this.onDownloadTimerOutListener = onDownloadTimerOutListener;
+        if (timer != null) {
+            timer.cancel();
+        }
+        timer = new CountDownTimer(time * 1000, 900) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                if (onDownloadTimerOutListener != null) {
+                    onDownloadTimerOutListener.onTimeOut();
+                }
+                timer.cancel();
+                timer = null;
+                dismiss();
+            }
+        };
+        timer.start();
+        showForceDlg(s);
     }
 
     protected void showDlg(final String s, final DialogInterface.OnCancelListener listener) {

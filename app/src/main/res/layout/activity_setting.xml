@@ -22,7 +22,7 @@
 
             <TextView
                 style="@style/home_textview"
-                android:text="@string/delete_device" />
+                android:text="@string/delete_rc" />
 
             <TextView
                 android:id="@+id/tv_name"

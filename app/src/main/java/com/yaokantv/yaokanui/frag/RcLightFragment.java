@@ -73,8 +73,8 @@ public class RcLightFragment extends BaseRcFragment implements View.OnClickListe
     @Override
     public void setKeyBackground() {
         KeyBackground(power, R.drawable.btn_circle, JackRFDataKey.POWER.getKey(), map);
-        KeyBackground(off, JackRFDataKey.ON.getKey(), map);
-        KeyBackground(on, JackRFDataKey.OFF.getKey(), map);
+        KeyBackground(off, JackRFDataKey.OFF.getKey(), map);
+        KeyBackground(on, JackRFDataKey.ON.getKey(), map);
     }
 
     @Override
