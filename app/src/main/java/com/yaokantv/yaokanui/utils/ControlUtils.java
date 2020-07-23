@@ -3,6 +3,7 @@ package com.yaokantv.yaokanui.utils;
 
 import com.yaokantv.yaokanui.frag.BaseRcFragment;
 import com.yaokantv.yaokanui.frag.RcAirFragment;
+import com.yaokantv.yaokanui.frag.RcAirMiniFragment;
 import com.yaokantv.yaokanui.frag.RcAudioFragment;
 import com.yaokantv.yaokanui.frag.RcBoxFragment;
 import com.yaokantv.yaokanui.frag.RcCameraFragment;
@@ -44,6 +45,9 @@ public class ControlUtils {
                 break;
             case 7:
                 sf = new RcAirFragment();
+                break;
+            case 44:
+                sf = new RcAirMiniFragment();
                 break;
             case 8:
                 sf = new RcLightFragment();

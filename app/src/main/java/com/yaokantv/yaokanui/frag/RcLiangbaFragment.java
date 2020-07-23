@@ -1,26 +1,19 @@
 package com.yaokantv.yaokanui.frag;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.yaokantv.sdkdemo.R;
-import com.yaokantv.yaokansdk.model.RcCmd;
 import com.yaokantv.yaokansdk.model.RemoteCtrl;
 
 import com.yaokantv.yaokanui.RcActivity;
-import com.yaokantv.yaokanui.key.FannerRemoteControlDataKey;
 import com.yaokantv.yaokanui.key.LiangbaRFDataKey;
 import com.yaokantv.yaokanui.utils.StringUtils;
 import com.yaokantv.yaokanui.widget.ExpandAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RcLiangbaFragment extends BaseRcFragment implements View.OnClickListener, View.OnLongClickListener {
 

@@ -17,25 +17,6 @@
         android:orientation="vertical">
 
         <RelativeLayout
-            android:id="@+id/rl_delete"
-            style="@style/home_LinearLayout">
-
-            <TextView
-                style="@style/home_textview"
-                android:text="@string/delete_rc" />
-
-            <TextView
-                android:id="@+id/tv_name"
-                style="@style/home_textview_end" />
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="@dimen/line_h"
-                android:layout_alignParentBottom="true"
-                android:background="@color/trans_black_50" />
-        </RelativeLayout>
-
-        <RelativeLayout
             android:id="@+id/rl_update"
             style="@style/home_LinearLayout">
 
@@ -49,6 +30,23 @@
                 android:layout_alignParentBottom="true"
                 android:background="@color/trans_black_50" />
         </RelativeLayout>
+
+        <RelativeLayout
+            android:onClick="onClick"
+            android:id="@+id/rl_room_msg"
+            style="@style/home_LinearLayout">
+
+            <TextView
+                style="@style/home_textview"
+                android:text="@string/set_room_msg" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/line_h"
+                android:layout_alignParentBottom="true"
+                android:background="@color/trans_black_50" />
+        </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/rl_study"
             style="@style/home_LinearLayout">
@@ -56,6 +54,25 @@
             <TextView
                 style="@style/home_textview"
                 android:text="@string/study_ctrl" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/line_h"
+                android:layout_alignParentBottom="true"
+                android:background="@color/trans_black_50" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_delete"
+            style="@style/home_LinearLayout">
+
+            <TextView
+                style="@style/home_textview"
+                android:text="@string/delete_rc" />
+
+            <TextView
+                android:id="@+id/tv_name"
+                style="@style/home_textview_end" />
 
             <View
                 android:layout_width="fill_parent"

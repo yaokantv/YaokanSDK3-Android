@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -16,24 +15,21 @@ import android.widget.TextView;
 import com.yaokantv.sdkdemo.R;
 import com.yaokantv.yaokansdk.manager.Yaokan;
 import com.yaokantv.yaokansdk.model.AirOrder;
+import com.yaokantv.yaokansdk.model.AirStatus;
 import com.yaokantv.yaokansdk.model.Mode;
 import com.yaokantv.yaokansdk.model.RcCmd;
 import com.yaokantv.yaokansdk.model.RemoteCtrl;
 import com.yaokantv.yaokansdk.model.Swing;
+import com.yaokantv.yaokansdk.model.YkMessage;
+import com.yaokantv.yaokansdk.model.e.MsgType;
 import com.yaokantv.yaokanui.Config;
 import com.yaokantv.yaokanui.RcActivity;
-import com.yaokantv.yaokanui.key.FannerRemoteControlDataKey;
-import com.yaokantv.yaokanui.widget.ExpandAdapter;
-import com.yaokantv.yaokanui.widget.NoScrollGridView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class RcAirFragment extends BaseRcFragment implements View.OnClickListener {
 
-    List<RcCmd> map = new ArrayList<>();
     RcActivity activity;
     TextView tvTemp;
     ImageView ivMode, ivSpeed, ivU, ivL;
@@ -144,7 +140,7 @@ public class RcAirFragment extends BaseRcFragment implements View.OnClickListene
             isOpen = !isOpen;
             mView.findViewById(R.id.ll_op).setVisibility(isOpen ? View.VISIBLE : View.GONE);
             mView.findViewById(R.id.tv_temp).setVisibility(isOpen ? View.VISIBLE : View.GONE);
-            Yaokan.instance().sendCmd(Config.DID, rc.getRid(), isOpen ? "off" : "on", rc.getBe_rc_type(), null, null);
+            Yaokan.instance().sendCmd(Config.DID, rc.getRid(), isOpen ? "on" : "off", rc.getBe_rc_type(), null, null);
         } else if (id == R.id.temp_down) {
             if (!isOpen) {
                 toast(R.string.open_air_first);
@@ -423,6 +419,66 @@ public class RcAirFragment extends BaseRcFragment implements View.OnClickListene
                 break;
         }
         return text;
+    }
+
+    @Override
+    public void onReceiveMsg(final MsgType msgType, final YkMessage ykMessage) {
+        super.onReceiveMsg(msgType, ykMessage);
+        if (getActivity() != null && !getActivity().isFinishing()) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    switch (msgType) {
+                        case CtrlStatus:
+                            AirStatus airStatus = (AirStatus) ykMessage.getData();
+                            if (airStatus != null) {
+                                isOpen = airStatus.isOpen();
+                                mView.findViewById(R.id.ll_op).setVisibility(isOpen ? View.VISIBLE : View.GONE);
+                                mView.findViewById(R.id.tv_temp).setVisibility(isOpen ? View.VISIBLE : View.GONE);
+                                if (isOpen) {
+                                    if (modeList.contains(airStatus.getStatus()[0])) {
+                                        modeIndex = modeList.indexOf(airStatus.getStatus()[0]);
+                                        curMode = modeList.get(modeIndex);
+                                    }
+                                    if (speedList.contains(airStatus.getStatus()[1])) {
+                                        speedIndex = speedList.indexOf(airStatus.getStatus()[1]);
+                                        curSpeed = speedList.get(speedIndex);
+                                    }
+                                    if (tempList.contains(airStatus.getStatus()[2])) {
+                                        tempIndex = tempList.indexOf(airStatus.getStatus()[2]);
+                                        curTemp = tempList.get(tempIndex);
+                                    }
+                                    if (!TextUtils.isEmpty(airStatus.getStatus()[3]) && !"*".equals(airStatus.getStatus()[3])) {
+                                        if (verList.contains(airStatus.getStatus()[3])) {
+                                            verIndex = verList.indexOf(airStatus.getStatus()[3]);
+                                            curVer = verList.get(verIndex);
+                                        }
+                                        if (rc.getAirCmd().getAttributes().getVerticalIndependent() == 1) {
+                                            boolean isOpen = airStatus.getStatus()[3].contains("On");
+                                            verIndex = (isOpen ? 1 : 0);
+                                            getShowText(isOpen ? "verOn" : "verOff");
+                                        }
+                                    }
+                                    if (!TextUtils.isEmpty(airStatus.getStatus()[4]) && !"*".equals(airStatus.getStatus()[4])) {
+                                        if (horList.contains(airStatus.getStatus()[4])) {
+                                            horIndex = horList.indexOf(airStatus.getStatus()[4]);
+                                            curHor = horList.get(horIndex);
+                                        }
+                                        if (rc.getAirCmd().getAttributes().getHorizontalIndependent() == 1) {
+                                            boolean isOpen = airStatus.getStatus()[4].contains("On");
+                                            horIndex = (isOpen ? 1 : 0);
+                                            getShowText(isOpen ? "horOn" : "horOff");
+                                        }
+                                    }
+                                    refreshView();
+                                    saveAirStatus();
+                                }
+                            }
+                            break;
+                    }
+                }
+            });
+        }
     }
 
     protected void setViewStatus(View v, boolean isEnable) {

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.yaokantv.yaokansdk.callback.YaokanSDKListener;
 import com.yaokantv.yaokansdk.manager.Yaokan;
@@ -19,10 +20,12 @@ import com.yaokantv.yaokansdk.model.BrandResult;
 import com.yaokantv.yaokansdk.model.CheckVersionResult;
 import com.yaokantv.yaokansdk.model.DeviceType;
 import com.yaokantv.yaokansdk.model.DeviceTypeResult;
+import com.yaokantv.yaokansdk.model.HardInfo;
 import com.yaokantv.yaokansdk.model.ProgressResult;
 import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
 import com.yaokantv.yaokansdk.utils.DlgUtils;
+import com.yaokantv.yaokanui.widget.RangeSeekBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +40,8 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
     DeviceType currDeviceType = null; // 当前设备类型
     Brand currBrand = null; // 当前品牌
     boolean isFirst = true;
+    TextView tvVoice;
+    RangeSeekBar<Integer> seekBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +54,8 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
         Yaokan.instance().addSdkListener(this);
         initToolbar(App.curMac);
         //检测更新
-        Yaokan.instance().checkDeviceVersion(App.curDid);
+//        Yaokan.instance().checkDeviceVersion(App.curDid);
+        Yaokan.instance().deviceInfo(App.curDid);
     }
 
     @Override
@@ -59,6 +65,8 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
     }
 
     private void initView() {
+        seekBar = findViewById(R.id.sb_vol);
+        tvVoice = findViewById(R.id.tv_voice);
         spType = findViewById(R.id.spType);
         spBrands = findViewById(R.id.spBrand);
         typeAdapter = new ArrayAdapter<>(this,
@@ -99,6 +107,21 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+        seekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
+            @Override
+            public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
+                int vol = maxValue;
+                dialog.show();
+                String voice = "0";
+                if (vol < 10) {
+                    voice = voice + vol;
+                } else {
+                    voice = String.valueOf(vol);
+                }
+                tvVoice.setText("" + vol);
+                Yaokan.instance().setVoice(App.curDid, voice);
             }
         });
     }
@@ -142,6 +165,9 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
             case R.id.btn_update_device:
                 Yaokan.instance().updateDevice(App.curDid);
                 break;
+            case R.id.btn_voice_update_device:
+                Yaokan.instance().updateVoice(App.curDid);
+                break;
             case R.id.btn_reset_apple:
                 Yaokan.instance().apReset(App.curMac, App.curDid);
                 break;
@@ -168,6 +194,9 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
             public void run() {
                 dismiss();
                 switch (msgType) {
+                    case setVoiceResult:
+                        dismiss();
+                        break;
                     case Types:
                         if (ykMessage != null && ykMessage.getCode() == 0) {
                             DeviceTypeResult typeResult = (DeviceTypeResult) ykMessage.getData();
@@ -192,7 +221,16 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                         break;
                     case DeviceInfo:
                         if (!TextUtils.isEmpty(ykMessage.getMsg())) {
-                            DlgUtils.createDefDlg(activity, ykMessage.getMsg());
+                            if (isFirst) {
+                                isFirst = false;
+                                HardInfo info = (HardInfo) ykMessage.getData();
+                                if (info != null && !TextUtils.isEmpty(info.getVoice_num())) {
+                                    tvVoice.setText(info.getVoice_num());
+                                    seekBar.setSelectedMaxValue(Integer.valueOf(info.getVoice_num()));
+                                }
+                            } else {
+                                DlgUtils.createDefDlg(activity, ykMessage.getMsg());
+                            }
                         }
                         break;
                     case getOtaVersionFail:
@@ -201,31 +239,38 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                     case otaVersion:
                         if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof CheckVersionResult) {
                             CheckVersionResult result = (CheckVersionResult) ykMessage.getData();
-                            if (!TextUtils.isEmpty(result.getOtaversion()) && !TextUtils.isEmpty(result.getVersion())) {
-                                int newV = Integer.valueOf(result.getOtaversion().replace('.', '0'));
-                                int curV = Integer.valueOf(result.getVersion().replace('.', '0'));
-                                if (newV > curV) {
-                                    DlgUtils.createDefDlg(activity, "版本更新", "硬件检测到新版本，是否更新？" + "\n当前版本：" + result.getVersion()
-                                            + "\n最新版本：" + result.getOtaversion(), new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-                                            Yaokan.instance().updateDevice(App.curDid);
-                                        }
-                                    }, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-                                        }
-                                    });
-                                } else {
-                                    if (!isFirst) {
-                                        DlgUtils.createDefDlg(activity, "当前已是最新版本：" + result.getVersion());
-                                    }
+                            DlgUtils.createDefDlg(activity, "", "当前固件版本：" + result.getVersion()
+                                    + "\n最新版本：" + result.getOtaversion()
+                                    + "\n当前语音固件版本：" + result.getVoice_version()
+                                    + "\n最新固件版本：" + result.getVoice_otaversion(), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
                                 }
-                            }
+                            });
+//                            if (!TextUtils.isEmpty(result.getOtaversion()) && !TextUtils.isEmpty(result.getVersion())) {
+//                                int newV = Integer.valueOf(result.getOtaversion().replace('.', '0'));
+//                                int curV = Integer.valueOf(result.getVersion().replace('.', '0'));
+//                                if (newV > curV) {
+//                                    DlgUtils.createDefDlg(activity, "版本更新", "硬件检测到新版本，是否更新？" + "\n当前版本：" + result.getVersion()
+//                                            + "\n最新版本：" + result.getOtaversion(), new DialogInterface.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(DialogInterface dialog, int which) {
+//                                            dialog.dismiss();
+//                                            Yaokan.instance().updateDevice(App.curDid);
+//                                        }
+//                                    }, new DialogInterface.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(DialogInterface dialog, int which) {
+//                                            dialog.dismiss();
+//                                        }
+//                                    });
+//                                } else {
+//                                    if (!isFirst) {
+//                                        DlgUtils.createDefDlg(activity, "当前已是最新版本：" + result.getVersion());
+//                                    }
+//                                }
+//                            }
                         }
-                        isFirst = false;
                         break;
                     case UpdateStart:
                         if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof ProgressResult) {

@@ -222,5 +222,12 @@
         <!-- 圆角矩形宽高相等,取较宽高中大值-->
         <attr name="mv_isWidthHeightEqual" format="boolean" />
     </declare-styleable>
-
+    <declare-styleable name="RangeSeekBar">
+        <attr name="yk_absoluteMinValue" format="integer|float"/>
+        <attr name="yk_absoluteMaxValue" format="integer|float"/>
+        <attr name="yk_singleThumb" format="boolean"/>
+        <!--         <attr name="minLabel" format="string"/>
+                <attr name="maxLabel" format="string"/> -->
+        <attr name="yk_measureUnit" format="string"/>
+    </declare-styleable>
 </resources>

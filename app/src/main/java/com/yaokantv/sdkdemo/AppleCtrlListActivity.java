@@ -71,7 +71,12 @@ public class AppleCtrlListActivity extends BaseActivity implements YaokanSDKList
                 helper.setVisibility(R.id.text2, View.GONE);
                 String s = Yaokan.instance().getNameByRid(item.getRid());
                 if (TextUtils.isEmpty(s)) {
-                    s = item.getRid();
+                    if (Yaokan.instance().isRfType(item.getType())) {
+                        s = Yaokan.instance().getNameByStudyId(item.getRid());
+                    }
+                    if (TextUtils.isEmpty(s)) {
+                        s = item.getRid();
+                    }
                 }
                 helper.setText(R.id.text1, s);
                 helper.setOnLongClickListener(R.id.rl, new View.OnLongClickListener() {

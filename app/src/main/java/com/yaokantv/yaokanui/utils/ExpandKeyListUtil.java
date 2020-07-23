@@ -1,5 +1,6 @@
 package com.yaokantv.yaokanui.utils;
 
+import com.yaokantv.yaokanui.key.AirMiniDataKey;
 import com.yaokantv.yaokanui.key.AirPurifierRemoteControlDataKey;
 import com.yaokantv.yaokanui.key.BoxRemoteControlDataKey;
 import com.yaokantv.yaokanui.key.CtrlContants;
@@ -29,6 +30,8 @@ public class ExpandKeyListUtil {
      */
     private List<String> mTVList;
     private List<String> mLightList;
+    private List<String> mBoxList;
+    private List<String> mAudioList;
     /**
      * 扫地机
      */
@@ -49,11 +52,10 @@ public class ExpandKeyListUtil {
      * 投影仪
      */
     private List<String> mDVDList;
-    private List<String> mAudioList;
-    private List<String> mBoxList;
     private List<String> mWaterHeaterList;
     private List<String> mRfList;
     private List<String> mLbList;
+    private List<String> mAirList;
 
     public ExpandKeyListUtil(int deviceType) {
         initExpandKeyList(deviceType);
@@ -85,7 +87,7 @@ public class ExpandKeyListUtil {
         mSTBList.add(STBRemoteControlDataKey.MENU.getKey());
         mSTBList.add(STBRemoteControlDataKey.BOOT.getKey());
         mSTBList.add(STBRemoteControlDataKey.POWER.getKey());
-//        mSTBList.add(STBRemoteControlDataKey.TVPOWER.getKey());
+        mSTBList.add(STBRemoteControlDataKey.TVPOWER.getKey());
         mSTBList.add(STBRemoteControlDataKey.CHANNEL_ADD.getKey());
         mSTBList.add(STBRemoteControlDataKey.CHANNEL_SUB.getKey());
         mSTBList.add(STBRemoteControlDataKey.VOLUME_ADD.getKey());
@@ -96,6 +98,7 @@ public class ExpandKeyListUtil {
         mSTBList.add(STBRemoteControlDataKey.REW.getKey());
         mSTBList.add(STBRemoteControlDataKey.STAR.getKey());
         mSTBList.add(STBRemoteControlDataKey.POUND.getKey());
+        mSTBList.add(STBRemoteControlDataKey.EXIT.getKey());
 //		mSTBList.add(STBRemoteControlDataKey.INFO.getKey());
 
 
@@ -159,7 +162,6 @@ public class ExpandKeyListUtil {
         mTVList.add(TVRemoteControlDataKey.MENU.getKey());
         mTVList.add(TVRemoteControlDataKey.EXIT.getKey());
         mTVList.add(TVRemoteControlDataKey.DIGIT.getKey());
-        mTVList.add(TVRemoteControlDataKey.SHARP.getKey());
 //
 //		mTVList.add(TVRemoteControlDataKey.REW.getKey());
 //		mTVList.add(TVRemoteControlDataKey.PLAY.getKey());
@@ -192,7 +194,7 @@ public class ExpandKeyListUtil {
 
     private void initSweperExpandKeyList() {
         mSweperList = new ArrayList<>();
-//        mSweperList.add(SweeperRemoteControlDataKey.POWER.getKey());
+        mSweperList.add(SweeperRemoteControlDataKey.POWER.getKey());
         mSweperList.add(SweeperRemoteControlDataKey.UP.getKey());
         mSweperList.add(SweeperRemoteControlDataKey.DOWN.getKey());
         mSweperList.add(SweeperRemoteControlDataKey.LEFT.getKey());
@@ -200,22 +202,55 @@ public class ExpandKeyListUtil {
         mSweperList.add(SweeperRemoteControlDataKey.PAUSE.getKey());
         mSweperList.add(SweeperRemoteControlDataKey.CHARGE.getKey());
     }
+    private void initAirMiniExpandKeyList() {
+        mAirList = new ArrayList<>();
+        mAirList.add(AirMiniDataKey.POWER.getKey());
+        mAirList.add(AirMiniDataKey.TEMP_UP.getKey());
+        mAirList.add(AirMiniDataKey.TEMP_DOWN.getKey());
+        mAirList.add(AirMiniDataKey.FANSPEED.getKey());
+        mAirList.add(AirMiniDataKey.MODE.getKey());
+        mAirList.add(AirMiniDataKey.LRWIND.getKey());
+        mAirList.add(AirMiniDataKey.UDWIND.getKey());
+    }
     private void initBoxExpandKeyList() {
         mBoxList = new ArrayList<>();
+        mBoxList.add(BoxRemoteControlDataKey.POWER.getKey());
         mBoxList.add(BoxRemoteControlDataKey.UP.getKey());
         mBoxList.add(BoxRemoteControlDataKey.DOWN.getKey());
         mBoxList.add(BoxRemoteControlDataKey.LEFT.getKey());
         mBoxList.add(BoxRemoteControlDataKey.RIGHT.getKey());
-        mBoxList.add(BoxRemoteControlDataKey.POWER.getKey());
         mBoxList.add(BoxRemoteControlDataKey.SIGNAL.getKey());
+        mBoxList.add(BoxRemoteControlDataKey.OK.getKey());
+        mBoxList.add(BoxRemoteControlDataKey.TVPOWER.getKey());
         mBoxList.add(BoxRemoteControlDataKey.VOLUME_ADD.getKey());
         mBoxList.add(BoxRemoteControlDataKey.VOLUME_SUB.getKey());
-        mBoxList.add(BoxRemoteControlDataKey.MENU.getKey());
-        mBoxList.add(BoxRemoteControlDataKey.BACK.getKey());
         mBoxList.add(BoxRemoteControlDataKey.BOOT.getKey());
+        mBoxList.add(BoxRemoteControlDataKey.BACK.getKey());
+        mBoxList.add(BoxRemoteControlDataKey.MENU.getKey());
         mBoxList.add(BoxRemoteControlDataKey.MUTE.getKey());
-        mBoxList.add(BoxRemoteControlDataKey.OK.getKey());
     }
+
+    private void initAudioExpandKeyList() {
+        mAudioList = new ArrayList<>();
+        mAudioList.add(DVDRemoteControlDataKey.POWER.getKey());
+        mAudioList.add(DVDRemoteControlDataKey.SWICTH.getKey());
+        mAudioList.add(DVDRemoteControlDataKey.STOP.getKey());
+        mAudioList.add(DVDRemoteControlDataKey.UP.getKey());
+        mAudioList.add(DVDRemoteControlDataKey.DOWN.getKey());
+        mAudioList.add(DVDRemoteControlDataKey.LEFT.getKey());
+        mAudioList.add(DVDRemoteControlDataKey.RIGHT.getKey());
+        mAudioList.add(DVDRemoteControlDataKey.SIGNAL.getKey());
+        mAudioList.add(DVDRemoteControlDataKey.OK.getKey());
+        mAudioList.add(DVDRemoteControlDataKey.VOLUME_ADD.getKey());
+        mAudioList.add(DVDRemoteControlDataKey.VOLUME_SUB.getKey());
+        mAudioList.add(DVDRemoteControlDataKey.BACK.getKey());
+        mAudioList.add(DVDRemoteControlDataKey.MENU.getKey());
+        mAudioList.add(DVDRemoteControlDataKey.MUTE.getKey());
+        mAudioList.add(DVDRemoteControlDataKey.PRE.getKey());
+        mAudioList.add(DVDRemoteControlDataKey.PLAY.getKey());
+        mAudioList.add(DVDRemoteControlDataKey.FF.getKey());
+    }
+
     private void initFanExpandKeyList() {
         mFanList = new ArrayList<>();
         mFanList.add(FannerRemoteControlDataKey.POWER.getKey());
@@ -228,13 +263,13 @@ public class ExpandKeyListUtil {
 
     private void initAirPurifierExpandKeyList() {
         mAirPurifierList = new ArrayList<>();
-//        mAirPurifierList.add(AirPurifierRemoteControlDataKey.FANSPEED.getKey());
-//        mAirPurifierList.add(AirPurifierRemoteControlDataKey.SLEEP.getKey());
-//        mAirPurifierList.add(AirPurifierRemoteControlDataKey.STERILIZE.getKey());
+        mAirPurifierList.add(AirPurifierRemoteControlDataKey.FANSPEED.getKey());
+        mAirPurifierList.add(AirPurifierRemoteControlDataKey.SLEEP.getKey());
+        mAirPurifierList.add(AirPurifierRemoteControlDataKey.STERILIZE.getKey());
 //        mAirPurifierList.add(AirPurifierRemoteControlDataKey.ANION.getKey());
 
         mAirPurifierList.add(AirPurifierRemoteControlDataKey.POWER.getKey());
-//        mAirPurifierList.add(AirPurifierRemoteControlDataKey.TIMER.getKey());
+        mAirPurifierList.add(AirPurifierRemoteControlDataKey.TIMER.getKey());
     }
 
     private void initProExpandKeyList() {
@@ -253,10 +288,12 @@ public class ExpandKeyListUtil {
         mProList.add(ProjectorRemoteControlDataKey.LEFT.getKey());
         mProList.add(ProjectorRemoteControlDataKey.RIGHT.getKey());
 
-        mProList.add(ProjectorRemoteControlDataKey.BACK.getKey());
+        mProList.add(ProjectorRemoteControlDataKey.EXIT.getKey());
         mProList.add(ProjectorRemoteControlDataKey.VOL_ADD.getKey());
         mProList.add(ProjectorRemoteControlDataKey.VOL_SUB.getKey());
         mProList.add(ProjectorRemoteControlDataKey.MUTE.getKey());
+        mProList.add(ProjectorRemoteControlDataKey.LIGHTNESS.getKey());
+        mProList.add(ProjectorRemoteControlDataKey.BOOT.getKey());
 
 
         //mProList.add(ProjectorRemoteControlDataKey.PAUSE.getKey());
@@ -276,8 +313,7 @@ public class ExpandKeyListUtil {
     private void initLightExpandKeyList() {
         mLightList = new ArrayList<>();
         mLightList.add(LightRemoteControlDataKey.POWER.getKey());
-        mLightList.add(JackRFDataKey.ON.getKey());
-        mLightList.add(JackRFDataKey.OFF.getKey());
+        mLightList.add(LightRemoteControlDataKey.POWEROFF.getKey());
     }
 
     private void initRfExpandKeyList() {
@@ -303,6 +339,7 @@ public class ExpandKeyListUtil {
 
     private void initLbExpandKeyList() {
         mLbList = new ArrayList<>();
+        mLbList.add(LiangbaRFDataKey.PTWIND.getKey());
         mLbList.add(LiangbaRFDataKey.LOW.getKey());
         mLbList.add(LiangbaRFDataKey.MID.getKey());
         mLbList.add(LiangbaRFDataKey.HIGH.getKey());
@@ -310,16 +347,14 @@ public class ExpandKeyListUtil {
         mLbList.add(LiangbaRFDataKey.TIME_UP.getKey());
         mLbList.add(LiangbaRFDataKey.LIGHT.getKey());
         mLbList.add(LiangbaRFDataKey.POWER.getKey());
-
-        mLbList.add(LiangbaRFDataKey.STOP.getKey());
         mLbList.add(LiangbaRFDataKey.SWING.getKey());
     }
 
     private void initDVDExpandKeyList() {
         mDVDList = new ArrayList<>();
         mDVDList.add(DVDRemoteControlDataKey.POWER.getKey());
-//        mDVDList.add(DVDRemoteControlDataKey.TVPOWER.getKey());
-//        mDVDList.add(DVDRemoteControlDataKey.SIGNAL.getKey());
+        mDVDList.add(DVDRemoteControlDataKey.TVPOWER.getKey());
+        mDVDList.add(DVDRemoteControlDataKey.SIGNAL.getKey());
 
         mDVDList.add(DVDRemoteControlDataKey.UP.getKey());
         mDVDList.add(DVDRemoteControlDataKey.DOWN.getKey());
@@ -336,6 +371,7 @@ public class ExpandKeyListUtil {
 
         mDVDList.add(DVDRemoteControlDataKey.MENU.getKey());
         mDVDList.add(DVDRemoteControlDataKey.BACK.getKey());
+        mDVDList.add(DVDRemoteControlDataKey.BOOT.getKey());
 
         mDVDList.add(DVDRemoteControlDataKey.STOP.getKey());
         mDVDList.add(DVDRemoteControlDataKey.PLAY.getKey());
@@ -347,36 +383,6 @@ public class ExpandKeyListUtil {
         mDVDList.add(DVDRemoteControlDataKey.NEXT.getKey());
     }
 
-    private void initAudioExpandKeyList() {
-        mAudioList = new ArrayList<>();
-        mAudioList.add(DVDRemoteControlDataKey.POWER.getKey());
-        mAudioList.add(DVDRemoteControlDataKey.SIGNAL.getKey());
-
-        mAudioList.add(DVDRemoteControlDataKey.VOLUME_ADD.getKey());
-        mAudioList.add(DVDRemoteControlDataKey.VOLUME_SUB.getKey());
-
-        mAudioList.add(DVDRemoteControlDataKey.SWICTH.getKey());
-        mAudioList.add(DVDRemoteControlDataKey.MUTE.getKey());
-
-        mAudioList.add(DVDRemoteControlDataKey.UP.getKey());
-        mAudioList.add(DVDRemoteControlDataKey.DOWN.getKey());
-        mAudioList.add(DVDRemoteControlDataKey.LEFT.getKey());
-        mAudioList.add(DVDRemoteControlDataKey.RIGHT.getKey());
-        mAudioList.add(DVDRemoteControlDataKey.OK.getKey());
-
-        mAudioList.add(DVDRemoteControlDataKey.MENU.getKey());
-        mAudioList.add(DVDRemoteControlDataKey.BACK.getKey());
-
-        mAudioList.add(DVDRemoteControlDataKey.STOP.getKey());
-        mAudioList.add(DVDRemoteControlDataKey.PLAY.getKey());
-        mAudioList.add(DVDRemoteControlDataKey.PAUSE.getKey());
-
-        mAudioList.add(DVDRemoteControlDataKey.REW.getKey());
-        mAudioList.add(DVDRemoteControlDataKey.PRE.getKey());
-        mAudioList.add(DVDRemoteControlDataKey.FF.getKey());
-        mAudioList.add(DVDRemoteControlDataKey.NEXT.getKey());
-    }
-
     private void initExpandKeyList(int deviceType) {
         switch (deviceType) {
             case CtrlContants.RemoteControlType.STB:
@@ -386,6 +392,12 @@ public class ExpandKeyListUtil {
                 break;
             case CtrlContants.RemoteControlType.TV:
                 initTVExpandKeyList();
+                break;
+            case CtrlContants.RemoteControlType.BOX:
+                initBoxExpandKeyList();
+                break;
+            case CtrlContants.RemoteControlType.AUDIO:
+                initAudioExpandKeyList();
                 break;
             case CtrlContants.RemoteControlType.LIGHT:
                 initLightExpandKeyList();
@@ -406,12 +418,6 @@ public class ExpandKeyListUtil {
             case CtrlContants.RemoteControlType.DVD:
                 initDVDExpandKeyList();
                 break;
-            case CtrlContants.RemoteControlType.AUDIO:
-                initAudioExpandKeyList();
-                break;
-            case CtrlContants.RemoteControlType.BOX:
-                initBoxExpandKeyList();
-                break;
             case CtrlContants.RemoteControlType.WATER_HEATER:
                 initWaterHeaterExpandKeyList();
                 break;
@@ -426,12 +432,23 @@ public class ExpandKeyListUtil {
             case CtrlContants.RemoteControlType.LIANGE_BA:
                 initLbExpandKeyList();
                 break;
+            case CtrlContants.RemoteControlType.AIR_MINI:
+                initAirMiniExpandKeyList();
+                break;
         }
 
     }
 
     public List<String> getmLightList() {
         return mLightList;
+    }
+
+    public List<String> getmBoxList() {
+        return mBoxList;
+    }
+
+    public List<String> getmAudioList() {
+        return mAudioList;
     }
 
     public List<String> getmSTBList() {
@@ -461,13 +478,6 @@ public class ExpandKeyListUtil {
     public List<String> getmDVDList() {
         return mDVDList;
     }
-    public List<String> getmBoxList() {
-        return mBoxList;
-    }
-
-    public List<String> getmAudioList() {
-        return mAudioList;
-    }
 
     public List<String> getmWaterHeaterList() {
         return mWaterHeaterList;
@@ -481,4 +491,7 @@ public class ExpandKeyListUtil {
         return mLbList;
     }
 
+    public List<String> getAirMiniList() {
+        return mAirList;
+    }
 }

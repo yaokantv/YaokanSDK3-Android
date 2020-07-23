@@ -11,15 +11,14 @@ import android.widget.EditText;
 import com.yaokantv.sdkdemo.R;
 import com.yaokantv.yaokansdk.manager.Yaokan;
 import com.yaokantv.yaokansdk.model.RemoteCtrl;
-import com.yaokantv.yaokanui.bean.UiRc;
 
 public class RenameDialog extends Dialog {
     Context context;
-    UiRc uiRc;
+    RemoteCtrl uiRc;
     EditText et;
     Button cancel, ok;
 
-    public RenameDialog(Context context, UiRc uiRc) {
+    public RenameDialog(Context context, RemoteCtrl uiRc) {
         super(context, R.style.ykk_dialog);
         this.context = context;
         this.uiRc = uiRc;
@@ -50,10 +49,9 @@ public class RenameDialog extends Dialog {
                 if (name.length() > 15) {
                     return;
                 }
-                RemoteCtrl ctrl = Yaokan.instance().getRcDataByUUID(uiRc.getUuid());
-                if (ctrl != null) {
-                    ctrl.setName(name);
-                    Yaokan.instance().updateRc(ctrl);
+                if (uiRc != null) {
+                    uiRc.setName(name);
+                    Yaokan.instance().updateRc(uiRc);
                 }
             }
         });

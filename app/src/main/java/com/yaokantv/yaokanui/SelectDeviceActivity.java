@@ -103,6 +103,7 @@ public class SelectDeviceActivity extends BaseActivity {
                     helper.setImageResource(R.id.iv_type, R.mipmap.ctrl_tv);
                     break;
                 case 7:
+                case 44:
                     helper.setImageResource(R.id.iv_type, R.mipmap.ctrl_air);
                     break;
                 case 10:

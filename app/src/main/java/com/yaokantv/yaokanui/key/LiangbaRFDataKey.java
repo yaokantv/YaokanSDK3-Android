@@ -1,13 +1,8 @@
 package com.yaokantv.yaokanui.key;
 
 public enum LiangbaRFDataKey {
-    STOP("fanstop"),LOW("low"),
-
-    MID("mid"),
-
-    HIGH("high"),TIME_DN("timer-"),
-
-    TIME_UP("timer+"),
+    PTWIND("ptwind"), LOW("low"), MID("mid"), STOP("fanstop"),
+    HIGH("high"), TIME_DN("timer-"), TIME_UP("timer+"),
 
     POWER("power"),LIGHT("light"),
 

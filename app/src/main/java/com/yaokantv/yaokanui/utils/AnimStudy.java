@@ -3,7 +3,6 @@ package com.yaokantv.yaokanui.utils;
 import android.app.Activity;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -11,9 +10,6 @@ import android.widget.ImageView;
 import com.yaokantv.sdkdemo.R;
 import com.yaokantv.yaokansdk.utils.Logger;
 import com.yaokantv.yaokansdk.utils.Utility;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class AnimStudy {
     private Drawable oldDrawable;
@@ -62,6 +58,7 @@ public class AnimStudy {
                 codeStudying = true;
             }
         } catch (Exception e) {
+            Logger.e(e.getMessage());
         }
     }
 

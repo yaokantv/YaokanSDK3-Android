@@ -1,4 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.yaokantv.sdkdemo">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,25 +16,22 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-
     <application
-        android:name=".App"
+        android:name="com.yaokantv.sdkdemo.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name="com.yaokantv.yaokanui.DeviceListActivity"></activity>
+        android:theme="@style/AppTheme"
+        tools:replace="android:theme,android:supportsRtl">
+        <activity android:name="com.yaokantv.yaokanui.RoomMsgActivity"></activity>
+        <activity android:name="com.yaokantv.yaokanui.DeviceListActivity" />
         <activity android:name="com.yaokantv.yaokanui.SoftApConfigActivity" />
-        <activity android:name=".AppleCtrlListActivity" />
-        <activity
-            android:name=".RfMatchActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".InitActivity"
-            android:screenOrientation="portrait">
+        <activity android:name="com.yaokantv.sdkdemo.AppleCtrlListActivity" />
+        <activity android:name="com.yaokantv.sdkdemo.RfMatchActivity" />
+        <activity android:name="com.yaokantv.sdkdemo.InitActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,33 +39,25 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MatchActivity"
-            android:label="一级匹配"
-            android:screenOrientation="portrait" />
+            android:name="com.yaokantv.sdkdemo.MatchActivity"
+            android:label="一级匹配" />
         <activity
-            android:name=".SecondMatchActivity"
-            android:label="二级匹配"
-            android:screenOrientation="portrait" />
+            android:name="com.yaokantv.sdkdemo.SecondMatchActivity"
+            android:label="二级匹配" />
         <activity
             android:name="com.yaokantv.yaokanui.RcListActivity"
-            android:label="遥控器列表"
-            android:screenOrientation="portrait" />
+            android:label="遥控器列表" />
         <activity
-            android:name=".RcActivity"
+            android:name="com.yaokantv.sdkdemo.RcActivity"
             android:label="遥控器详情"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".BrandActivity"
-            android:label="遥控器品牌"
-            android:screenOrientation="portrait" />
+            android:name="com.yaokantv.sdkdemo.BrandActivity"
+            android:label="遥控器品牌" />
         <activity
-            android:name=".SelectProviderActivity"
-            android:label="电视运营商"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".MainActivity"
-            android:screenOrientation="portrait" />
+            android:name="com.yaokantv.sdkdemo.SelectProviderActivity"
+            android:label="电视运营商" />
+        <activity android:name="com.yaokantv.sdkdemo.MainActivity" />
         <activity android:name="com.yaokantv.yaokanui.SelectDeviceActivity" />
         <activity android:name="com.yaokantv.yaokanui.BrandListActivity" />
         <activity android:name="com.yaokantv.yaokanui.SelectProviderActivity" />

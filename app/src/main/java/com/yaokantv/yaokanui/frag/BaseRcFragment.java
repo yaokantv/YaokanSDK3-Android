@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -455,7 +454,22 @@ public abstract class BaseRcFragment extends Fragment implements YaokanSDKListen
             btn.setVisibility(View.GONE);
         }
     }
-
+    protected void KeyBackground(RelativeLayout btn, TextView textView, String key, List<RcCmd> map) {
+        if (!Utility.isEmpty(map)) {
+            RcCmd cmd = new RcCmd();
+            cmd.setValue(key);
+            if (map.contains(cmd)) {
+                btn.setVisibility(View.VISIBLE);
+                btn.setClickable(true);
+                textView.setTextColor(getResources().getColor(R.color.black));
+            }else{
+                btn.setClickable(false);
+                textView.setTextColor(getResources().getColor(android.R.color.darker_gray));
+            }
+        } else {
+            btn.setVisibility(View.GONE);
+        }
+    }
     protected void KeyBackground(TextView btn, int bg, int d_bg, String key, List<RcCmd> map) {
         if (btn == null) {
             return;

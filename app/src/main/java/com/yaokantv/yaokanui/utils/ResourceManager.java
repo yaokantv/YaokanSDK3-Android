@@ -38,8 +38,10 @@ public class ResourceManager {
     public static String dimen = "dimen";
 
 
+
+
     @SuppressWarnings("rawtypes")
-    public static final int getIdByName(Context context, String className, String name) {
+    public static  final int getIdByName(Context context, String className, String name) {
         String packageName = context.getPackageName();
         Class<?> r = null;
         int id = 0;

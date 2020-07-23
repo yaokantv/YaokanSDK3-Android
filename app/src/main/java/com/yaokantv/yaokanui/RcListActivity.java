@@ -2,6 +2,7 @@ package com.yaokantv.yaokanui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -13,6 +14,7 @@ import com.yaokantv.yaokansdk.model.RemoteCtrl;
 import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
 import com.yaokantv.yaokansdk.utils.CommonAdapter;
+import com.yaokantv.yaokansdk.utils.Logger;
 import com.yaokantv.yaokansdk.utils.ViewHolder;
 
 import java.util.ArrayList;
@@ -42,7 +44,7 @@ public class RcListActivity extends BaseActivity {
         adapter = new CommonAdapter<RemoteCtrl>(this, mList, R.layout.lv_rc_item) {
             @Override
             public void convert(ViewHolder helper, RemoteCtrl item, int position) {
-                helper.setText(R.id.text1, item.getName());
+                helper.setText(R.id.text1, item.getPlace() + item.getName());
                 helper.setText(R.id.text2, item.getMac());
             }
         };
@@ -50,12 +52,14 @@ public class RcListActivity extends BaseActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                String s = Yaokan.instance().exportRcString(mList.get(position).getUuid());
+//                String d = Yaokan.instance().exportDeviceListStringFromDB();
                 Intent intent = new Intent(RcListActivity.this, RcActivity.class);
                 intent.putExtra("uuid", mList.get(position).getUuid());
                 startActivity(intent);
             }
         });
-        showSetting(R.mipmap.add,new View.OnClickListener() {
+        showSetting(R.mipmap.add, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(activity, SelectDeviceActivity.class);

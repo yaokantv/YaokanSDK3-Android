@@ -1,12 +1,17 @@
 package com.yaokantv.yaokanui;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 
 import com.yaokantv.sdkdemo.App;
 import com.yaokantv.sdkdemo.AppManager;
@@ -49,7 +54,11 @@ public class DeviceListActivity extends BaseActivity implements YaokanSDKListene
         showSetting(R.mipmap.add, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(activity, SoftApConfigActivity.class));
+                if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    startActivity(new Intent(activity, SoftApConfigActivity.class));
+                } else {
+                    ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 98);
+                }
             }
         });
         adapter = new CommonAdapter<YkDevice>(this, mList, R.layout.lv_item) {
@@ -109,6 +118,14 @@ public class DeviceListActivity extends BaseActivity implements YaokanSDKListene
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 98 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            startActivity(new Intent(this, SoftApConfigActivity.class));
+        }
     }
 
     String getMac(String mac) {

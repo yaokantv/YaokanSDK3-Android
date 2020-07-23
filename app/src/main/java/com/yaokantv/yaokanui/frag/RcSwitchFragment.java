@@ -1,31 +1,20 @@
 package com.yaokantv.yaokanui.frag;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.yaokantv.sdkdemo.R;
-import com.yaokantv.yaokansdk.manager.Yaokan;
-import com.yaokantv.yaokansdk.model.RcCmd;
 import com.yaokantv.yaokansdk.model.RemoteCtrl;
-import com.yaokantv.yaokansdk.model.YkMessage;
-import com.yaokantv.yaokansdk.model.e.MsgType;
-import com.yaokantv.yaokansdk.utils.DlgUtils;
 
 import com.yaokantv.yaokanui.RcActivity;
 import com.yaokantv.yaokanui.key.JackRFDataKey;
 import com.yaokantv.yaokanui.utils.StringUtils;
 import com.yaokantv.yaokanui.widget.ExpandAdapter;
-import com.yaokantv.yaokanui.widget.NoScrollGridView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RcSwitchFragment extends BaseRcFragment implements View.OnClickListener, View.OnLongClickListener {
 

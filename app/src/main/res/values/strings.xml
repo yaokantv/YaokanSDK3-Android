@@ -12,8 +12,8 @@
     <string name="app_delete_success">删除成功</string>
     <string name="app_delete_failed">删除失败</string>
 
-    <string name="net_config_smart_tips">1、接通设备的电源\n2、若指示灯处于快闪，直接“下一步”\n3、如果指示灯慢闪，需要复位后操作，长按复位按键5秒，当指示灯亮起再熄灭，松开按键，指示灯快闪，表示复位成功。\n4、如指示灯闪2次停1下，需要长按复位按键10秒，当指示灯亮起再熄灭，松开按键，指示灯快闪，表示已切换到一键配网方式。</string>
-    <string name="net_config_ap_tips">1、接通设备的电源\n2、若指示灯处于快闪，直接“下一步”\n3、如果指示灯慢闪，需要复位后操作，长按复位按键5秒，当指示灯再次亮起，松开按键，指示灯快闪，表示复位成功。\n4、如指示灯闪2次停1下，需要长按复位按键10秒，当指示灯亮起再熄灭，松开按键，指示灯快闪，表示已切换到热点配网方式。</string>
+    <string name="net_config_smart_tips">1、接通设备的电源\n2、若指示灯处于快闪，直接“下一步”\n3、如果指示灯慢闪，需要复位后操作，长按复位按键5秒，当指示灯再次亮起，松开按键，指示灯快闪，表示复位成功\n4、如指示灯闪2次停1下，需要长按复位按键10秒，当指示灯亮起再熄灭，松开按键，指示灯快闪，表示已切换到一键配网方式</string>
+    <string name="net_config_ap_tips">1、接通设备的电源\n2、若指示灯处于2闪1停，直接“下一步”\n3、如果指示灯慢闪，需要复位后操作，长按复位按键5秒，当指示灯再次亮起，松开按键，指示灯闪2次停1下，表示复位成功\n4、如指示灯快闪，需要长按复位按键10秒，当指示灯亮起再熄灭，松开按键，指示灯2闪1停，表示已切换到热点配网方式</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="smart_config">配网中...</string>
@@ -117,5 +117,7 @@
     <string name="title_device_list">设备列表</string>
     <string name="delete_rc">删除遥控器</string>
     <string name="download_to_big_apple">下载码库到大苹果...</string>
-
+    <string name="set_room_msg">设置房间信息</string>
+    <string name="demo_min_label">Mix</string>
+    <string name="demo_max_label">Max</string>
 </resources>

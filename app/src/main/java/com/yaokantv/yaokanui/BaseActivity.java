@@ -1,12 +1,18 @@
 package com.yaokantv.yaokanui;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +28,9 @@ import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
 import com.yaokantv.yaokanui.utils.ToastUtils;
 import com.yaokantv.yaokanui.utils.YKAppManager;
+import com.yaokantv.yaokanui.widget.TypeListDialog;
+
+import java.util.List;
 
 public abstract class BaseActivity extends AppCompatActivity implements YaokanSDKListener {
     protected static final int TITLE_LOCATION_LEFT = 0;
@@ -61,7 +70,7 @@ public abstract class BaseActivity extends AppCompatActivity implements YaokanSD
             return;
         }
         if (type == 6 || type == 15 || type == 40 || type == 14 || type == 8 || type == 7 || type == 21
-                || type == 22 || type == 24 || type == 25 || type == 23 || type == 38 || type == 41) {
+                || type == 22 || type == 24 || type == 25 || type == 23 || type == 38 || type == 41|| type == 44) {
             view.setBackgroundResource(R.color.top_gray_deep);
 //            StatusBarUtil.setTranslucent(this);
             StatusBarUtil.setColorNoTranslucent(this, getResources().getColor(R.color.top_gray_deep));
@@ -320,5 +329,23 @@ public abstract class BaseActivity extends AppCompatActivity implements YaokanSD
                 }
             });
         }
+    }
+
+    public static Dialog showTypeList(View v, Context context, List<String> data, TypeListDialog.OnStringSelectedListener listener) {
+        TypeListDialog shakeDlg = new TypeListDialog(context, data, listener);
+        shakeDlg.setCanceledOnTouchOutside(true);
+        Window dialogWindow = shakeDlg.getWindow();// 设置Dialog的位置
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        dialogWindow.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);// 垂直居中和水平居中
+        int[] location = new int[2];
+        v.getLocationOnScreen(location);
+        lp.y = (int) (location[1] - v.getHeight() * 1.3);
+        dialogWindow.setAttributes(lp);
+        try {
+            shakeDlg.show();
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return shakeDlg;
     }
 }

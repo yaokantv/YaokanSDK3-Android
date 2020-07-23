@@ -17,9 +17,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.jaeger.library.StatusBarUtil;
 import com.yaokantv.sdkdemo.App;
-import com.yaokantv.sdkdemo.AppManager;
-import com.yaokantv.sdkdemo.BrandActivity;
-import com.yaokantv.sdkdemo.MatchActivity;
 import com.yaokantv.sdkdemo.R;
 import com.yaokantv.yaokansdk.Contants;
 import com.yaokantv.yaokansdk.manager.Yaokan;
@@ -30,7 +27,6 @@ import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
 import com.yaokantv.yaokansdk.utils.DlgUtils;
 import com.yaokantv.yaokansdk.utils.Logger;
-import com.yaokantv.yaokanui.bean.UiRc;
 import com.yaokantv.yaokanui.frag.BaseRcFragment;
 import com.yaokantv.yaokanui.key.TabEntity;
 import com.yaokantv.yaokanui.utils.ControlUtils;
@@ -82,9 +78,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(activity, SettingActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(Config.S_GID, UiRc.transRc(rc));
-                intent.putExtras(bundle);
+                intent.putExtra("uuid", rc.getUuid());
                 startActivityForResult(intent, 0);
             }
         });
@@ -103,18 +97,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener {
             findViewById(R.id.study_finish).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if ("1".equals(rc.getRf())) {
-                        if (Yaokan.instance().isBigApple(rc.getMac())) {
-                            isRfStudy = true;
-                            dialog.setMessage(getString(R.string.download_to_big_apple));
-                            dialog.show();
-                            Yaokan.instance().downloadCodeToDevice(App.curDid, rc.getStudyId(), rc.getBe_rc_type());
-                        } else {
-                            studyFinish();
-                        }
-                    } else {
-                        studyFinish();
-                    }
+                    check();
                 }
             });
         }
@@ -133,6 +116,20 @@ public class RcActivity extends BaseActivity implements View.OnClickListener {
         super.onResume();
         if (!TextUtils.isEmpty(uuid)) {
             rc = Yaokan.instance().getRcDataByUUID(uuid);
+            setRcTitle();
+        } else if (rc != null && !TextUtils.isEmpty(rc.getUuid())) {
+            rc = Yaokan.instance().getRcDataByUUID(rc.getUuid());
+            setRcTitle();
+        }
+    }
+
+    private void setRcTitle() {
+        if (rc == null) {
+            return;
+        }
+        if (!TextUtils.isEmpty(rc.getPlace())) {
+            setMTitle(rc.getPlace() + rc.getName(), TITLE_LOCATION_LEFT);
+        } else {
             setMTitle(rc.getName(), TITLE_LOCATION_LEFT);
         }
     }
@@ -140,6 +137,8 @@ public class RcActivity extends BaseActivity implements View.OnClickListener {
     public int getActivityType() {
         return actType;
     }
+
+    boolean isRfDownload = false;
 
     @Override
     protected void reload() {
@@ -150,23 +149,11 @@ public class RcActivity extends BaseActivity implements View.OnClickListener {
             findViewById(R.id.study_finish).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    YKAppManager.getAppManager().finishActivities(BrandListActivity.class, SelectDeviceActivity.class);
-                    if ("1".equals(rc.getRf())) {
-                        if (Yaokan.instance().isBigApple(rc.getMac())) {
-                            isRfStudy = true;
-                            dialog.setMessage(getString(R.string.download_to_big_apple));
-                            dialog.show();
-                            Yaokan.instance().downloadCodeToDevice(App.curDid, rc.getStudyId(), rc.getBe_rc_type());
-                        } else {
-                            studyFinish();
-                        }
-                    } else {
-                        studyFinish();
-                    }
+                    check();
                 }
             });
             Yaokan.instance().getRfMatchingResult(Config.MAC, rcTid, getIntent().getIntExtra(Config.S_BID, 0));
-            setMTitle(Config.curBName + Config.curTName, TITLE_LOCATION_LEFT);
+            setRcTitle();
         } else if (actType == Config.TYPE_MATCHING) {
             showDlg();
             Yaokan.instance().getMatchingResult(rcTid, getIntent().getIntExtra(Config.S_BID, 0), getIntent().getIntExtra(Config.S_GID, 0));
@@ -188,13 +175,38 @@ public class RcActivity extends BaseActivity implements View.OnClickListener {
                         public void run() {
                             dismiss();
                             if (rc != null) {
-                                setMTitle(rc.getName(), TITLE_LOCATION_LEFT);
+                                setRcTitle();
                                 frgRc.refreshRcData(rc);
                             }
                         }
                     });
                 }
             }, 500);
+        }
+    }
+
+    private void check() {
+        YKAppManager.getAppManager().finishActivities(BrandListActivity.class, SelectDeviceActivity.class);
+        if (rc.isRf()) {
+            String mac = rc.getMac();
+            if (TextUtils.isEmpty(mac)) {
+                mac = App.curMac;
+            }
+            if (Yaokan.instance().isNeedDownloadDevice(mac)) {
+                isRfStudy = true;
+                dialog.setMessage(getString(R.string.download_to_big_apple));
+                dialog.show();
+                if (rc.getId() == 0) {
+                    isRfDownload = true;
+                    frgRc.saveRc();
+                } else {
+                    Yaokan.instance().downloadCodeToDevice(App.curDid, rc.getStudyId(), rc.getBe_rc_type());
+                }
+            } else {
+                studyFinish();
+            }
+        } else {
+            studyFinish();
         }
     }
 
@@ -284,7 +296,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener {
                 Config.operators = null;
             }
             //设备列表中必须有此设备
-            if (Yaokan.instance().isBigApple(rc.getMac())) {
+            if (Yaokan.instance().isNeedToDownload(rc) && Yaokan.instance().isNeedDownloadDevice(rc.getMac())) {
                 dialog.setMessage(getString(R.string.download_to_big_apple));
                 dialog.show();
                 if (!TextUtils.isEmpty(rc.getRid())) {
@@ -299,12 +311,22 @@ public class RcActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void saveTo() {
+        boolean isSetRoom = false;
+        if (rc.getId() == 0) {
+            isSetRoom = true;
+        }
         Yaokan.instance().saveRc(rc);
         showSetting(true);
-        setMTitle(rc.getName(), TITLE_LOCATION_LEFT);
+        setRcTitle();
         YKAppManager.getAppManager().finishActivities(SelectProviderActivity.class,
                 NewMatchActivity.class, SelectDeviceActivity.class, BrandListActivity.class);
         showcontrol.setVisibility(View.GONE);
+        if (isSetRoom) {
+            Intent intent = new Intent(activity, RoomMsgActivity.class);
+            intent.putExtra("uuid", rc.getUuid());
+            intent.putExtra("create", true);
+            startActivity(intent);
+        }
     }
 
 
@@ -355,7 +377,12 @@ public class RcActivity extends BaseActivity implements View.OnClickListener {
                 finish();
                 break;
             case RfUploadSuccess:
-                dismiss();
+                if (isRfDownload) {
+                    rc = (RemoteCtrl) ykMessage.getData();
+                    Yaokan.instance().downloadCodeToDevice(App.curDid, rc.getStudyId(), rc.getBe_rc_type());
+                } else {
+                    dismiss();
+                }
                 break;
             case DownloadCode:
                 if (!isFinishing()) {
@@ -376,6 +403,9 @@ public class RcActivity extends BaseActivity implements View.OnClickListener {
                                         showDlg(120, "正在下载码库到设备...", new OnDownloadTimerOutListener() {
                                             @Override
                                             public void onTimeOut() {
+                                                if (isFinishing()) {
+                                                    return;
+                                                }
                                                 dismiss();
                                                 DlgUtils.createDefDlg(activity, "下载超时");
                                             }
@@ -390,6 +420,13 @@ public class RcActivity extends BaseActivity implements View.OnClickListener {
                                                 timerCancel();
                                                 if (isRfStudy) {
                                                     studyFinish();
+                                                    if (isRfDownload) {
+                                                        isRfDownload = false;
+                                                        Intent intent = new Intent(activity, RoomMsgActivity.class);
+                                                        intent.putExtra("uuid", rc.getUuid());
+                                                        intent.putExtra("create", true);
+                                                        startActivity(intent);
+                                                    }
                                                 } else {
                                                     saveTo();
                                                 }

@@ -1,25 +1,18 @@
 package com.yaokantv.yaokanui.frag;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 
 import com.yaokantv.sdkdemo.R;
-import com.yaokantv.yaokansdk.model.RcCmd;
 import com.yaokantv.yaokansdk.model.RemoteCtrl;
 
 import com.yaokantv.yaokanui.RcActivity;
 import com.yaokantv.yaokanui.key.CurtainRFDataKey;
-import com.yaokantv.yaokanui.key.CurtainRFDataKey;
 import com.yaokantv.yaokanui.utils.StringUtils;
 import com.yaokantv.yaokanui.widget.ExpandAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RcCurtainFragment extends BaseRcFragment implements View.OnClickListener, View.OnLongClickListener {
 

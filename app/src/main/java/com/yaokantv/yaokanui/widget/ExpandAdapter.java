@@ -92,6 +92,9 @@ public class ExpandAdapter extends BaseAdapter {
             case CtrlContants.RemoteControlType.FAN_LIGHT:
                 commonKeys = expandKeyList.getmRfList();
                 break;
+            case CtrlContants.RemoteControlType.AIR_MINI:
+                commonKeys = expandKeyList.getAirMiniList();
+                break;
         }
         if (commonKeys == null) {
             commonKeys = new ArrayList<>();
@@ -100,7 +103,7 @@ public class ExpandAdapter extends BaseAdapter {
             Iterator<RcCmd> iterator = expandKeyRDatas.iterator();
             while (iterator.hasNext()) {
                 RcCmd cmd = iterator.next();
-                if (cmd.getValue().contains("_r")||commonKeys.contains(cmd.getValue())) {
+                if (cmd.getValue().contains("_r") || commonKeys.contains(cmd.getValue())) {
                     iterator.remove();
                 }
             }
