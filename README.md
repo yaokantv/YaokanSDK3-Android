@@ -1,7 +1,7 @@
 # Yaokan SDK4 Android 开发文档
 
 
-    文件编号：YKSDK4ANDROID-20200522
+    文件编号：YKSDK4ANDROID-20200724
     版本：v1.0
 
     深圳遥看科技有限公司
@@ -11,7 +11,7 @@
 
 | 版本 | 说明 | 备注 | 日期 |
 | --- | --- | --- | --- |
-| v4 | 新建 | Peer | 20200617 |
+| v4 | 新建 | Peer | 20200522 |
 
 
 
@@ -105,6 +105,7 @@ YaokanSDK4 提供完整的设备配网，设备管理，遥控器管理功能，
         implementation 'com.google.code.gson:gson:2.8.2'
         implementation 'com.squareup.okhttp3:okhttp:3.11.0'
         implementation "com.orhanobut:hawk:2.0.1"//用于记录数据
+        implementation 'com.jaeger.statusbarutil:library:1.5.1'//UI相关
         implementation(name:'yaokansdk', ext:'aar')
     }
 
@@ -165,51 +166,57 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
     - 使用非5G Wi-Fi 网络配网
 
 
-     /**
-     * @param context 上下文
-     * @param ssid    WI-FI名称
-     * @param psw     WI-FI密码
-     * @param hotspot 产品类型  YKK-1011/YKK-1013/YKK-DS16A 分别对应小苹果/大苹果/空调伴侣
-     */
-    Yaokan.instance().softApConfig(context,ssid,psw,hotspot);
+         /**
+         * @param context 上下文
+         * @param ssid    WI-FI名称
+         * @param psw     WI-FI密码
+         * @param hotspot 产品类型  YKK-1011/YKK-1013/YKK-DS16A 分别对应小苹果/大苹果/空调伴侣
+         */
 
-    /**
-    * 停止配置入网
-    */
-    Yaokan.instance().stopSoftApConfig();
+        Yaokan.instance().softApConfigSwitch(context,ssid,psw,hotspot);
 
-    /**
-     * 配置入网
-     *
-     * @param context 上下文
-     * @param psw     Wi-Fi密码
-     */
-    Yaokan.instance().smartConfig(context,psw);
-    /**
-     * 停止配置入网
-     */
-    Yaokan.instance().stopSmartConfig();
+        /**
+        * 停止配置入网
+        */
+
+        Yaokan.instance().stopSoftApConfig();
+
+        /**
+         * 配置入网
+         *
+         * @param context 上下文
+         * @param psw     Wi-Fi密码
+         */
+
+        Yaokan.instance().smartConfig(context,psw);
+
+        /**
+         * 停止配置入网
+         */
+
+        Yaokan.instance().stopSmartConfig();
+
     - 回调
 
-    ```java
-    @Override
-    public void onReceiveMsg(MsgTypemsgType, final YkMessage ykMessage {
-        switch (msgType) {
-            case SoftApConfigStart:
-            //SoftAp配网开始
-                break;
-            case SoftApConfigResult:
-            //SoftAp配网结果
-                break;
-            case StartSmartConfig:
-            //SmartConfig配网开始
-                break;
-            case SmartConfigResult:
-            //SmartConfig配网结果
-                break;
+        ```java
+        @Override
+        public void onReceiveMsg(MsgTypemsgType, final YkMessage ykMessage {
+            switch (msgType) {
+                case SoftApConfigStart:
+                //SoftAp配网开始
+                    break;
+                case SoftApConfigResult:
+                //SoftAp配网结果
+                    break;
+                case StartSmartConfig:
+                //SmartConfig配网开始
+                    break;
+                case SmartConfigResult:
+                //SmartConfig配网结果
+                    break;
+            }
         }
-    }
-    ```
+        ```
 
 1. 获取设备列表
 
@@ -273,7 +280,7 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
         * @param did 设备Did
         * @param rid 遥控器Rid
         * @param key 指令名称
-        * @param type 设备类型
+        * @param type 家电类型
         */
         Yaokan.instance().sendCmd(did,rid,key,type);
         ```
@@ -373,12 +380,18 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
     Yaokan.instance().lightOff(did);
     ```
 
-1. 硬件升级OTA
+1. 固件升级OTA
 
     OTA升级硬件固件，支持显示升级进度
 
     ```java
     Yaokan.instance().updateDevice(did);
+    ```
+
+    OTA升级语音固件，支持显示升级进度
+
+    ```java
+    Yaokan.instance().updateVoice(did);
     ```
 1. 获取设备内的遥控器列表
 
@@ -444,7 +457,7 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
     ```
 
 ### 4.3 遥控器接口
-1. 获取被遥控设备类型列表
+1. 获取被遥控家电类型列表
 
     ```java
     Yaokan.instance().getDeviceType()
@@ -456,7 +469,7 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
     ```java
     /**
     *
-    * @param tid 设备类型
+    * @param tid 家电类型
     */
     Yaokan.instance().getBrandsByType(tid)
     ```
@@ -465,7 +478,7 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
     ```java
     /**
     *
-    * @param tid 设备类型
+    * @param tid 家电类型
     * @param bid 品牌ID
     */
     Yaokan.instance().getMatchingResult(tid,bid)
@@ -475,7 +488,7 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
     ```java
     /**
     *
-    * @param tid 设备类型
+    * @param tid 家电类型
     * @param bid 品牌ID
     * @param gid 组Id(一级匹配接口返回,空调设备传0)
     */
@@ -487,7 +500,7 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
     public void onReceiveMsg(final MsgType msgType, final YkMessage ykMessage) {
         switch (msgType) {
             case Types:
-            //设备类型列表
+            //家电类型列表
                 break;
             case Brands:
             //品牌列表
@@ -505,23 +518,58 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
     }
     ```
 
+1. 获取房间类型
+
+    ```java
+    /**
+    * @param rc 遥控器对象
+    */
+    Yaokan.instance().placeList();
+    ```
+
+1. 获取房间类型
+
+    ```java
+    /**
+    * @param tid 家电类型
+    */
+    Yaokan.instance().aliceList(tid);
+    ```
+
+1. 设置遥控器的房间和别名
+
+    ```java
+    /**
+     *
+     * @param did 设备DID
+     * @param bean 房间参数
+     */
+     Yaokan.instance().setRoomMsg(Yaokan.instance().getDid(did, whereBean);
+    ```
+
 1. 保存遥控器
 
     匹配完成后，先要将码库下载到设备，下载成功后可以通过遥控器id下载详情保存至本地
 
     ```java
     /**
+     * 判断是否需要下载码库到设备（目前只有大苹果/空调伴侣需要）
+     *
+     * @param mac
+     */
+    Yaokan.instance().isNeedDownloadDevice(mac);
+    /**
      * 将码库下载到设备
      *
      * @param rid  遥控器ID
-     * @param type 设备类型
+     * @param type 家电类型
      */
     Yaokan.instance().downloadCodeToDevice(App.curDid, rc.getRid(), rc.getBe_rc_type());
     /**
      * 将射频码库下载到设备
      *
      * @param rid  遥控器ID
-     * @param type 设备类型
+     * @param type 家电类型
      */
     Yaokan.instance().downloadRFCodeToDevice(App.curDid, rc.getRid(), rc.getBe_rc_type());
 
@@ -694,7 +742,7 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
 1. 获取设备信息
     ```java
     /**
-     * 硬件信息
+     * 固件信息
      *
      * @param did
      */
