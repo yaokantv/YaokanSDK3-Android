@@ -130,6 +130,7 @@ public class NewMatchActivity extends BaseActivity implements View.OnClickListen
             if (mMatch != null) {
                 Intent intent = new Intent(this, RcActivity.class);
                 intent.putExtra(Config.ACTIVITY_TYPE, Config.TYPE_MATCHING);
+                intent.putExtra("create", true);
                 intent.putExtra(Config.S_TID, tid);
                 intent.putExtra(Config.S_BID, mMatch.getBid());
                 intent.putExtra(Config.S_GID, mMatch.getGid());

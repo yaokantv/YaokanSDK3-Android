@@ -18,6 +18,7 @@
 
         <RelativeLayout
             android:id="@+id/rl_update"
+            android:visibility="gone"
             style="@style/home_LinearLayout">
 
             <TextView

@@ -95,6 +95,7 @@ public class BrandListActivity extends BaseActivity {
                         Intent intent = new Intent(activity, RcActivity.class);
                         intent.putExtra(Config.ACTIVITY_TYPE, Config.TYPE_MATCHING);
                         intent.putExtra(Config.S_TID, tid);
+                        intent.putExtra("create", true);
                         intent.putExtra(Config.S_BID, results.getBid());
                         intent.putExtra(Config.S_GID, 0);
                         intent.putExtra(Config.S_IS_RF, true);

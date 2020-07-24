@@ -69,9 +69,9 @@ public class SelectDeviceActivity extends BaseActivity {
                 }
                 Intent intent = new Intent();
                 if(item.getTid()==1){
-                    intent.setClass(activity,SelectProviderActivity.class);
+                    intent.setClass(activity, SelectProviderActivity.class);
                 }else{
-                    intent.setClass(activity,BrandListActivity.class);
+                    intent.setClass(activity, BrandListActivity.class);
                     intent.putExtra(Config.S_IS_RF, item.getRf()==1);
                     intent.putExtra(Config.S_TID, item.getTid());
                 }

@@ -118,6 +118,7 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
     }
 
 
+
     @Override
     public void onReceiveMsg(MsgType msgType, final YkMessage ykMessage) {
         if (isFinishing()) {
@@ -217,11 +218,8 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
                                 public void onClick(DialogInterface dialog, int which) {
                                     if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof SmartConfigResult) {
                                         SmartConfigResult result = (SmartConfigResult) ykMessage.getData();
-                                        //result = true 配网成功
                                         if (result.isResult()) {
-                                            if (!TextUtils.isEmpty(result.getMac())) {
-                                                Yaokan.instance().deleteRemoteByMac(result.getMac());
-                                            }
+                                            //result = true 配网成功
                                             finish();
                                         }
                                     }

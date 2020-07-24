@@ -116,7 +116,7 @@
     <string name="study_ctrl">按键学习</string>
     <string name="title_device_list">设备列表</string>
     <string name="delete_rc">删除遥控器</string>
-    <string name="download_to_big_apple">下载码库到大苹果...</string>
+    <string name="download_to_big_apple">下载码库到设备...</string>
     <string name="set_room_msg">设置房间信息</string>
     <string name="demo_min_label">Mix</string>
     <string name="demo_max_label">Max</string>

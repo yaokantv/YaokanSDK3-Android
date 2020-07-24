@@ -101,7 +101,7 @@ public class RcSwitchFragment extends BaseRcFragment implements View.OnClickList
     public boolean onLongClick(View v) {
         int id = v.getId();
         if (isStudyMode()) {
-            if (id == R.id.power) {
+            if (id == R.id.power || id == R.id.c_btn_power) {
                 key = JackRFDataKey.POWER.getKey();
             } else if (id == R.id.c_btn_open) {
                 key = JackRFDataKey.ON.getKey();

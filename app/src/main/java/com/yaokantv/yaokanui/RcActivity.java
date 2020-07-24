@@ -120,6 +120,8 @@ public class RcActivity extends BaseActivity implements View.OnClickListener {
         } else if (rc != null && !TextUtils.isEmpty(rc.getUuid())) {
             rc = Yaokan.instance().getRcDataByUUID(rc.getUuid());
             setRcTitle();
+        } else {
+            setMTitle(Config.curBName + Config.curTName, TITLE_LOCATION_LEFT);
         }
     }
 
@@ -419,14 +421,15 @@ public class RcActivity extends BaseActivity implements View.OnClickListener {
                                             public void onClick(DialogInterface dialog, int which) {
                                                 timerCancel();
                                                 if (isRfStudy) {
-                                                    studyFinish();
-                                                    if (isRfDownload) {
+                                                    boolean b = getIntent().getBooleanExtra("create", false);
+                                                    if (b || isRfDownload) {
                                                         isRfDownload = false;
                                                         Intent intent = new Intent(activity, RoomMsgActivity.class);
                                                         intent.putExtra("uuid", rc.getUuid());
                                                         intent.putExtra("create", true);
                                                         startActivity(intent);
                                                     }
+                                                    studyFinish();
                                                 } else {
                                                     saveTo();
                                                 }
