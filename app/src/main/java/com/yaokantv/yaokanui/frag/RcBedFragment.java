@@ -328,9 +328,9 @@ public class RcBedFragment extends BaseRcFragment implements View.OnClickListene
                     endTime = System.currentTimeMillis();
                     long t = endTime - startTime;
                     Logger.d("TTTTT", t + "?");
-                    if (t < 500) {
+                    if (t < 150) {
                         isCanSend = false;
-                        handler.sendEmptyMessageDelayed(1, (500 - (endTime - startTime)));
+                        handler.sendEmptyMessageDelayed(1, (150 - (endTime - startTime)));
                     } else {
                         sendCmd(MpeDataKey.STOP.getKey());
                     }

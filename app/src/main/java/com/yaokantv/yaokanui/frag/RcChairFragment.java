@@ -201,10 +201,10 @@ public class RcChairFragment extends BaseRcFragment implements View.OnClickListe
         list.add(new BedMode(BedMode.MODE_LIE, "平躺模式", MpeDataKey.FLAT.getKey()));
         list.add(new BedMode(BedMode.MODE_DEEP_SLEEP, "深睡模式", MpeDataKey.DEEPSLEEP.getKey()));
         list.add(new BedMode(BedMode.MODE_SLEEP, "助眠模式", MpeDataKey.SLEEPAID.getKey()));
-        list.add(new BedMode(BedMode.MODE_YOGA, "瑜伽模式", MpeDataKey.YOGA.getKey()));
         list.add(new BedMode(BedMode.MODE_RELAX, "放松模式", MpeDataKey.RELAX.getKey()));
         list.add(new BedMode(BedMode.MODE_ARDER, "休闲模式", MpeDataKey.ARDER.getKey()));
         list.add(new BedMode(BedMode.MODE_OFFICE, "办公模式", MpeDataKey.OFFICE.getKey()));
+        list.add(new BedMode(BedMode.MODE_YOGA, "瑜伽模式", MpeDataKey.YOGA.getKey()));
         rvMode.setLayoutManager(new RecyclerViewNoBugLinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         rvMode.addItemDecoration(new SpaceItemDecoration(0, 0, 0, 20));
 
@@ -326,9 +326,9 @@ public class RcChairFragment extends BaseRcFragment implements View.OnClickListe
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
                     endTime = System.currentTimeMillis();
-                    if (endTime - startTime < 500) {
+                    if (endTime - startTime < 150) {
                         isCanSend = false;
-                        handler.sendEmptyMessageDelayed(1, (500 - (endTime - startTime)));
+                        handler.sendEmptyMessageDelayed(1, (150 - (endTime - startTime)));
                     } else {
                         sendCmd(MpeDataKey.STOP.getKey());
                     }
