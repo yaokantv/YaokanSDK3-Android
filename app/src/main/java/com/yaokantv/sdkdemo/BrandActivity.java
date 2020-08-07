@@ -224,6 +224,8 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                             if (isFirst) {
                                 isFirst = false;
                                 HardInfo info = (HardInfo) ykMessage.getData();
+                                if("1".equals(info.getLed())){
+                                }
                                 if (info != null && !TextUtils.isEmpty(info.getVoice_num())) {
                                     tvVoice.setText(info.getVoice_num());
                                     seekBar.setSelectedMaxValue(Integer.valueOf(info.getVoice_num()));

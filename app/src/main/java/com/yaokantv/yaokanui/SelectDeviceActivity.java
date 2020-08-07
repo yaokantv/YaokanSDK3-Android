@@ -1,16 +1,22 @@
 package com.yaokantv.yaokanui;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+
 import com.yaokantv.sdkdemo.R;
 import com.yaokantv.yaokansdk.manager.Yaokan;
 import com.yaokantv.yaokansdk.model.DeviceType;
 import com.yaokantv.yaokansdk.model.DeviceTypeResult;
+import com.yaokantv.yaokansdk.model.MpeBindResult;
 import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
 import com.yaokantv.yaokansdk.utils.CommonAdapter;
@@ -59,6 +65,8 @@ public class SelectDeviceActivity extends BaseActivity {
         gvRfDeviceType.setAdapter(gvRfAdapter);
     }
 
+    private int tid = 0;
+
     private void setGridView(ViewHolder helper, final DeviceType item, int position) {
         helper.setText(R.id.tv_device_type_name, item.getName());
         helper.setOnclickListener(R.id.sr_content, new View.OnClickListener() {
@@ -68,14 +76,19 @@ public class SelectDeviceActivity extends BaseActivity {
                     return;
                 }
                 Intent intent = new Intent();
-                if(item.getTid()==1){
+                Config.curTName = item.getName();
+                if (item.getTid() == 1) {
                     intent.setClass(activity, SelectProviderActivity.class);
-                }else{
+                } else if (item.getTid() == 45 || item.getTid() == 46) {
+
                     intent.setClass(activity, BrandListActivity.class);
-                    intent.putExtra(Config.S_IS_RF, item.getRf()==1);
+                    intent.putExtra(Config.S_IS_RF, item.getRf() == 1);
+                    intent.putExtra(Config.S_TID, item.getTid());
+                } else {
+                    intent.setClass(activity, BrandListActivity.class);
+                    intent.putExtra(Config.S_IS_RF, item.getRf() == 1);
                     intent.putExtra(Config.S_TID, item.getTid());
                 }
-                Config.curTName = item.getName();
                 startActivity(intent);
             }
         });
@@ -161,6 +174,12 @@ public class SelectDeviceActivity extends BaseActivity {
                 case 41:
                     helper.setImageResource(R.id.iv_type, R.mipmap.ctrl_liangba);
                     break;
+                case 45:
+                    helper.setImageResource(R.id.iv_type, R.mipmap.ctrl_bed);
+                    break;
+                case 46:
+                    helper.setImageResource(R.id.iv_type, R.mipmap.ctrl_chair);
+                    break;
             }
         }
     }
@@ -178,6 +197,7 @@ public class SelectDeviceActivity extends BaseActivity {
             public void run() {
                 dismiss();
                 switch (msgType) {
+
                     case Types:
                         if (ykMessage != null && ykMessage.getCode() == 0) {
                             showContent(true);

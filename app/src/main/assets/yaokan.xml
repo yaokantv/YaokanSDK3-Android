@@ -2,7 +2,7 @@
 <litepal>
     <dbname value="yaoaknsdk"></dbname>
 
-    <version value="21"></version>
+    <version value="23"></version>
     <!--2019.09.26 遥控器增加provider属性-->
     <list>
         <mapping class="com.yaokantv.yaokansdk.model.RemoteCtrl" />

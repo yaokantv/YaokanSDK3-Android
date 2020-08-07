@@ -5,8 +5,10 @@ import com.yaokantv.yaokanui.frag.BaseRcFragment;
 import com.yaokantv.yaokanui.frag.RcAirFragment;
 import com.yaokantv.yaokanui.frag.RcAirMiniFragment;
 import com.yaokantv.yaokanui.frag.RcAudioFragment;
+import com.yaokantv.yaokanui.frag.RcBedFragment;
 import com.yaokantv.yaokanui.frag.RcBoxFragment;
 import com.yaokantv.yaokanui.frag.RcCameraFragment;
+import com.yaokantv.yaokanui.frag.RcChairFragment;
 import com.yaokantv.yaokanui.frag.RcCurtainFragment;
 import com.yaokantv.yaokanui.frag.RcDVDFragment;
 import com.yaokantv.yaokanui.frag.RcFanFragment;
@@ -89,6 +91,12 @@ public class ControlUtils {
                 break;
             case 42:
                 sf = new RcFanRfFragment();
+                break;
+            case 45:
+                sf = new RcBedFragment();
+                break;
+            case 46:
+                sf = new RcChairFragment();
                 break;
             default:
                 sf = new RcStbFragment();

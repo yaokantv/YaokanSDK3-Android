@@ -8,6 +8,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -45,5 +46,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation "com.orhanobut:hawk:2.0.1"//用于记录数据
     implementation 'com.jaeger.statusbarutil:library:1.5.1'//UI相关
+    implementation 'com.zhy:base-rvadapter:3.0.3'
+
     implementation(name:'yaokansdk', ext:'aar')
 }

@@ -34,7 +34,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         rename = findViewById(R.id.rl_update);
         rename.setOnClickListener(this);
         findViewById(R.id.rl_study).setOnClickListener(this);
-        if (uiRc != null && uiRc.getBe_rc_type() == 7) {
+        if (uiRc != null && (uiRc.getBe_rc_type() == 7||
+                uiRc.getBe_rc_type() == 45||uiRc.getBe_rc_type() == 46)) {
             findViewById(R.id.rl_study).setVisibility(View.GONE);
         }
     }

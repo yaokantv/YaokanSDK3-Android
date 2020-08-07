@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_item_bg"
+    android:layout_width="110dp"
+    android:layout_height="58dp"
+    android:background="@drawable/btn_bed_item"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingTop="13dp"
+    android:paddingBottom="13dp">
+
+    <ImageView
+        android:id="@+id/iv_tag"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@mipmap/ic_mpe_lie" />
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:lines="1"
+        android:text="平躺模式"
+        android:textColor="@android:color/black"
+        android:textSize="12sp" />
+</LinearLayout>

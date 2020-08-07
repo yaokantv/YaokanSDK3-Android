@@ -11,9 +11,11 @@ import com.yaokantv.sdkdemo.R;
 import com.yaokantv.yaokansdk.manager.Yaokan;
 import com.yaokantv.yaokansdk.model.Brand;
 import com.yaokantv.yaokansdk.model.BrandResult;
+import com.yaokantv.yaokansdk.model.MpeBindResult;
 import com.yaokantv.yaokansdk.model.Results;
 import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
+import com.yaokantv.yaokansdk.utils.Logger;
 import com.yaokantv.yaokanui.widget.CharacterParser;
 import com.yaokantv.yaokanui.widget.FnameAdapter;
 import com.yaokantv.yaokanui.widget.PinyinComparator;
@@ -69,8 +71,23 @@ public class BrandListActivity extends BaseActivity {
                     setOnTouch();
                 }
             });
+        } else if (msgType == MsgType.MpeBindResult) {
+            dialog.dismiss();
+            MpeBindResult result = (MpeBindResult) ykMessage.getData();
+            Intent intent = new Intent(activity, RcActivity.class);
+            intent.putExtra(Config.ACTIVITY_TYPE, Config.TYPE_MATCHING);
+            intent.putExtra(Config.S_TID, tid);
+            intent.putExtra("create", true);
+            intent.putExtra(Config.S_BID, bid);
+            intent.putExtra(Config.S_GID, 0);
+            intent.putExtra(Config.S_IS_RF, true);
+            intent.putExtra(Config.ACTIVITY_TYPE, Config.TYPE_RC_RF_MATCH_STUDY);
+            intent.putExtra(Config.S_TAG, result.getMac());
+            startActivity(intent);
         }
     }
+
+    int bid = 0;
 
     private void setOnTouch() {
         // 设置右侧触摸监听
@@ -91,7 +108,13 @@ public class BrandListActivity extends BaseActivity {
                 Results results = fnames.get(position);
                 if (results != null) {
                     Config.curBName = results.getName();
-                    if (tid == 7||isRf) {
+                    if (tid == 7 || isRf) {
+                        if (results.getBid() == 4041 || results.getBid() == 4042) {
+                            dialog.show();
+                            bid = results.getBid();
+                            Yaokan.instance().bindBedDevice(Config.MAC, Config.DID, tid);
+                            return;
+                        }
                         Intent intent = new Intent(activity, RcActivity.class);
                         intent.putExtra(Config.ACTIVITY_TYPE, Config.TYPE_MATCHING);
                         intent.putExtra(Config.S_TID, tid);
@@ -99,7 +122,8 @@ public class BrandListActivity extends BaseActivity {
                         intent.putExtra(Config.S_BID, results.getBid());
                         intent.putExtra(Config.S_GID, 0);
                         intent.putExtra(Config.S_IS_RF, true);
-                        if(isRf){
+                        intent.putExtra(Config.S_TAG, getIntent().getStringExtra(Config.S_TAG));
+                        if (isRf) {
                             intent.putExtra(Config.ACTIVITY_TYPE, Config.TYPE_RC_RF_MATCH_STUDY);
                         }
                         startActivity(intent);
@@ -114,6 +138,7 @@ public class BrandListActivity extends BaseActivity {
         });
     }
 
+
     public List<Results> filledData(List<Results> listResult) {
         CharacterParser characterParser = new CharacterParser();
         List<Results> mSortList = new ArrayList<Results>();
@@ -126,7 +151,7 @@ public class BrandListActivity extends BaseActivity {
             // 正则表达式，判断首字母是否是英文字母
             if (sortString.matches("[A-Z]")) {
                 sortModel.setSortLetters(sortString.toUpperCase());
-                sortModel.setCp(sortString.toUpperCase()+pinyin);
+                sortModel.setCp(sortString.toUpperCase() + pinyin);
             } else if (sortString.equals("@")) {
                 sortModel.setSortLetters("@");
             } else {
@@ -138,9 +163,9 @@ public class BrandListActivity extends BaseActivity {
         Collections.sort(mSortList, new Comparator<Results>() {
             @Override
             public int compare(Results r1, Results r2) {
-                if(!TextUtils.isEmpty(r1.getCp())&&!TextUtils.isEmpty(r2.getCp())){
+                if (!TextUtils.isEmpty(r1.getCp()) && !TextUtils.isEmpty(r2.getCp())) {
                     return r1.getCp().compareTo(r2.getCp());
-                }else{
+                } else {
                     return r1.getName().compareTo(r2.getName());
                 }
             }

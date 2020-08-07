@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/top_gray"
+    android:padding="10dp">
+
+
+    <com.yaokantv.yaokanui.widget.CustScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_mode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/shape_cir_white_15"
+                android:orientation="vertical"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/ll_head_up"
+                        style="@style/bed">
+
+                        <ImageView
+                            style="@style/bed_iv"
+                            android:src="@mipmap/ic_bed_head_up" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="头部上升" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_foot_up"
+                        style="@style/bed">
+
+                        <ImageView
+                            style="@style/bed_iv"
+                            android:src="@mipmap/ic_bed_foot_up" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="脚部上升" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_haf_up"
+                        style="@style/bed">
+
+                        <ImageView
+                            style="@style/bed_iv"
+                            android:src="@mipmap/ic_bed_haf_up" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="同步上升" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/ll_head_down"
+                        style="@style/bed">
+
+                        <ImageView
+                            style="@style/bed_iv"
+                            android:src="@mipmap/ic_bed_head_down" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="头部下降" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_foot_down"
+                        style="@style/bed">
+
+                        <ImageView
+                            style="@style/bed_iv"
+                            android:src="@mipmap/ic_bed_foot_down" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="脚部下降" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_haf_down"
+                        style="@style/bed">
+
+                        <ImageView
+                            style="@style/bed_iv"
+                            android:src="@mipmap/ic_bed_haf_down" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="同步下降" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/shape_cir_white_15"
+                android:orientation="vertical"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/ll_head_sock"
+                        style="@style/bed">
+
+                        <ImageView
+                            android:id="@+id/iv_head_sock"
+                            style="@style/bed_iv_cir"
+                            android:src="@mipmap/ic_mpe_headsock" />
+
+                        <TextView
+                            android:id="@+id/tv_head_sock"
+                            style="@style/bed_tv_cir"
+                            android:text="头部放松" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_light"
+                        style="@style/bed">
+
+                        <ImageView
+                            android:id="@+id/iv_light"
+                            style="@style/bed_iv"
+                            android:src="@mipmap/ic_mpe_larm" />
+
+                        <TextView
+                            android:id="@+id/tv_light"
+                            style="@style/bed_tv_cir"
+                            android:text="灯" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_foot_sock"
+                        style="@style/bed">
+
+                        <ImageView
+                            android:id="@+id/iv_foot_sock"
+                            style="@style/bed_iv"
+                            android:src="@mipmap/ic_mpe_footsock" />
+
+                        <TextView
+                            android:id="@+id/tv_foot_sock"
+                            style="@style/bed_tv_cir"
+                            android:text="腿部放松" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/ll_mode1"
+                        style="@style/bed">
+
+                        <ImageView
+                            android:id="@+id/iv_mode1"
+                            style="@style/bed_iv"
+                            android:src="@mipmap/ic_mpe_bed_sm1" />
+
+                        <TextView
+                            android:id="@+id/tv_mode1"
+                            style="@style/bed_tv_cir"
+
+                            android:text="模式一" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_mode2"
+                        style="@style/bed">
+
+                        <ImageView
+                            android:id="@+id/iv_mode2"
+                            style="@style/bed_iv"
+                            android:src="@mipmap/ic_mpe_bed_sm2" />
+
+                        <TextView
+                            android:id="@+id/tv_mode2"
+                            style="@style/bed_tv_cir"
+
+                            android:text="模式二" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_mode3"
+                        style="@style/bed">
+
+                        <ImageView
+                            android:id="@+id/iv_mode3"
+                            style="@style/bed_iv"
+                            android:src="@mipmap/ic_mpe_bed_sm3" />
+
+                        <TextView
+                            android:id="@+id/tv_mode3"
+                            style="@style/bed_tv_cir"
+
+                            android:text="模式三" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/ll_min1"
+                        style="@style/bed">
+
+                        <ImageView
+                            android:id="@+id/iv_min1"
+                            style="@style/bed_iv"
+                            android:src="@mipmap/ic_mpe_time10" />
+
+                        <TextView
+                            style="@style/bed_tv_cir"
+                            android:id="@+id/tv_min1"
+                            android:text="10分钟" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_min2"
+                        style="@style/bed">
+
+                        <ImageView
+                            android:id="@+id/iv_min2"
+                            style="@style/bed_iv"
+                            android:src="@mipmap/ic_mpe_time20" />
+
+                        <TextView
+                            style="@style/bed_tv_cir"
+                            android:id="@+id/tv_min2"
+
+
+                            android:text="20分钟" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_min3"
+                        style="@style/bed">
+
+                        <ImageView
+                            android:id="@+id/iv_min3"
+                            style="@style/bed_iv"
+                            android:src="@mipmap/ic_mpe_time30" />
+
+                        <TextView
+                            style="@style/bed_tv_cir"
+                            android:id="@+id/tv_min3"
+
+                            android:text="30分钟" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </com.yaokantv.yaokanui.widget.CustScrollView>
+</RelativeLayout>

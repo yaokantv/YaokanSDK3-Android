@@ -2,6 +2,7 @@ package com.yaokantv.yaokanui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -13,6 +14,7 @@ import com.yaokantv.yaokansdk.model.RemoteCtrl;
 import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
 import com.yaokantv.yaokansdk.utils.CommonAdapter;
+import com.yaokantv.yaokansdk.utils.Logger;
 import com.yaokantv.yaokansdk.utils.ViewHolder;
 
 import java.util.ArrayList;

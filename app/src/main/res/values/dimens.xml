@@ -9,6 +9,7 @@
     <dimen name="x_ctrl_btn_w">60dip</dimen>
     <dimen name="c_ctrl_btn_w">95dip</dimen>
     <dimen name="xx_ctrl_btn_w">80dip</dimen>
+    <dimen name="bed_high">80dip</dimen>
     <dimen name="x_ctrl_btn_h">140dip</dimen>
     <dimen name="half_w">24dip</dimen>
 

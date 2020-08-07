@@ -1,4 +1,5 @@
 <resources>
+
     <style name="dialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <!-- 边框 -->
@@ -21,6 +22,41 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="bed">
+        <item name="android:background">@drawable/btn_bed_item</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/bed_high</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:onClick">onClick</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+    <style name="bed_tv">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="bed_iv">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">50dp</item>
+    </style>
+    <style name="bed_arr_iv">
+        <item name="android:layout_width">37dp</item>
+        <item name="android:layout_height">37dp</item>
+    </style>
+    <style name="bed_iv_cir">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">50dp</item>
+    </style>
+
+    <style name="bed_tv_cir">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+    </style>
+
     <style name="tv">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -37,6 +73,7 @@
         <item name="android:onClick">onClick</item>
         <item name="android:background">@drawable/shape_btn</item>
     </style>
+
     <style name="ykk_dialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <!-- 边框 -->
@@ -51,6 +88,7 @@
         <item name="android:backgroundDimEnabled">true</item>
         <!-- 模糊 -->
     </style>
+
     <style name="home_LinearLayout">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">55dp</item>
@@ -226,6 +264,7 @@
         <item name="android:textSize">15dp</item>
         <item name="android:fontFamily">sans-serif-thin</item>
     </style>
+
     <style name="text_circle_62">
         <item name="android:background">@drawable/btn_circle</item>
         <item name="android:layout_width">62dp</item>
@@ -236,6 +275,7 @@
         <item name="android:textSize">15dp</item>
         <item name="android:fontFamily">sans-serif-thin</item>
     </style>
+
     <style name="rl_bg">
         <item name="android:background">@color/top_gray_deep</item>
         <item name="android:layout_width">match_parent</item>

@@ -286,6 +286,7 @@ public abstract class BaseRcFragment extends Fragment implements YaokanSDKListen
             Logger.e("sendCmd a");
             return;
         }
+        Logger.e("sendCmd:"+key);
         RcCmd cmd = new RcCmd();
         cmd.setValue(key);
         if (!map.contains(cmd)) {
@@ -454,6 +455,7 @@ public abstract class BaseRcFragment extends Fragment implements YaokanSDKListen
             btn.setVisibility(View.GONE);
         }
     }
+
     protected void KeyBackground(RelativeLayout btn, TextView textView, String key, List<RcCmd> map) {
         if (!Utility.isEmpty(map)) {
             RcCmd cmd = new RcCmd();
@@ -462,7 +464,7 @@ public abstract class BaseRcFragment extends Fragment implements YaokanSDKListen
                 btn.setVisibility(View.VISIBLE);
                 btn.setClickable(true);
                 textView.setTextColor(getResources().getColor(R.color.black));
-            }else{
+            } else {
                 btn.setClickable(false);
                 textView.setTextColor(getResources().getColor(android.R.color.darker_gray));
             }
@@ -470,6 +472,7 @@ public abstract class BaseRcFragment extends Fragment implements YaokanSDKListen
             btn.setVisibility(View.GONE);
         }
     }
+
     protected void KeyBackground(TextView btn, int bg, int d_bg, String key, List<RcCmd> map) {
         if (btn == null) {
             return;

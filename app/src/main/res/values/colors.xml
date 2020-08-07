@@ -11,6 +11,7 @@
     <color name="black">#000000</color>
     <color name="trans_10">#20ffffff</color>
 
+    <color name="text_gray">#aaaaaa</color>
     <color name="top_gray">#f2f2f2</color>
     <color name="top_gray_deep">#e1e1e1</color>
     <color name="top_gray33">#66f2f2f2</color>

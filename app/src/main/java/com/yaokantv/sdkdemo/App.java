@@ -2,6 +2,8 @@ package com.yaokantv.sdkdemo;
 
 import android.app.Application;
 
+import androidx.multidex.MultiDex;
+
 import com.orhanobut.hawk.Hawk;
 import com.yaokantv.yaokansdk.manager.Yaokan;
 import com.yaokantv.yaokansdk.model.Operators;
@@ -20,6 +22,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        MultiDex.install(this);
         Yaokan.initialize(this);
         Hawk.init(this).build();
     }
