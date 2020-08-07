@@ -14,8 +14,8 @@ import com.yaokantv.yaokansdk.utils.DlgUtils;
 import com.yaokantv.yaokanui.DeviceListActivity;
 
 public class InitActivity extends BaseActivity implements YaokanSDKListener, View.OnClickListener {
-    String appId = "0b4ae125215e01ed10337e0be79bc47f";
-    String appSecret = "b4b969086821a4ece1029f5d333cd529";
+    String appId = "";
+    String appSecret = "";
     boolean isUi = true;
 
     @Override
