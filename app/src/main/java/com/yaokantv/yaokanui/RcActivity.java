@@ -202,7 +202,7 @@ public class RcActivity extends BaseActivity implements View.OnClickListener {
             if (TextUtils.isEmpty(mac)) {
                 mac = App.curMac;
             }
-            if (rc.getBe_rc_type() != 45 && rc.getBe_rc_type() != 46 && Yaokan.instance().isNeedDownloadDevice(mac)) {
+            if (Yaokan.instance().isNeedDownloadDevice(mac)) {
                 isRfStudy = true;
                 dialog.setMessage(getString(R.string.download_to_big_apple));
                 dialog.show();
@@ -212,9 +212,6 @@ public class RcActivity extends BaseActivity implements View.OnClickListener {
                 } else {
                     Yaokan.instance().downloadCodeToDevice(App.curDid, rc.getStudyId(), rc.getBe_rc_type());
                 }
-            } else if (rc.getBe_rc_type() == 45 || rc.getBe_rc_type() == 46) {
-                isRfDownload = false;
-                frgRc.saveRc();
             } else {
                 studyFinish();
             }
