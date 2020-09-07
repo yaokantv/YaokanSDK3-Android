@@ -28,7 +28,7 @@
             android:id="@+id/rg_config"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <RadioButton
                 android:id="@+id/cb_soft"
@@ -42,85 +42,105 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="SmartConfig" />
-        </RadioGroup>
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="配网设备: "
-            android:textSize="18sp" />
-
-        <RadioGroup
-            android:id="@+id/rg_device"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
             <RadioButton
-                android:id="@+id/cb_1101"
+                android:id="@+id/cb_hot_point"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="小苹果" />
-
+                android:text="手机热点配网" />
             <RadioButton
-                android:id="@+id/cb_1103"
+                android:id="@+id/cb_param"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="大苹果" />
-            <RadioButton
-                android:id="@+id/cb_ds16"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="空调伴侣" />
-        </RadioGroup>
+                android:text="参数配网" /> </RadioGroup>
 
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Wifi:"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/tv_ssid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/ll_psw"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="密码:"
-            android:textSize="20sp" />
-
-        <EditText
-            android:id="@+id/et_psw"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@null"
-            android:textSize="20sp" />
+            android:layout_margin="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="配网设备: "
+                android:textSize="18sp" />
+
+            <RadioGroup
+                android:id="@+id/rg_device"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/cb_1101"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="小苹果" />
+
+                <RadioButton
+                    android:id="@+id/cb_1103"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="大苹果" />
+
+                <RadioButton
+                    android:id="@+id/cb_ds16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="空调伴侣" />
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wifi:"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_ssid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="密码:"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/et_psw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:textSize="20sp" />
+        </LinearLayout>
     </LinearLayout>
 
     <Button
@@ -130,12 +150,13 @@
         android:layout_gravity="center_horizontal"
         android:onClick="onClick"
         android:text="开始配网" />
+
     <TextView
         android:id="@+id/tv_cfg_tips"
-        android:textSize="16dp"
-        android:textColor="@color/black"
-        android:text="@string/net_config_ap_tips"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"/>
+        android:padding="10dp"
+        android:text="@string/net_config_ap_tips"
+        android:textColor="@color/black"
+        android:textSize="16dp" />
 </LinearLayout>

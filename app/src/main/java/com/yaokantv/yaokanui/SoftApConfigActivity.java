@@ -13,6 +13,7 @@ import com.yaokantv.sdkdemo.R;
 import com.yaokantv.yaokansdk.Contants;
 import com.yaokantv.yaokansdk.callback.YaokanSDKListener;
 import com.yaokantv.yaokansdk.manager.Yaokan;
+import com.yaokantv.yaokansdk.model.ConfigType;
 import com.yaokantv.yaokansdk.model.SmartConfigResult;
 import com.yaokantv.yaokansdk.model.SoftApConfigResult;
 import com.yaokantv.yaokansdk.model.YkMessage;
@@ -28,9 +29,9 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
     String ssid;
     String psw;
     EditText editText;
-    boolean isAp = true;
     RadioGroup rgConfigType, rgDeviceType;
     String deviceType = Contants.YKK_MODEL_1011;
+    ConfigType configType = ConfigType.SoftAp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +73,24 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
         rgConfigType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                isAp = (checkedId == R.id.cb_soft);
+                switch (checkedId) {
+                    case R.id.cb_soft:
+                        configType = ConfigType.SoftAp;
+                        findViewById(R.id.ll_psw).setVisibility(View.VISIBLE);
+                        break;
+                    case R.id.cb_smart:
+                        configType = ConfigType.SmartConfig;
+                        findViewById(R.id.ll_psw).setVisibility(View.VISIBLE);
+                        break;
+                    case R.id.cb_hot_point:
+                        configType = ConfigType.HotPoint;
+                        findViewById(R.id.ll_psw).setVisibility(View.GONE);
+                        break;
+                    case R.id.cb_param:
+                        configType = ConfigType.PARAM;
+                        findViewById(R.id.ll_psw).setVisibility(View.GONE);
+                        break;
+                }
                 setTips();
             }
         });
@@ -80,7 +98,21 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void setTips() {
-        tvTips.setText(isAp ? R.string.net_config_ap_tips : R.string.net_config_smart_tips);
+        String txt = "";
+        switch (configType) {
+            case SoftAp:
+                txt = getString(R.string.net_config_ap_tips);
+                break;
+            case SmartConfig:
+                txt = getString(R.string.net_config_smart_tips);
+                break;
+            case HotPoint:
+                txt = getString(R.string.net_config_hot_point_tips);
+                break;
+            case PARAM:
+                break;
+        }
+        tvTips.setText(txt);
     }
 
     @Override
@@ -107,16 +139,26 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.btn_smart_config:
                 psw = editText.getText().toString();
-                Hawk.put(ssid, psw);//用于保存数据
-                if (isAp) {
-                    Yaokan.instance().softApConfigSwitch(SoftApConfigActivity.this, ssid, psw, deviceType);
-                } else {
-                    Yaokan.instance().smartConfig(this, psw);
+                if (!TextUtils.isEmpty(ssid) && !TextUtils.isEmpty(psw)) {
+                    Hawk.put(ssid, psw);//用于保存数据
+                }
+                switch (configType) {
+                    case SoftAp:
+                        Yaokan.instance().softApConfigSwitch(SoftApConfigActivity.this, ssid, psw, deviceType);
+                        break;
+                    case SmartConfig:
+                        Yaokan.instance().smartConfig(this, psw);
+                        break;
+                    case HotPoint:
+                        Yaokan.instance().hotPointConfig();
+                        break;
+                    case PARAM:
+                        Yaokan.instance().paramConfig("","");
+                        break;
                 }
                 break;
         }
     }
-
 
 
     @Override
@@ -135,11 +177,49 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
                     }
                 });
                 break;
+            case GetConfigParam:
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.setMessage("参数获取成功，请用以下参数进行配网：\n" + ykMessage.getData());
+                    }
+                });
+                break;
             case SwitchWifi:
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         dialog.setMessage("如果WI-FI未自动切换\n至:" + deviceType + "，请手动连接。");
+                    }
+                });
+                break;
+            case HotPointStart:
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.setMessage(getString(com.yaokantv.yaokansdk.R.string.smart_config));
+                        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                Yaokan.instance().stopHotPointConfig();
+                            }
+                        });
+                        dialog.show();
+                    }
+                });
+                break;
+            case ParamConfigStart:
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.setMessage(getString(com.yaokantv.yaokansdk.R.string.smart_config));
+                        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                Yaokan.instance().stopParamConfig();
+                            }
+                        });
+                        dialog.show();
                     }
                 });
                 break;
@@ -184,11 +264,14 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
                 break;
             //配网结束
             case SoftApConfigResult:
+            case HotPointConfigResult:
+            case ParamConfigResult:
                 if (dialog != null) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             dialog.dismiss();
+
                             DlgUtils.createDefDlg(activity, "", ykMessage.getMsg(), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -197,7 +280,9 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
                                         Logger.e(result.toString());
                                         if (result.isResult()) {
                                             //result = true 配网成功
-                                            Hawk.put(ssid, psw);
+                                            if (msgType == MsgType.SoftApConfigResult) {
+                                                Hawk.put(ssid, psw);
+                                            }
                                             finish();
                                         }
                                     }

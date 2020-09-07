@@ -121,4 +121,5 @@
     <string name="demo_min_label">Mix</string>
     <string name="demo_max_label">Max</string>
     <string name="click_finish">点击完成以创建遥控器</string>
+    <string name="net_config_hot_point_tips">请将手机热点名称设置为YKK，密码设置为12345678</string>
 </resources>

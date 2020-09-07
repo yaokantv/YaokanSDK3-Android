@@ -196,6 +196,34 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
 
         Yaokan.instance().stopSmartConfig();
 
+        /**
+         * 手机热点配置入网，需要将手机热点名称设置为YKK，密码设置为12345678
+         *
+         * @param context 上下文
+         * @param psw     Wi-Fi密码
+         */
+
+        Yaokan.instance().hotPointConfig();
+
+        /**
+         * 停止配置入网
+         */
+
+        Yaokan.instance().stopHotPointConfig();
+
+        /**
+         *  参数配网
+         * @param ssid  WI-FI名称
+         * @param psw WI-FI密码
+         */
+
+        Yaokan.instance().paramConfig("","");
+
+        /**
+         * 停止参数配置入网
+         */
+
+        Yaokan.instance().stopParamConfig();
     - 回调
 
         ```java
@@ -213,6 +241,22 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
                     break;
                 case SmartConfigResult:
                 //SmartConfig配网结果
+                    break;
+                case HotPointStart:
+                //手机热点配网开始
+                    break;
+                case HotPointConfigResult:
+                //手机热点配网结果
+                    break;
+                case ParamConfigStart:
+                //参数配网开始
+                    break;
+                case GetConfigParam:
+                //获得参数配网的参数
+                    String data = ykMessage.getData();
+                    break;
+                case ParamConfigResult:
+                //参数配网结果
                     break;
             }
         }
@@ -445,12 +489,7 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
 
 1. 设备复位
 
-    - 复位设备，进入SmartConfig配网状态
-
-    ```java
-    Yaokan.instance().resetApple(mac,did);
-    ```
-    - 复位设备，进入SoftAp配网状态
+    - 复位设备，进入配网状态
 
     ```java
     Yaokan.instance().apReset(mac,did);
