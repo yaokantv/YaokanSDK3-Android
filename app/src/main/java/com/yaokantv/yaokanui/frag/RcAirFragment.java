@@ -62,6 +62,8 @@ public class RcAirFragment extends BaseRcFragment implements View.OnClickListene
         }
         int open = isOpen ? 1 : 0;
         String s = open + "_" + modeIndex + "_" + speedIndex + "_" + tempIndex + "_" + verIndex + "_" + horIndex;
+        rc.setAir_status_index(s);
+        Yaokan.instance().updateRc(rc);
         dataUtils.setKeyValue(rc.getUuid(), s);
     }
 

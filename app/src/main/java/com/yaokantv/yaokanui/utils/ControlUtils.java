@@ -18,6 +18,7 @@ import com.yaokantv.yaokanui.frag.RcHangerFragment;
 import com.yaokantv.yaokanui.frag.RcHeaterFragment;
 import com.yaokantv.yaokanui.frag.RcLiangbaFragment;
 import com.yaokantv.yaokanui.frag.RcLightFragment;
+import com.yaokantv.yaokanui.frag.RcOtherFragment;
 import com.yaokantv.yaokanui.frag.RcProjectorFragment;
 import com.yaokantv.yaokanui.frag.RcPurifierFragment;
 import com.yaokantv.yaokanui.frag.RcStbFragment;
@@ -99,7 +100,7 @@ public class ControlUtils {
                 sf = new RcChairFragment();
                 break;
             default:
-                sf = new RcStbFragment();
+                sf = new RcOtherFragment();
                 break;
         }
         return sf;

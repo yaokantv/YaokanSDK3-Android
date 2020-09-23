@@ -17,14 +17,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
+import com.orhanobut.hawk.Hawk;
 import com.yaokantv.yaokansdk.callback.YaokanSDKListener;
 import com.yaokantv.yaokansdk.manager.Yaokan;
+import com.yaokantv.yaokansdk.model.HotPointConfigResult;
 import com.yaokantv.yaokansdk.model.RemoteCtrl;
+import com.yaokantv.yaokansdk.model.SoftApConfigResult;
 import com.yaokantv.yaokansdk.model.YkDevice;
 import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
 import com.yaokantv.yaokansdk.utils.CommonAdapter;
 import com.yaokantv.yaokansdk.utils.DlgUtils;
+import com.yaokantv.yaokansdk.utils.Logger;
 import com.yaokantv.yaokansdk.utils.ViewHolder;
 import com.yaokantv.yaokanui.RcListActivity;
 import com.yaokantv.yaokanui.SoftApConfigActivity;
@@ -105,7 +109,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 helper.setOnclickListener(R.id.btn_test, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Yaokan.instance().test(item.getDid());
+//                        Yaokan.instance().test(item.getDid());
                     }
                 });
                 helper.setOnclickListener(R.id.btn_del, new View.OnClickListener() {
@@ -152,6 +156,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.btn_hot_point_config:
+                Yaokan.instance().hotPointConfig();
+                break;
             case R.id.btn_soft_ap_config:
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     startActivity(new Intent(this, SoftApConfigActivity.class));
@@ -214,6 +221,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             @Override
             public void run() {
                 switch (msgType) {
+                    case HotPointStart:
+                        showForceDlg("手机热点配网中");
+                        break;
+                    case HotPointConfigResult:
+                        HotPointConfigResult configResult = (HotPointConfigResult) ykMessage.getData();
+                        if(configResult!=null){
+                            if(configResult.isResult()){
+                                dismiss();
+                                showDlg();
+                            }
+                            DlgUtils.createDefDlg(activity, "", ykMessage.getMsg(), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (ykMessage != null && ykMessage.getData() != null && ykMessage.getData() instanceof SoftApConfigResult) {
+                                        SoftApConfigResult result = (SoftApConfigResult) ykMessage.getData();
+                                        Logger.e(result.toString());
+                                    }
+                                }
+                            });
+                        }
+                        break;
                     case DeviceOnline:
                     case DeviceOffline:
 

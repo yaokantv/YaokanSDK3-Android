@@ -11,6 +11,7 @@ import com.yaokantv.yaokansdk.manager.Yaokan;
 import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
 import com.yaokantv.yaokansdk.utils.DlgUtils;
+import com.yaokantv.yaokansdk.utils.Logger;
 import com.yaokantv.yaokanui.DeviceListActivity;
 
 public class InitActivity extends BaseActivity implements YaokanSDKListener, View.OnClickListener {
@@ -30,9 +31,12 @@ public class InitActivity extends BaseActivity implements YaokanSDKListener, Vie
             ((EditText) findViewById(R.id.et_app_secret)).setText(appSecret);
         }
 //        String s = "[{\"name\":\"空调\",\"rid\":\"2016093013210706\",\"place\":\"阳台\",\"rmodel\":\"1(V3)\",\"be_rmodel\":\"1(V3)\",\"be_rc_type\":7,\"bid\":1236,\"mac\":\"A4CF12A9334E\",\"rf\":\"0\",\"rf_body\":\"\",\"rc_command_type\":1,\"study_id\":\"0\",\"rc_command\":{\"mode\":[\"auto\",\"cold\",\"dry\",\"hot\",\"wind\"],\"attributes\":{\"verticalIndependent\":0,\"horizontalIndependent\":0,\"auto\":{\"speed\":[0,1,2,3],\"swing\":[\"horizontalOff\",\"horizontalOn\",\"verticalOff\",\"verticalOn\"],\"temperature\":[]},\"dry\":{\"speed\":[1],\"swing\":[\"horizontalOff\",\"horizontalOn\",\"verticalOff\",\"verticalOn\"],\"temperature\":[]},\"hot\":{\"speed\":[0,1,2,3],\"swing\":[\"horizontalOff\",\"horizontalOn\",\"verticalOff\",\"verticalOn\"],\"temperature\":[16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]},\"cold\":{\"speed\":[0,1,2,3],\"swing\":[\"horizontalOff\",\"horizontalOn\",\"verticalOff\",\"verticalOn\"],\"temperature\":[16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]},\"wind\":{\"speed\":[1,2,3],\"swing\":[\"horizontalOff\",\"horizontalOn\",\"verticalOff\",\"verticalOn\"],\"temperature\":[16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]}}}}]";
+//        String s = "[{\"name\":\"澳柯玛空调 4(V3)\",\"rid\":\"2016093013110380\",\"rmodel\":\"4(V3)\",\"be_rmodel\":\"4(V3)\",\"be_rc_type\":7,\"bid\":1377,\"mac\":\"A4CF12A9334E\",\"rf\":\"0\",\"rf_body\":\"\",\"rc_command_type\":1,\"study_id\":\"0\",\"air_status_index\":\"1_1_2_6_1_1\",\"rc_command\":{\"mode\":[\"auto\",\"cold\",\"dry\",\"hot\",\"wind\"],\"attributes\":{\"verticalIndependent\":0,\"horizontalIndependent\":0,\"auto\":{\"speed\":[0,1,2,3],\"swing\":[\"horizontalOff\",\"horizontalOn\",\"verticalOff\",\"verticalOn\"],\"temperature\":[]},\"dry\":{\"speed\":[1],\"swing\":[\"horizontalOff\",\"horizontalOn\",\"verticalOff\",\"verticalOn\"],\"temperature\":[]},\"hot\":{\"speed\":[0,1,2,3],\"swing\":[\"horizontalOff\",\"horizontalOn\",\"verticalOff\",\"verticalOn\"],\"temperature\":[16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]},\"cold\":{\"speed\":[0,1,2,3],\"swing\":[\"horizontalOff\",\"horizontalOn\",\"verticalOff\",\"verticalOn\"],\"temperature\":[16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]},\"wind\":{\"speed\":[1,2,3],\"swing\":[\"horizontalOff\",\"horizontalOn\",\"verticalOff\",\"verticalOn\"],\"temperature\":[16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]}}}}]";
 //        String d = "[{\"did\":\"BE2D38BD3F1BD7E5\",\"mac\":\"A4CF12A9334E\",\"name\":\"YKK-1013-RF\",\"rf\":\"0\"}]";
 //        Yaokan.instance().inputRcString(s);
 //        Yaokan.instance().inputYkDevicesToDB(d);
+//        String s = Yaokan.instance().exportRcString();
+//        Logger.e(s);
     }
 
     @Override
@@ -65,6 +69,8 @@ public class InitActivity extends BaseActivity implements YaokanSDKListener, Vie
                     showDlg();
                     Yaokan.instance().init(getApplication(), appId, appSecret);
                 }
+//                Yaokan.instance().hotPointConfig();
+
                 break;
         }
     }
