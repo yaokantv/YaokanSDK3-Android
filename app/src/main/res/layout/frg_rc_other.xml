@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <com.yaokantv.yaokanui.widget.CustScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_bg_top">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.yaokantv.yaokanui.widget.NoScrollGridView
+                android:id="@+id/gv"
+                style="@style/extra_grid"
+                android:layout_marginTop="40dp" />
+        </LinearLayout>
+    </com.yaokantv.yaokanui.widget.CustScrollView>
+</RelativeLayout>

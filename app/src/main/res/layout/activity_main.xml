@@ -18,6 +18,14 @@
             android:layout_weight="1"
             android:onClick="onClick"
             android:text="SoftAp配网" />
+
+        <Button
+            android:id="@+id/btn_hot_point_config"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClick"
+            android:text="手机热点配网" />
     </LinearLayout>
 
     <LinearLayout
@@ -62,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onClick"
-            android:text="导入遥控器列表"  />
+            android:text="导入遥控器列表" />
 
     </LinearLayout>
 
