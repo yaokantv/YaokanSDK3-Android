@@ -13,8 +13,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.yaokantv.yaokansdk.callback.YaokanSDKListener;
 import com.yaokantv.yaokansdk.manager.Yaokan;
+import com.yaokantv.yaokansdk.model.AirPowerResult;
 import com.yaokantv.yaokansdk.model.Brand;
 import com.yaokantv.yaokansdk.model.BrandResult;
 import com.yaokantv.yaokansdk.model.CheckVersionResult;
@@ -25,6 +27,7 @@ import com.yaokantv.yaokansdk.model.ProgressResult;
 import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
 import com.yaokantv.yaokansdk.utils.DlgUtils;
+import com.yaokantv.yaokansdk.utils.Logger;
 import com.yaokantv.yaokanui.widget.RangeSeekBar;
 
 import java.util.ArrayList;
@@ -180,6 +183,11 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
             case R.id.btn_ctrl_list:
                 startActivity(new Intent(activity, AppleCtrlListActivity.class));
                 break;
+            case R.id.btn_power_query:
+                long endTime = System.currentTimeMillis() / 1000;
+                long startTime = endTime - 24 * 60 * 60;
+                Yaokan.instance().powerQuery(App.curDid, "day", startTime, endTime);
+                break;
         }
     }
 
@@ -311,6 +319,11 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                             message.obj = ykMessage.getMsg();
                             mHandler.sendMessage(message);
                         }
+                        break;
+                    case AirPowerResult:
+                        List<AirPowerResult> list = (List<AirPowerResult>) ykMessage.getData();
+
+                        DlgUtils.createDefDlg(activity,new Gson().toJson(list));
                         break;
                 }
             }
