@@ -766,6 +766,8 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
     回调
       case AirPowerResult:
         List<AirPowerResult> list = (List<AirPowerResult>) ykMessage.getData();
+
+    //返回的Model说明 tag:第几天或月；value：电量统计值，保留4位小数；createAt：电量上报的时间戳，用于tag显示的排序
     ```    
 ### 4.4 其他接口
 1. 设置发码是否震动
