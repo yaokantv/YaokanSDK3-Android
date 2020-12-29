@@ -751,6 +751,22 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
     ```java
     Yaokan.instance().saveRcList(json);
     ```
+1. 电量统计
+
+    ```java
+    /**
+     *
+     * @param did 设备DID
+     * @param unit  查询单位 day,month
+     * @param timeBegin 起始时间戳 秒
+     * @param timeEnd 结束时间戳 秒
+     */
+    Yaokan.instance().powerQuery(String did, String unit, long timeBegin, long timeEnd);
+
+    回调
+      case AirPowerResult:
+        List<AirPowerResult> list = (List<AirPowerResult>) ykMessage.getData();
+    ```    
 ### 4.4 其他接口
 1. 设置发码是否震动
 
