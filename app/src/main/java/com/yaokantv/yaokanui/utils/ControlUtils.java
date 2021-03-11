@@ -2,6 +2,7 @@ package com.yaokantv.yaokanui.utils;
 
 
 import com.yaokantv.yaokanui.frag.BaseRcFragment;
+import com.yaokantv.yaokanui.frag.RcAdjusterFragment;
 import com.yaokantv.yaokanui.frag.RcAirFragment;
 import com.yaokantv.yaokanui.frag.RcAirMiniFragment;
 import com.yaokantv.yaokanui.frag.RcAudioFragment;
@@ -27,6 +28,16 @@ import com.yaokantv.yaokanui.frag.RcSwitchFragment;
 import com.yaokantv.yaokanui.frag.RcTvFragment;
 
 public class ControlUtils {
+    public static boolean isGfskControl(int bid) {
+        if (bid == 4055 || bid == 4056 || bid == 4057
+                || bid == 4041 || bid == 4042
+                || bid == 4067
+        ) {
+            return true;
+        }
+        return false;
+    }
+
     public static BaseRcFragment getControlFragment(int type) {
         BaseRcFragment sf;
         switch (type) {
@@ -98,6 +109,9 @@ public class ControlUtils {
                 break;
             case 46:
                 sf = new RcChairFragment();
+                break;
+            case 49:
+                sf = new RcAdjusterFragment();
                 break;
             default:
                 sf = new RcOtherFragment();

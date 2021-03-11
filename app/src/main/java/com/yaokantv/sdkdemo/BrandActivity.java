@@ -10,13 +10,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.yaokantv.yaokansdk.callback.YaokanSDKListener;
 import com.yaokantv.yaokansdk.manager.Yaokan;
-import com.yaokantv.yaokansdk.model.AirPowerResult;
+import com.yaokantv.yaokansdk.model.Alias;
+import com.yaokantv.yaokansdk.model.BindRFResult;
 import com.yaokantv.yaokansdk.model.Brand;
 import com.yaokantv.yaokansdk.model.BrandResult;
 import com.yaokantv.yaokansdk.model.CheckVersionResult;
@@ -24,11 +26,14 @@ import com.yaokantv.yaokansdk.model.DeviceType;
 import com.yaokantv.yaokansdk.model.DeviceTypeResult;
 import com.yaokantv.yaokansdk.model.HardInfo;
 import com.yaokantv.yaokansdk.model.ProgressResult;
+import com.yaokantv.yaokansdk.model.ReceiveModeResult;
+import com.yaokantv.yaokansdk.model.SelectItem;
 import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
 import com.yaokantv.yaokansdk.utils.DlgUtils;
-import com.yaokantv.yaokansdk.utils.Logger;
+import com.yaokantv.yaokansdk.utils.Utility;
 import com.yaokantv.yaokanui.widget.RangeSeekBar;
+import com.yaokantv.yaokanui.widget.TypeListDialogV2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,13 +49,18 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
     Brand currBrand = null; // 当前品牌
     boolean isFirst = true;
     TextView tvVoice;
-    RangeSeekBar<Integer> seekBar;
+    RangeSeekBar<Integer> seekBar, sbWake;
+    Button btnReceiveMode;
+    List<ReceiveModeResult.ResultBean> resultBeanList;
+    LinearLayout llOther;
+    HardInfo info;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_d);
         initView();
+        resultBeanList = Utility.getReceiveMode();
         if (getIntent() != null && !TextUtils.isEmpty(getIntent().getStringExtra("from"))) {
             findViewById(R.id.ll_1).setVisibility(View.GONE);
         }
@@ -59,6 +69,7 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
         //检测更新
 //        Yaokan.instance().checkDeviceVersion(App.curDid);
         Yaokan.instance().deviceInfo(App.curDid);
+
     }
 
     @Override
@@ -68,7 +79,9 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
     }
 
     private void initView() {
+        llOther = findViewById(R.id.ll_other);
         seekBar = findViewById(R.id.sb_vol);
+        sbWake = findViewById(R.id.sb_wake);
         tvVoice = findViewById(R.id.tv_voice);
         spType = findViewById(R.id.spType);
         spBrands = findViewById(R.id.spBrand);
@@ -80,6 +93,13 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                 .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         brandAdapter
                 .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        btnReceiveMode = findViewById(R.id.btn_receive_mode);
+        btnReceiveMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Yaokan.instance().getProtocolBrand();
+            }
+        });
         spType.setAdapter(typeAdapter);
         spBrands.setAdapter(brandAdapter);
         spType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -127,6 +147,25 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                 Yaokan.instance().setVoice(App.curDid, voice);
             }
         });
+        sbWake.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
+            @Override
+            public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
+                int vol = maxValue;
+                dialog.show();
+                String voice = "0";
+                if (vol < 10) {
+                    voice = voice + vol;
+                } else {
+                    voice = String.valueOf(vol);
+                }
+                Yaokan.instance().setKeepAlive(App.curDid, voice);
+            }
+        });
+        if(App.isLittleApple){
+            findViewById(R.id.ll_voice).setVisibility(View.GONE);
+            findViewById(R.id.ll_other).setVisibility(View.GONE);
+            findViewById(R.id.btn_receive_mode).setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -183,17 +222,31 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
             case R.id.btn_ctrl_list:
                 startActivity(new Intent(activity, AppleCtrlListActivity.class));
                 break;
-            case R.id.btn_power_query:
-                long endTime = System.currentTimeMillis() / 1000;
-                long startTime = endTime - 24 * 60 * 60;
-                Yaokan.instance().powerQuery(App.curDid, "day", startTime, endTime);
-                break;
         }
     }
 
     final int OTHER_FAIL = -1;
     final int HAND_TYPES_SUC = 0;
     final int HAND_BRANDS_SUC = 1;
+    String receiveModeName = "";
+
+    private void setBtnReceiveModeText() {
+        if (resultBeanList != null && info != null) {
+            if (!TextUtils.isEmpty(info.getName())) {
+                for (ReceiveModeResult.ResultBean bean : resultBeanList) {
+                    if (bean.getCode().equals(info.getName())) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                btnReceiveMode.setText("接收模式：" + bean.getShow_name());
+                                receiveModeName = bean.getShow_name();
+                            }
+                        });
+                    }
+                }
+            }
+        }
+    }
 
     @Override
     public void onReceiveMsg(final MsgType msgType, final YkMessage ykMessage) {
@@ -202,6 +255,38 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
             public void run() {
                 dismiss();
                 switch (msgType) {
+                    case BindRFResult://设置接收模式回调
+                        if (ykMessage != null && ykMessage.getData() != null) {
+                            BindRFResult bindRFResult = (BindRFResult) ykMessage.getData();
+                            if ("01".equals(bindRFResult.getCode())) {
+                                toast("设置成功");
+                            } else {
+                                toast("设置失败");
+                            }
+                        }
+                        break;
+                    case ProtocolBrand:
+                        if (ykMessage != null && ykMessage.getData() != null) {
+                            resultBeanList = (List<ReceiveModeResult.ResultBean>) ykMessage.getData();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    com.yaokantv.yaokanui.BaseActivity.showTypeList(findViewById(R.id.btn_receive_mode), activity, resultBeanList, new TypeListDialogV2.OnStringSelectedListener() {
+                                        @Override
+                                        public void onSelected(SelectItem s) {
+                                            ReceiveModeResult.ResultBean bean = (ReceiveModeResult.ResultBean) s;
+                                            btnReceiveMode.setText("接收模式：" + bean.getShow_name());
+                                            receiveModeName = bean.getShow_name();
+                                            info.setName(bean.getCode());
+                                            Yaokan.instance().setReceiveMode(App.curDid, bean);
+                                        }
+                                    }, receiveModeName);
+                                }
+                            });
+                            setBtnReceiveModeText();
+                        }
+                        break;
+                    case SetKeepAliveResult:
                     case setVoiceResult:
                         dismiss();
                         break;
@@ -231,12 +316,17 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                         if (!TextUtils.isEmpty(ykMessage.getMsg())) {
                             if (isFirst) {
                                 isFirst = false;
-                                HardInfo info = (HardInfo) ykMessage.getData();
-                                if("1".equals(info.getLed())){
+                                info = (HardInfo) ykMessage.getData();
+                                setBtnReceiveModeText();
+                                if ("1".equals(info.getLed())) {
                                 }
                                 if (info != null && !TextUtils.isEmpty(info.getVoice_num())) {
                                     tvVoice.setText(info.getVoice_num());
                                     seekBar.setSelectedMaxValue(Integer.valueOf(info.getVoice_num()));
+                                }
+                                if (!TextUtils.isEmpty(info.getVoice_time())) {//
+                                    sbWake.setSelectedMaxValue(Integer.valueOf(info.getVoice_time()));
+                                    llOther.setVisibility(View.VISIBLE);
                                 }
                             } else {
                                 DlgUtils.createDefDlg(activity, ykMessage.getMsg());
@@ -319,11 +409,6 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                             message.obj = ykMessage.getMsg();
                             mHandler.sendMessage(message);
                         }
-                        break;
-                    case AirPowerResult:
-                        List<AirPowerResult> list = (List<AirPowerResult>) ykMessage.getData();
-                        //返回的Model说明 tag:第几天或月；value：电量统计值，保留4位小数；createAt：电量上报的时间戳，用于tag显示的排序
-                        DlgUtils.createDefDlg(activity,new Gson().toJson(list));
                         break;
                 }
             }

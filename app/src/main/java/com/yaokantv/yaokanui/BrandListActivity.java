@@ -109,10 +109,23 @@ public class BrandListActivity extends BaseActivity {
                 if (results != null) {
                     Config.curBName = results.getName();
                     if (tid == 7 || isRf) {
-                        if (results.getBid() == 4041 || results.getBid() == 4042) {
+                        if (results.getBid() == 4055 || results.getBid() == 4056 || results.getBid() == 4057) {
+                            Intent intent = new Intent(BrandListActivity.this, RoadListActivity.class);
+                            intent.putExtra("tid", tid);
+                            intent.putExtra("bid", results.getBid());
+                            startActivity(intent);
+                            return;
+                        } else if (results.getBid() == 4041 || results.getBid() == 4042) {
                             dialog.show();
                             bid = results.getBid();
                             Yaokan.instance().bindBedDevice(Config.MAC, Config.DID, tid);
+                            return;
+                        } else if (results.getBid() == 4067) {
+                            Intent intent = new Intent(BrandListActivity.this, SelectGfskModeActivity.class);
+                            intent.putExtra("road", 1);
+                            intent.putExtra("tid", tid);
+                            intent.putExtra("bid", results.getBid());
+                            startActivity(intent);
                             return;
                         }
                         Intent intent = new Intent(activity, RcActivity.class);

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SDK4.0Demo</string>
+    <string name="app_name">SDK4.0</string>
     <string name="first_match">一级匹配</string>
     <string name="second_match">二级匹配</string>
     <string name="rc_list">遥控器列表</string>
@@ -122,4 +122,9 @@
     <string name="demo_max_label">Max</string>
     <string name="click_finish">点击完成以创建遥控器</string>
     <string name="net_config_hot_point_tips">请将手机热点名称设置为YKK，密码设置为12345678</string>
+    <string name="key_match_hint">长按终端的按键5秒，然后终端的灯会开始闪烁，下一步</string>
+    <string name="start_match_hint">\"如果终端没有按键，或者不方便操作按键，将终端重新上电，在上电后的3秒内，按下方的“进入配码状态”按钮，然后终端的灯会开始闪烁，下一步 \"</string>
+    <string name="key_gfsk_match">按键配码</string>
+    <string name="start_gfsk_match">上电配码</string>
+    <string name="gfsk_match_hint">1、确认终端设备的灯在闪烁（处于配码状态）\n2、点击上图"配码按钮"进行配码，设备的灯停止闪烁，表示配码成功。\n3、可以点击下方的测试按钮，测试灯是否被打开关。</string>
 </resources>

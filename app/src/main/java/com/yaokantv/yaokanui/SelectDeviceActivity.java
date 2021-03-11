@@ -1,26 +1,24 @@
 package com.yaokantv.yaokanui;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-
+import com.google.gson.Gson;
+import com.orhanobut.hawk.Hawk;
 import com.yaokantv.sdkdemo.R;
+import com.yaokantv.yaokansdk.Contants;
 import com.yaokantv.yaokansdk.manager.Yaokan;
 import com.yaokantv.yaokansdk.model.DeviceType;
 import com.yaokantv.yaokansdk.model.DeviceTypeResult;
-import com.yaokantv.yaokansdk.model.MpeBindResult;
 import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
 import com.yaokantv.yaokansdk.utils.CommonAdapter;
 import com.yaokantv.yaokansdk.utils.ViewHolder;
+import com.yaokantv.yaokanui.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,6 +125,7 @@ public class SelectDeviceActivity extends BaseActivity {
                     helper.setImageResource(R.id.iv_type, R.mipmap.ctrl_fan);
                     break;
                 case 8:
+                case 25:
                     helper.setImageResource(R.id.iv_type, R.mipmap.ctrl_light);
                     break;
                 case 3:
@@ -165,9 +164,6 @@ public class SelectDeviceActivity extends BaseActivity {
                 case 22:
                     helper.setImageResource(R.id.iv_type, R.mipmap.ctrl_jack);
                     break;
-                case 25:
-                    helper.setImageResource(R.id.iv_type, R.mipmap.ctrl_light_ctrl);
-                    break;
                 case 38:
                     helper.setImageResource(R.id.iv_type, R.mipmap.ctrl_fan_light);
                     break;
@@ -179,6 +175,12 @@ public class SelectDeviceActivity extends BaseActivity {
                     break;
                 case 46:
                     helper.setImageResource(R.id.iv_type, R.mipmap.ctrl_chair);
+                    break;
+                case 47:
+                    helper.setImageResource(R.id.iv_type, R.mipmap.ctrl_humidifier);
+                    break;
+                case 49:
+                    helper.setImageResource(R.id.iv_type, R.mipmap.ctrl_adjuster);
                     break;
             }
         }
@@ -203,6 +205,7 @@ public class SelectDeviceActivity extends BaseActivity {
                             showContent(true);
                             DeviceTypeResult typeResult = (DeviceTypeResult) ykMessage.getData();
                             if (typeResult != null) {
+                                Hawk.put(Contants.TYPE_RESULT, new Gson().toJson(typeResult.getResult()));
                                 for (DeviceType type : typeResult.getResult()) {
                                     if (type.getRf() == 0) {
                                         arrayDeviceType.add(type);

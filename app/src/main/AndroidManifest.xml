@@ -26,6 +26,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:theme,android:supportsRtl">
+        <activity android:name="com.yaokantv.yaokanui.RoadListActivity"></activity>
+        <activity android:name="com.yaokantv.yaokanui.GfskMatchActivity" />
+        <activity android:name="com.yaokantv.yaokanui.SelectGfskModeActivity" />
         <activity android:name="com.yaokantv.yaokanui.RoomMsgActivity"></activity>
         <activity android:name="com.yaokantv.yaokanui.DeviceListActivity" />
         <activity android:name="com.yaokantv.yaokanui.SoftApConfigActivity" />

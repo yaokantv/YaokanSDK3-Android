@@ -2,6 +2,7 @@ package com.yaokantv.yaokanui.utils;
 
 import android.content.Context;
 
+import com.yaokantv.sdkdemo.App;
 import com.yaokantv.yaokansdk.utils.Logger;
 
 public class ResourceManager {
@@ -38,15 +39,12 @@ public class ResourceManager {
     public static String dimen = "dimen";
 
 
-
-
     @SuppressWarnings("rawtypes")
-    public static  final int getIdByName(Context context, String className, String name) {
-        String packageName = context.getPackageName();
+    public static final int getIdByName(String className, String name) {
         Class<?> r = null;
         int id = 0;
         try {
-            r = Class.forName(packageName + ".R");
+            r = Class.forName(App.PACKAGE_NAME + ".R");
             Class[] classes = r.getClasses();
             Class desireClass = null;
 

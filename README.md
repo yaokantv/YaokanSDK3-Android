@@ -11,7 +11,7 @@
 
 | 版本 | 说明 | 备注 | 日期 |
 | --- | --- | --- | --- |
-| v4 | 新建 | Peer | 20200522 |
+| v4 | 新建 | Peer | 20210311 |
 
 
 
@@ -423,6 +423,33 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
     //关灯
     Yaokan.instance().lightOff(did);
     ```
+1. 设置唤醒时长
+
+    ```java
+    /**
+     *
+     * @param time 唤醒时长 15-60
+     */
+    Yaokan.instance().setKeepAlive(did, voice);
+    ```
+
+1. 获取接收模式
+
+    ```java
+    Yaokan.instance().getProtocolBrand();
+    回调：MsgType.ProtocolBrand
+    ```
+
+1. 设置接收模式
+
+    ```java
+    /**
+     *
+     * @param time 唤醒时长 15-60
+     */
+    Yaokan.instance().setReceiveMode(did, ReceiveModeResult.ResultBean);
+    回调：MsgType.BindRFResult
+    ```
 
 1. 固件升级OTA
 
@@ -493,6 +520,44 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
 
     ```java
     Yaokan.instance().apReset(mac,did);
+    ```
+
+1. 判断是否需要下载码库的设备
+
+    - 型号为YKK-1013、DS16A 的设备需要下载码库
+
+    ```java
+    Yaokan.instance().isNeedDownloadDevice(mac);
+    ```
+
+1. 获取GFSK回路数
+
+    -
+
+    ```java
+    Yaokan.instance().getGfskModels(tid,bid);
+    回调：MsgType.RfModels
+    ```
+
+1. 获取GFSK配码信息
+
+    ```java
+    /**
+    *
+    * @param road 回路数
+    */
+    Yaokan.instance().getProduceMac(mac,tid,road)
+    ```
+
+1. 生成GFSK码库
+
+    ```java
+    /**
+    *
+    * @param road 回路数
+    * @param subMac 子设备Mac
+    */
+    Yaokan.instance().rfOsmV2(mac, tid, bid, road, subMac);
     ```
 
 ### 4.3 遥控器接口
@@ -768,7 +833,7 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
         List<AirPowerResult> list = (List<AirPowerResult>) ykMessage.getData();
 
     //返回的Model说明 tag:第几天或月；value：电量统计值，保留4位小数；createAt：电量上报的时间戳，用于tag显示的排序
-    ```    
+    ```
 ### 4.4 其他接口
 1. 设置发码是否震动
 

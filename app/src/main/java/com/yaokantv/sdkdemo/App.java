@@ -1,6 +1,7 @@
 package com.yaokantv.sdkdemo;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.multidex.MultiDex;
 
@@ -14,10 +15,12 @@ public class App extends Application {
     public static String curRf = "0";//设备是否支持射频
     public static String curTName = "";//设备类型
     public static String curBName = "";//品牌名称
+    public static boolean isLittleApple = false;
     public static int curTid = 0;//设备类型ID
     public static int curBid = 0;//品牌ID
     public static int curGid = 0;//组ID
     public static Operators operators = null;//运营商对象
+    public static String PACKAGE_NAME = "com.yaokantv.sdkdemo";//包名
 
     @Override
     public void onCreate() {

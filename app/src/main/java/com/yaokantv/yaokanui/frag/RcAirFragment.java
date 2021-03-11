@@ -22,6 +22,7 @@ import com.yaokantv.yaokansdk.model.RemoteCtrl;
 import com.yaokantv.yaokansdk.model.Swing;
 import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
+import com.yaokantv.yaokansdk.utils.Logger;
 import com.yaokantv.yaokanui.Config;
 import com.yaokantv.yaokanui.RcActivity;
 
@@ -432,49 +433,53 @@ public class RcAirFragment extends BaseRcFragment implements View.OnClickListene
                 public void run() {
                     switch (msgType) {
                         case CtrlStatus:
-                            AirStatus airStatus = (AirStatus) ykMessage.getData();
-                            if (airStatus != null) {
-                                isOpen = airStatus.isOpen();
-                                mView.findViewById(R.id.ll_op).setVisibility(isOpen ? View.VISIBLE : View.GONE);
-                                mView.findViewById(R.id.tv_temp).setVisibility(isOpen ? View.VISIBLE : View.GONE);
-                                if (isOpen) {
-                                    if (modeList.contains(airStatus.getStatus()[0])) {
-                                        modeIndex = modeList.indexOf(airStatus.getStatus()[0]);
-                                        curMode = modeList.get(modeIndex);
-                                    }
-                                    if (speedList.contains(airStatus.getStatus()[1])) {
-                                        speedIndex = speedList.indexOf(airStatus.getStatus()[1]);
-                                        curSpeed = speedList.get(speedIndex);
-                                    }
-                                    if (tempList.contains(airStatus.getStatus()[2])) {
-                                        tempIndex = tempList.indexOf(airStatus.getStatus()[2]);
-                                        curTemp = tempList.get(tempIndex);
-                                    }
-                                    if (!TextUtils.isEmpty(airStatus.getStatus()[3]) && !"*".equals(airStatus.getStatus()[3])) {
-                                        if (verList.contains(airStatus.getStatus()[3])) {
-                                            verIndex = verList.indexOf(airStatus.getStatus()[3]);
-                                            curVer = verList.get(verIndex);
+                            try {
+                                AirStatus airStatus = (AirStatus) ykMessage.getData();
+                                if (airStatus != null) {
+                                    isOpen = airStatus.isOpen();
+                                    mView.findViewById(R.id.ll_op).setVisibility(isOpen ? View.VISIBLE : View.GONE);
+                                    mView.findViewById(R.id.tv_temp).setVisibility(isOpen ? View.VISIBLE : View.GONE);
+                                    if (isOpen) {
+                                        if (modeList.contains(airStatus.getStatus()[0])) {
+                                            modeIndex = modeList.indexOf(airStatus.getStatus()[0]);
+                                            curMode = modeList.get(modeIndex);
                                         }
-                                        if (rc.getAirCmd().getAttributes().getVerticalIndependent() == 1) {
-                                            boolean isOpen = airStatus.getStatus()[3].contains("On");
-                                            verIndex = (isOpen ? 1 : 0);
-                                            getShowText(isOpen ? "verOn" : "verOff");
+                                        if (speedList.contains(airStatus.getStatus()[1])) {
+                                            speedIndex = speedList.indexOf(airStatus.getStatus()[1]);
+                                            curSpeed = speedList.get(speedIndex);
                                         }
+                                        if (tempList.contains(airStatus.getStatus()[2])) {
+                                            tempIndex = tempList.indexOf(airStatus.getStatus()[2]);
+                                            curTemp = tempList.get(tempIndex);
+                                        }
+                                        if (!TextUtils.isEmpty(airStatus.getStatus()[3]) && !"*".equals(airStatus.getStatus()[3])) {
+                                            if (verList.contains(airStatus.getStatus()[3])) {
+                                                verIndex = verList.indexOf(airStatus.getStatus()[3]);
+                                                curVer = verList.get(verIndex);
+                                            }
+                                            if (rc.getAirCmd().getAttributes().getVerticalIndependent() == 1) {
+                                                boolean isOpen = airStatus.getStatus()[3].contains("On");
+                                                verIndex = (isOpen ? 1 : 0);
+                                                getShowText(isOpen ? "verOn" : "verOff");
+                                            }
+                                        }
+                                        if (!TextUtils.isEmpty(airStatus.getStatus()[4]) && !"*".equals(airStatus.getStatus()[4])) {
+                                            if (horList.contains(airStatus.getStatus()[4])) {
+                                                horIndex = horList.indexOf(airStatus.getStatus()[4]);
+                                                curHor = horList.get(horIndex);
+                                            }
+                                            if (rc.getAirCmd().getAttributes().getHorizontalIndependent() == 1) {
+                                                boolean isOpen = airStatus.getStatus()[4].contains("On");
+                                                horIndex = (isOpen ? 1 : 0);
+                                                getShowText(isOpen ? "horOn" : "horOff");
+                                            }
+                                        }
+                                        refreshView();
+                                        saveAirStatus();
                                     }
-                                    if (!TextUtils.isEmpty(airStatus.getStatus()[4]) && !"*".equals(airStatus.getStatus()[4])) {
-                                        if (horList.contains(airStatus.getStatus()[4])) {
-                                            horIndex = horList.indexOf(airStatus.getStatus()[4]);
-                                            curHor = horList.get(horIndex);
-                                        }
-                                        if (rc.getAirCmd().getAttributes().getHorizontalIndependent() == 1) {
-                                            boolean isOpen = airStatus.getStatus()[4].contains("On");
-                                            horIndex = (isOpen ? 1 : 0);
-                                            getShowText(isOpen ? "horOn" : "horOff");
-                                        }
-                                    }
-                                    refreshView();
-                                    saveAirStatus();
                                 }
+                            } catch (Exception e) {
+                                Logger.e(e.getMessage());
                             }
                             break;
                     }

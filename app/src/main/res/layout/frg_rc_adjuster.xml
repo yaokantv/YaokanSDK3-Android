@@ -1,0 +1,197 @@
+<com.yaokantv.yaokanui.widget.CustScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/main3_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:id="@+id/ll_k"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_temp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:id="@+id/power"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/yk_ctrl_camera_power"
+                android:clickable="true">
+
+                <ImageView
+                    android:id="@+id/iv_power"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/center_power" />
+
+            </RelativeLayout>
+
+            <ImageButton
+                android:id="@+id/on"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/yk_ctrl_camera_power"
+                android:scaleType="fitXY"
+                android:src="@mipmap/tx_on"
+                android:textSize="25dp" />
+
+            <ImageButton
+                android:id="@+id/off"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:background="@drawable/yk_ctrl_camera_power"
+                android:scaleType="fitXY"
+                android:src="@mipmap/tx_off"
+                android:textSize="25dp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/ll_temp"
+            style="@style/rl_bg">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/ctrl_light" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_k"
+            android:gravity="center">
+
+            <com.yaokantv.yaokanui.widget.AdjRangeSeekBar
+                android:id="@+id/sb_vol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                app:yk_absoluteMaxValue="100"
+                app:yk_absoluteMinValue="0"
+                app:yk_measureUnit=""
+                app:yk_singleThumb="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/ll_croller"
+            android:layout_width="190dp"
+            android:layout_height="190dp"
+            android:layout_below="@+id/ll_k"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="90dp"
+            android:background="@mipmap/adj_bg">
+
+            <TextView
+                android:id="@+id/tv_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="sans-serif-thin"
+                android:text="50%"
+                android:textColor="@color/black"
+                android:textSize="30dp" />
+
+            <com.yaokantv.yaokanui.widget.Croller
+                android:id="@+id/croller"
+                android:layout_width="190dp"
+                android:layout_height="190dp"
+                app:back_circle_color="#00000000"
+                app:back_circle_radius="100"
+                app:indicator_color="@color/black"
+                app:indicator_width="5"
+                app:is_continuous="true"
+                app:label=" "
+                app:label_color="#000000"
+                app:main_circle_color="#00000000"
+                app:max="100"
+                app:progress_primary_color="@color/transparent"
+                app:progress_secondary_color="@color/transparent"
+                app:start_offset="0" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_ken"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_croller"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/k25"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="20dp"
+                android:layout_toStartOf="@+id/croller"
+                android:background="@drawable/yk_ctrl_camera_power"
+                android:fontFamily="sans-serif-thin"
+                android:gravity="center"
+                android:text="25"
+                android:textColor="@color/black"
+                android:textSize="25dp" />
+
+            <Button
+                android:id="@+id/k50"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/yk_ctrl_camera_power"
+                android:fontFamily="sans-serif-thin"
+                android:gravity="center"
+                android:text="50"
+                android:textColor="@color/black"
+                android:textSize="25dp" />
+
+            <Button
+                android:id="@+id/k75"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/yk_ctrl_camera_power"
+                android:fontFamily="sans-serif-thin"
+                android:gravity="center"
+                android:text="75"
+                android:textColor="@color/black"
+                android:textSize="25dp" />
+
+            <Button
+                android:id="@+id/k100"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:background="@drawable/yk_ctrl_camera_power"
+                android:fontFamily="sans-serif-thin"
+                android:gravity="center"
+                android:text="100"
+                android:textColor="@color/black"
+                android:textSize="25dp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/ll_ken" />
+    </RelativeLayout>
+
+</com.yaokantv.yaokanui.widget.CustScrollView>

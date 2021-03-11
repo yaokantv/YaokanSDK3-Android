@@ -55,7 +55,7 @@
                 style="@style/xxxl_btn"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="50dp"
-                android:src="@drawable/btn_c_power" />
+                android:src="@drawable/btn_cur_pause" />
 
             <com.yaokantv.yaokanui.widget.NoScrollGridView
                 android:id="@+id/gv"

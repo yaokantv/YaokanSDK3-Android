@@ -279,6 +279,7 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
                                         SoftApConfigResult result = (SoftApConfigResult) ykMessage.getData();
                                         Logger.e(result.toString());
                                         if (result.isResult()) {
+                                            Yaokan.instance().deleteRemoteByMac(result.getMac());//清除旧的本地遥控器，可以不清除
                                             //result = true 配网成功
                                             if (msgType == MsgType.SoftApConfigResult) {
                                                 Hawk.put(ssid, psw);
@@ -305,6 +306,7 @@ public class SoftApConfigActivity extends BaseActivity implements View.OnClickLi
                                         SmartConfigResult result = (SmartConfigResult) ykMessage.getData();
                                         if (result.isResult()) {
                                             //result = true 配网成功
+                                            Yaokan.instance().deleteRemoteByMac(result.getMac());//清除旧的本地遥控器，可以不清除
                                             finish();
                                         }
                                     }

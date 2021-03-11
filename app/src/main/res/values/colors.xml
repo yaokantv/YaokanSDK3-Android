@@ -26,4 +26,7 @@
     <drawable name="button_text_white">#FFFFFF</drawable>
     <drawable name="button_text_gray" tools:ignore="MissingDefaultResource">#b4b4b4</drawable>
     <drawable name="button_text_black">#000000</drawable>
+
+    <color name="tab_indicator_textview">#3379c7</color>
+
 </resources>

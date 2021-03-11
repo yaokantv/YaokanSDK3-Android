@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import com.yaokantv.sdkdemo.R;
 import com.yaokantv.yaokansdk.callback.YaokanSDKListener;
 import com.yaokantv.yaokansdk.manager.Yaokan;
+import com.yaokantv.yaokansdk.model.AirStatus;
 import com.yaokantv.yaokansdk.model.RcCmd;
 import com.yaokantv.yaokansdk.model.RemoteCtrl;
 import com.yaokantv.yaokansdk.model.YkMessage;
@@ -227,6 +228,12 @@ public abstract class BaseRcFragment extends Fragment implements YaokanSDKListen
                                 rcActivity.setStudyTips(R.string.study_suc);
                             }
                             break;
+                        case CtrlStatus:
+                            if (ykMessage != null && ykMessage.getData() != null){
+                                AirStatus status = (AirStatus) ykMessage.getData();
+                                toast(status.toString());
+                            }
+                            break;
                         case SendCodeResponse:
                             Logger.e(ykMessage.toString());
                             break;
@@ -281,18 +288,8 @@ public abstract class BaseRcFragment extends Fragment implements YaokanSDKListen
         return rcActivity.getActivityType() == Config.TYPE_RC_STUDY || rcActivity.getActivityType() == Config.TYPE_RC_RF_MATCH_STUDY;
     }
 
-    protected void sendCmd(String key) {
-        if (isStudy) {
-            Logger.e("sendCmd a");
-            return;
-        }
-        Logger.e("sendCmd:"+key);
-        RcCmd cmd = new RcCmd();
-        cmd.setValue(key);
-        if (!map.contains(cmd)) {
-            return;
-        }
-        if (rc != null && !TextUtils.isEmpty(rc.getMac())) {
+    protected void sendAdjCmd(String key) {
+        if (TextUtils.isEmpty(Config.DID) && rc != null && !TextUtils.isEmpty(rc.getMac())) {
             String mac = rc.getMac();
             if (!TextUtils.isEmpty(mac)) {
                 String did = Yaokan.instance().getDid(mac);
@@ -313,6 +310,20 @@ public abstract class BaseRcFragment extends Fragment implements YaokanSDKListen
         } else {
             Yaokan.instance().sendCmd(Config.DID, rc.getRid(), key, rc.getBe_rc_type(), rc.getStudyId(), rc.getRf());
         }
+    }
+
+    protected void sendCmd(String key) {
+        if (isStudy) {
+            Logger.e("sendCmd a");
+            return;
+        }
+        Logger.e("sendCmd:" + key);
+        RcCmd cmd = new RcCmd();
+        cmd.setValue(key);
+        if (!map.contains(cmd)) {
+            return;
+        }
+        sendAdjCmd(key);
     }
 
     protected void toast(String s) {

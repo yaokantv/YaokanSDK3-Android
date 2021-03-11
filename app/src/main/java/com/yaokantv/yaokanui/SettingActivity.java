@@ -13,6 +13,7 @@ import com.yaokantv.yaokansdk.model.YkMessage;
 import com.yaokantv.yaokansdk.model.e.MsgType;
 import com.yaokantv.yaokansdk.utils.DlgUtils;
 import com.yaokantv.yaokanui.dlg.RenameDialog;
+import com.yaokantv.yaokanui.utils.ControlUtils;
 import com.yaokantv.yaokanui.utils.YKAppManager;
 
 public class SettingActivity extends BaseActivity implements View.OnClickListener {
@@ -34,8 +35,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         rename = findViewById(R.id.rl_update);
         rename.setOnClickListener(this);
         findViewById(R.id.rl_study).setOnClickListener(this);
-        if (uiRc != null && (uiRc.getBe_rc_type() == 7||
-                uiRc.getBe_rc_type() == 45||uiRc.getBe_rc_type() == 46)) {
+        if (uiRc != null && (uiRc.getBe_rc_type() == 7 ||
+                uiRc.getBe_rc_type() == 45 || uiRc.getBe_rc_type() == 46)
+                || ControlUtils.isGfskControl(uiRc.getBid())) {
             findViewById(R.id.rl_study).setVisibility(View.GONE);
         }
     }
@@ -60,7 +62,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                     public void onClick(DialogInterface dialog, int which) {
                         if (Yaokan.instance().isDeviceOnline(uiRc.getMac())) {
                             //删除设备端和手机内的的遥控器
-                            Yaokan.instance().deleteDeviceRc(Yaokan.instance().getDid(uiRc.getMac()), uiRc.isRf()?uiRc.getStudyId():uiRc.getRid());
+                            Yaokan.instance().deleteDeviceRc(Yaokan.instance().getDid(uiRc.getMac()), uiRc.isRf() ? uiRc.getStudyId() : uiRc.getRid());
                             Yaokan.instance().deleteRcByUUID(uiRc.getUuid());
                             finish();
                         } else {
@@ -87,7 +89,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             finish();
         } else if (v.getId() == R.id.rl_room_msg) {
             Intent intent = new Intent(this, RoomMsgActivity.class);
-            intent.putExtra("uuid",uiRc.getUuid());
+            intent.putExtra("uuid", uiRc.getUuid());
             startActivity(intent);
         }
     }

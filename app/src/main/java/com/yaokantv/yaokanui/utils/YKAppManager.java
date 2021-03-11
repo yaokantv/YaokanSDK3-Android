@@ -1,8 +1,6 @@
 package com.yaokantv.yaokanui.utils;
 
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.Context;
 
 import java.util.Iterator;
 import java.util.Stack;

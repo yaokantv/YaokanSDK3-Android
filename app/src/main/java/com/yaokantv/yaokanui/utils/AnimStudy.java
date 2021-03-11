@@ -41,7 +41,7 @@ public class AnimStudy {
                 if (view instanceof ImageButton) {
                     oldDrawable = view.getBackground();
                     if (StringUtils.DRA_CAMERA.equals(currResStr)) {
-                        ((ImageButton)view).setImageDrawable(null);
+                        ((ImageButton) view).setImageDrawable(null);
                     }
                 } else if (view instanceof ImageView) {
                     oldDrawable = ((ImageView) view).getDrawable();
@@ -51,8 +51,8 @@ public class AnimStudy {
                 Logger.e("currResStr:" + currResStr);
                 anim = new AnimationDrawable();
                 anim.setOneShot(false);
-                anim.addFrame(ctx.getResources().getDrawable(ResourceManager.getIdByName(ctx, ResourceManager.drawable, getSrc(currResStr)[0])), 300);
-                anim.addFrame(ctx.getResources().getDrawable(ResourceManager.getIdByName(ctx, ResourceManager.drawable, getSrc(currResStr)[1])), 300);
+                anim.addFrame(ctx.getResources().getDrawable(ResourceManager.getIdByName(ResourceManager.drawable, getSrc(currResStr)[0])), 300);
+                anim.addFrame(ctx.getResources().getDrawable(ResourceManager.getIdByName(ResourceManager.drawable, getSrc(currResStr)[1])), 300);
                 view.setBackground(anim);
                 anim.start();
                 codeStudying = true;
@@ -99,7 +99,7 @@ public class AnimStudy {
             if (currentView instanceof ImageButton) {
                 currentView.setBackground(oldDrawable);
                 if (StringUtils.DRA_CAMERA.equals(currResStr)) {
-                    ((ImageButton)currentView).setImageResource(R.drawable.btn_camera);
+                    ((ImageButton) currentView).setImageResource(R.drawable.btn_camera);
                 }
             } else if (currentView instanceof ImageView) {
                 ((ImageView) currentView).setImageDrawable(oldDrawable);

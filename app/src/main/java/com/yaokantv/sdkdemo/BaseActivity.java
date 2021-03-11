@@ -222,8 +222,10 @@ public class BaseActivity extends AppCompatActivity {
                 if (onDownloadTimerOutListener != null) {
                     onDownloadTimerOutListener.onTimeOut();
                 }
-                timer.cancel();
-                timer = null;
+                if(timer!=null){
+                    timer.cancel();
+                    timer = null;
+                }
                 dismiss();
             }
         };

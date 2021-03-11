@@ -79,6 +79,11 @@ public class DeviceListActivity extends BaseActivity implements YaokanSDKListene
                         intent.putExtra("from", "d");
                         App.curMac = mList.get(position).getMac();
                         App.curDid = mList.get(position).getDid();
+                        if(mList.get(position).getName().contains("1011")){
+                            App.isLittleApple = true;
+                        }else{
+                            App.isLittleApple = false;
+                        }
                         App.curRf = mList.get(position).getName().contains("RF") ? "1" : "0";
                         startActivity(intent);
                     }

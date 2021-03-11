@@ -1,8 +1,19 @@
 package com.yaokantv.yaokanui.utils;
 
 import android.content.Context;
+import android.text.TextUtils;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.orhanobut.hawk.Hawk;
 import com.yaokantv.sdkdemo.R;
+import com.yaokantv.yaokansdk.Contants;
+import com.yaokantv.yaokansdk.model.BaseR;
+import com.yaokantv.yaokansdk.model.DeviceType;
+import com.yaokantv.yaokansdk.model.DeviceTypeResult;
+
+import java.lang.reflect.Type;
+import java.util.List;
 
 public class StringUtils {
     public static final String DRA_BTN_CIRCLE = "btn_circle";
@@ -11,6 +22,24 @@ public class StringUtils {
     public static final String DRA_SQUARE = "bg_square";
     public static final String DRA_PLAY = "bg_play";
     public static final String DRA_CAMERA = "bg_camera";
+
+    public static String typeString(Context context, int type) {
+        String data = Hawk.get(Contants.TYPE_RESULT, "");
+        if (TextUtils.isEmpty(data)) {
+            return getTypeString(context, type);
+        }
+        Type mType = new TypeToken<List<DeviceType>>() {
+        }.getType();
+        List<DeviceType> types = new Gson().fromJson(data, mType);
+        if (types != null) {
+            for (DeviceType deviceType : types) {
+                if (deviceType.getTid() == type) {
+                    return deviceType.getName();
+                }
+            }
+        }
+        return "";
+    }
 
     public static String getTypeString(Context context, int type) {
         if (type == 1) {
