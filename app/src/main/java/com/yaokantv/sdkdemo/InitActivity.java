@@ -21,7 +21,7 @@ import java.util.List;
 public class InitActivity extends BaseActivity implements YaokanSDKListener, View.OnClickListener {
     String appId = "";
     String appSecret = "";
-    boolean isUi = true;
+    boolean isUi = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

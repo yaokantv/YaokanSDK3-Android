@@ -304,10 +304,14 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
                     case Brands:
                         if (ykMessage != null && ykMessage.getCode() == 0) {
                             BrandResult brandResult = (BrandResult) ykMessage.getData();
+                            for(int i = 0; i < brandResult.getResult().length; i++) {
+                                Log.e(TAG, brandResult.getResult()[i].getName()+brandResult.getResult()[i].getCommon());
+                            }
                             if (brandResult != null) {
                                 mBrandResult = brandResult;
                                 mHandler.sendEmptyMessage(HAND_BRANDS_SUC);
                             }
+
                         } else if (ykMessage != null) {
                             Log.e(TAG, ykMessage.toString());
                         }

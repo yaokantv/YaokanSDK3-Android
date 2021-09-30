@@ -109,7 +109,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 helper.setOnclickListener(R.id.btn_test, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        Yaokan.instance().test(item.getDid());
+                        Yaokan.instance().test(item.getDid());
                     }
                 });
                 helper.setOnclickListener(R.id.btn_del, new View.OnClickListener() {
