@@ -80,7 +80,8 @@ public class RcListActivity extends BaseActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                List<RemoteCtrl> list = Yaokan.instance().getRcList(App.curMac);
+//                List<RemoteCtrl> list = Yaokan.instance().getRcList(App.curMac);
+                List<RemoteCtrl> list = Yaokan.instance().getRcList();
                 mList.clear();
                 if (list != null && list.size() > 0) {
                     mList.addAll(list);

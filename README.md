@@ -814,7 +814,7 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
 1. 导入遥控器列表
 
     ```java
-    Yaokan.instance().saveRcList(json);
+    Yaokan.instance().inputRcString(json);
     ```
 1. 电量统计
 
