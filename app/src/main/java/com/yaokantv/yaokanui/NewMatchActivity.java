@@ -80,7 +80,7 @@ public class NewMatchActivity extends BaseActivity implements View.OnClickListen
 //                findViewById(R.id.ll_match1).setVisibility(View.VISIBLE);
 //                findViewById(R.id.btn_second).setVisibility(View.VISIBLE);
                 mMatch = dataList.get(index);
-                String msg = name + " " + (index + 1);
+                String msg = name + " " + Config.curTName + " " + (index + 1);
                 tvNum.setText((index + 1) + "/" + dataList.size());
                 tvName.setText(msg);
             }

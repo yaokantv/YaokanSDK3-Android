@@ -27,7 +27,7 @@
     <string name="title_step_match">逐个匹配</string>
     <string name="rf_ctrl_device">RF(433/315)射频遥控设备</string>
     <string name="long_matched_prompt">长按可以逐个连续匹配</string>
-    <string name="default_matched_prompt_stb">匹配前，请将机顶盒电源打开\n如果电视上出现音量调整图标\n表示匹配成功，点击"下一步"</string>
+    <string name="default_matched_prompt_stb">匹配开始，请保持对准家电\n点击中间发码按钮,如果家电有反应\n表示匹配成功，点击"下一步"</string>
 
     <string name="stb">电视机顶盒</string>
     <string name="tv">电视机</string>
