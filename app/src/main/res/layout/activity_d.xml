@@ -173,6 +173,26 @@
                     android:onClick="onClick"
                     android:text="设备复位" />
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_enable_mic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onClick"
+                    android:text="启麦" />
+
+                <Button
+                    android:id="@+id/btn_disable_mic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onClick"
+                    android:text="禁麦" />
+            </LinearLayout>
             <Button
                 android:id="@+id/btn_receive_mode"
                 android:layout_width="wrap_content"

@@ -46,8 +46,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initToolbar(R.string.app_name);
+        mList = Yaokan.instance().exportDeviceListFromDB();
+
         Yaokan.instance().addSdkListener(this);
         initView();
+//        adapter.notifyDataSetChanged();
+
+        Log.e(TAG, "23333");
     }
 
     String getMac(String mac) {
@@ -172,7 +177,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                    Yaokan.instance().inputYkDevicesToDB(mList);
 //                }
                 //导入设备方式二
-                String devicesJson = "[{\"did\":\"EE901971B8744FAC\",\"mac\":\"DC4F22529F13\",\"name\":\"YKK-1011\",\"rf\":\"0\"},{\"did\":\"6D65F33EBF1862C6\",\"mac\":\"84F3EB1A0793\",\"name\":\"YKK-1013-RF\",\"rf\":\"0\"}]";
+                String devicesJson = "[{\"did\":\"A9A365532A1EC10D\",\"mac\":\"DC4F22529F13\",\"name\":\"YKK-1011\",\"rf\":\"0\"},{\"did\":\"A1CDCA6B4CF31842\",\"mac\":\"84F3EB1A0793\",\"name\":\"YKK-1013-RF\",\"rf\":\"0\"}]";
 //                Yaokan.instance().inputYkDevicesToDB("[{\"did\":\"CA2772763BBD7FD4\",\"mac\":\"BCDDC2898CD7\",\"name\":\"\",\"rf\":\"0\"}]");
                 Yaokan.instance().inputYkDevicesToDB(devicesJson);
                 break;

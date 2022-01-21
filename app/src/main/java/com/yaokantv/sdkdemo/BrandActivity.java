@@ -54,6 +54,7 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
     List<ReceiveModeResult.ResultBean> resultBeanList;
     LinearLayout llOther;
     HardInfo info;
+    Button btnEnableMic,btnDisableMic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +86,7 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
         tvVoice = findViewById(R.id.tv_voice);
         spType = findViewById(R.id.spType);
         spBrands = findViewById(R.id.spBrand);
+
         typeAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, nameType);
         brandAdapter = new ArrayAdapter<>(this,
@@ -166,6 +168,20 @@ public class BrandActivity extends BaseActivity implements View.OnClickListener,
             findViewById(R.id.ll_other).setVisibility(View.GONE);
             findViewById(R.id.btn_receive_mode).setVisibility(View.GONE);
         }
+        btnEnableMic = findViewById(R.id.btn_enable_mic);
+        btnDisableMic = findViewById(R.id.btn_disable_mic);
+        btnEnableMic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Yaokan.instance().enableMic(App.curDid);
+            }
+        });
+        btnDisableMic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Yaokan.instance().disableMic(App.curDid);
+            }
+        });
     }
 
     @Override

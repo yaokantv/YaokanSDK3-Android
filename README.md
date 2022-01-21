@@ -2,7 +2,7 @@
 
 
     文件编号：YKSDK4ANDROID-20200724
-    版本：v1.0
+    版本：v1.01
 
     深圳遥看科技有限公司
     （版权所有，切勿拷贝）
@@ -11,8 +11,8 @@
 
 | 版本 | 说明 | 备注 | 日期 |
 | --- | --- | --- | --- |
-| v4 | 新建 | Peer | 20210311 |
-
+| v1 | 新建 | Peer | 20210311 |
+| v1.01 | 支持启用/禁用设备麦克风 | alex | 20220121 |
 
 
 ## 1. 概述
@@ -430,7 +430,28 @@ public void onReceiveMsg(MsgType msgType, YkMessage ykMessage) {
      *
      * @param time 唤醒时长 15-60
      */
-    Yaokan.instance().setKeepAlive(did, voice);
+    Yaokan.instance().setKeepAlive(did, time);
+    ```
+1. 设置设备音量
+
+    ```java
+    /**
+     *
+     * @param voice 设备音量大小 0-20
+     */
+    Yaokan.instance().setVoice(did, voice);
+    ```
+1. 启用设备麦克风
+
+    ```java
+
+    Yaokan.instance().enableMic(did);
+    ```
+1. 禁用设备麦克风
+
+    ```java
+
+    Yaokan.instance().disableMic(did);
     ```
 
 1. 获取接收模式
