@@ -28,6 +28,8 @@ public class InitActivity extends BaseActivity implements YaokanSDKListener, Vie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_init);
         showDlg();
+
+        Yaokan.initialize(this.getApplication());
         Yaokan.instance().init(getApplication(), appId, appSecret).addSdkListener(this);
         initToolbar(R.string.t_init);
         if (!TextUtils.isEmpty(appId)) {

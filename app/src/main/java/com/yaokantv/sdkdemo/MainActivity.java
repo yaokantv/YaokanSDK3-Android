@@ -165,10 +165,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 Yaokan.instance().hotPointConfig();
                 break;
             case R.id.btn_soft_ap_config:
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+//                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+//                    startActivity(new Intent(this, SoftApConfigActivity.class));
+//                } else {
+//                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 98);
+//                }
+                //需要添加access_fine_location,否则会返回UNKNOWN_SSID;
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     startActivity(new Intent(this, SoftApConfigActivity.class));
                 } else {
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 98);
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION}, 98);
                 }
                 break;
             case R.id.btn_input_device_list:

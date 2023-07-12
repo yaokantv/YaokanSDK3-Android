@@ -1,6 +1,11 @@
 package com.yaokantv.yaokanui;
 
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkRequest;
+import android.net.wifi.WifiInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;

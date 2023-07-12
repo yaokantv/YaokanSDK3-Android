@@ -26,7 +26,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         MultiDex.install(this);
-        Yaokan.initialize(this);
+//        Yaokan.initialize(this);
         Hawk.init(this).build();
     }
 

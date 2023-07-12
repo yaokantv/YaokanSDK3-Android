@@ -1,16 +1,17 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 31
     defaultConfig {
         applicationId "com.yaokantv.sdkdemo"
         minSdkVersion 19
-        targetSdkVersion 28
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    namespace 'com.yaokantv.sdkdemo'
     buildTypes {
         release {
             minifyEnabled false
@@ -47,6 +48,6 @@ dependencies {
     implementation "com.orhanobut:hawk:2.0.1"//用于记录数据
     implementation 'com.jaeger.statusbarutil:library:1.5.1'//UI相关
     implementation 'com.zhy:base-rvadapter:3.0.3'
-
+    implementation 'androidx.multidex:multidex:2.0.1'
     implementation(name:'yaokansdk', ext:'aar')
 }
